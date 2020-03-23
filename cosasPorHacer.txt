@@ -1,0 +1,2 @@
+Probar Bootstrap con Vendor y quitarlo del Main.
+Imagenes Baraja
