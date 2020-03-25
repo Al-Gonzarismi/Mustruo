@@ -5,6 +5,5 @@ class LobbyController extends Controller {
         //TO DO
         global $config;
         var_dump($config);
-        echo \dawfony\Ti::render("view/MainView.phtml");
     }
 }
