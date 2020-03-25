@@ -14,6 +14,6 @@ Macaw::get($URL_PATH . '/perfil/(:any)', "controller\UserController@perfil");
 
 Macaw::error(function() {
     echo '404 :: Not Found';
-  });
+});
   
 Macaw::dispatch();

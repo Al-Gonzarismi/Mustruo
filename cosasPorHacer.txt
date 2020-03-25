@@ -1,2 +1,8 @@
+AMBOS:
 Probar Bootstrap con Vendor y quitarlo del Main.
-Imagenes Baraja
+Logo
+GONZALO:
+Registro
+Perfil
+JORGE:
+Lobby
