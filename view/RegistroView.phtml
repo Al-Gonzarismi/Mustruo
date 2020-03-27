@@ -1,0 +1,35 @@
+<?php global $URL_PATH;?>
+<?php \dawfony\Ti::extend("view/MainView.phtml"); ?>
+<?php \dawfony\Ti::startBlock("content"); ?>
+<form id="registro">
+    <div class="form-group">
+        <label for="login">Login:</label>
+        <input type="text" class="form-control" id="login" value="hola" required>
+        <small>*El login no tiene que existir</small>
+    </div>
+    <div class="form-group">
+        <label for="contrasenna">Contraseña:</label>
+        <input type="password" class="form-control" id="contrasenna" value="jaja" required>
+    </div>
+    <div class="form-group">
+        <label for="repitecontrasenna">Repite contraseña:</label>
+        <input type="password" class="form-control" id="repitecontrasenna" value="jajaja" required>
+    </div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+        <small>*Campo obligatorio</small>
+    </div>
+    <div class="custom-file">
+        <input type="file" class="custom-file-input" id="avatar" name="avatar">
+        <label class="custom-file-label" for="avatar">Elige una foto de perfil...</label>
+        <small>*Si no se te pondra una por defecto</small>
+    </div>
+    <button onclick="comprobarRegistro()" class="btn boton-naranja float-right">Registrarte!</button>
+</form>
+<script>
+var URL_PATH = '<?= $URL_PATH ?>';
+</script>
+<script src="<?= $URL_PATH ?>/js/comprobarRegistro.js"></script>
+<?php \dawfony\Ti::endBlock(); ?>
+<?php \dawfony\Ti::endExtend(); ?>

@@ -11,6 +11,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Propia hoja de estilos -->
+    <link rel="stylesheet" href="css/main.css">
     <?php \dawfony\Ti::startBlock("extrahead"); ?>
     <?php \dawfony\Ti::endBlock() ?>
     <title>
@@ -19,9 +21,38 @@
         <?php \dawfony\Ti::endBlock() ?>
     </title>
 </head>
-
-<body class="container" style="background-color: #004d1a;">
+<!--Hoja de estilos backgrous y color-->
+<body>
+    <nav class="navbar bg-morado">
+        <div class="personalizarNav">
+            <?=$data["title"]?>
+        </div>
+        <!--LOGO-->
+        <div class="personalizarNav">
+            <picture>
+            <!--
+                <source media="(min-width: 650px)" srcset="images/image-medium.png">
+                <source media="(min-width: 465px)" srcset="images/image-small.png">
+            -->    
+                <img src="media/logoPrueba.png" >
+            </picture>
+        </div>
+        <div>
+        <!--
+            <form class="form-inline">
+                <input type="text" class="form-control mr-sm-2" id="login" name="login">
+                <input type="password" class="form-control mr-sm-2" id="contrasenna" name="contrasenna">
+                <div>
+                <button class="btn boton-naranja" type="submit">Iniciar Sesion</button>
+                <a href="">Registrate</a>
+                </div>
+            </form>
+        -->
+        </div>
+    </nav>
+    <div class="container">
     <?php \dawfony\Ti::startBlock("content"); ?>
     <?php \dawfony\Ti::endBlock() ?>
+    </div>
 </body>
 </html>
