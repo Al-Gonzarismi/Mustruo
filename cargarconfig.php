@@ -17,7 +17,6 @@ $URL_PATH = $config['url_path'];
 //Cargar funciones
 require_once "funciones.php";
 */
-
 // Inicializar BD
 dawfony\Klasto::init($config["db_host"], $config["db_user"], $config["db_pass"], $config["db_name"]);
 

@@ -1,0 +1,28 @@
+body {
+    background-color: #004d1a;
+    color: white;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+}
+form#registro {
+    margin-top: 3%;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+#registro > div > small {
+    color: gray;
+}
+.personalizarNav {
+    padding-left: 10%;
+    font-size: 30px;
+}
+.bg-morado {
+    background-color: purple;
+}
+.boton-naranja {
+    background-color: orange;
+    color: purple;
+}
+.boton-naranja:hover {
+    background-color: rgba(255, 166, 0, 0.822);
+    color: rgba(128, 0, 128, 0.781);
+}
