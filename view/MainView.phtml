@@ -17,18 +17,17 @@
     <?php \dawfony\Ti::endBlock() ?>
     <title>
         <?php \dawfony\Ti::startBlock("title"); ?>
-        <?=$data["title"]?>
+        <?=$data["title"]?> - Mustruo
         <?php \dawfony\Ti::endBlock() ?>
     </title>
 </head>
-<!--Hoja de estilos backgrous y color-->
 <body>
-    <nav class="navbar bg-morado">
-        <div class="personalizarNav">
+    <nav class="navbar bg-morado row">
+        <div class="personalizarNav col-md-3">
             <?=$data["title"]?>
         </div>
         <!--LOGO-->
-        <div class="personalizarNav">
+        <div class="personalizarNav col-md-4">
             <picture>
             <!--
                 <source media="(min-width: 650px)" srcset="images/image-medium.png">
@@ -37,17 +36,28 @@
                 <img src="media/logoPrueba.png" >
             </picture>
         </div>
-        <div>
-        <!--
-            <form class="form-inline">
-                <input type="text" class="form-control mr-sm-2" id="login" name="login">
-                <input type="password" class="form-control mr-sm-2" id="contrasenna" name="contrasenna">
-                <div>
-                <button class="btn boton-naranja" type="submit">Iniciar Sesion</button>
-                <a href="">Registrate</a>
+        <div class="col-md-5">
+            <?php if (isset($_SESSION["login"])) : ?>
+            <div class="float-right">
+                <a class="perfil" href="<?= $URL_PATH ?>/perfil/<?= $_SESSION["login"] ?>">Perfil de <?= $_SESSION["login"] ?></a>
+                <a class="btn boton-naranja ml-5" href="<?= $URL_PATH ?>/cerrarSesion">Cerrar Sesión</a>
+            </div>    
+            <?php elseif (isset($registro)) : ?>
+                <a class="btn boton-naranja float-right" href="<?= $URL_PATH ?>/">Volver a Lobby</a>
+            <?php else : ?>
+                <div class="form-inline float-right">
+                    <input type="text" class="form-control mr-sm-2" id="login" name="login" placeholder="login">
+                    <input type="password" class="form-control mr-sm-2" id="contrasenna" name="contrasenna" placeholder="******">
+                    <div class="bloqueRegistro">
+                        <input type="button" class="btn boton-naranja" onclick="comprobarSesion()" value="Iniciar Sesión">
+                        <a href="<?= $URL_PATH ?>/registrate">Regístrate</a>
+                    </div>
                 </div>
-            </form>
-        -->
+                <script>
+                    var URL_PATH = '<?= $URL_PATH ?>';
+                </script>
+                <script src="<?= $URL_PATH ?>/js/comprobarSesion.js"></script>
+            <?php endif; ?> 
         </div>
     </nav>
     <div class="container">

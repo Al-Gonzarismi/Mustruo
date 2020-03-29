@@ -1,25 +1,64 @@
 function comprobarRegistro() {
-    var login = document.getElementById("login").value;
+    var error = false;
+    var login = $('#login').val();
     var contrasenna = document.getElementById("contrasenna").value;
     var repitecontrasenna = document.getElementById("repitecontrasenna").value;
-    console.log(login);
-    console.log(contrasenna);
-    console.log(repitecontrasenna);
-    /*
-    fetch(URL_PATH+"/Api/Like/"+postid)
-        .then(function (response) {
-            return response.json()
-        }).then (function (datos){
-            var corazon = document.querySelector("#likecorazon"+postid);
-            var numLikes = document.querySelector("#likecontador"+postid);
-            if (datos.estado) {
-                corazon.classList.add("text-danger"); // Color rojo
-                corazon.classList.add("heartBeat"); // efecto de animate.css
-            } else {
-                corazon.classList.remove("text-danger");
-                corazon.classList.remove("heartBeat");
-            }
-            numLikes.innerHTML = datos.numLikes;
+    var email = $("#email").val();
+    var avatar = "";
+    //Comprobar si avatar no esta vacio
+    if (undefined !== document.getElementById("avatar").files[0]) {
+        var avatar = document.getElementById("avatar").files[0].name;
+    }
+    //Comprobacion login
+    if (login.length <= 3) {
+        $('#errorLogin').text('*El login iene que tener mas de 3 carácteres');
+        error = true;
+    } else {
+        $('#errorLogin').text('');
+    }
+    //Comprobacion email
+    if (email < 1) {
+        $('#errorEmail').text('*El email es campo obligatorio');
+        error = true;
+    } else if (!(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/.test(email))) {
+        $('#errorEmail').text('*Introduce un email');
+        error = true;
+    } else {
+        $('#errorEmail').text('');
+    }
+    //Comprobacion contraseñas
+    if (contrasenna < 1) {
+        $('#errorContrasenna').text('*La contraseña es campo obligatorio');
+        error = true;
+    } else if (contrasenna <= 3) {
+        $('#errorContrasenna').text('*La contraseña tiene que tener al menos 4 carácteres');
+        error = true;
+    } else if (contrasenna != repitecontrasenna) {
+        $('#errorContrasenna').text('*Las contraseñas no coinciden');
+        error = true;
+    } else {
+        $('#errorEmail').text('');
+    }
+    //Comprobacion avatar
+    if (avatar.length > 0) {
+        var extension = avatar.substring(avatar.lastIndexOf(".") + 1);
+        if (extension != "jpg" && extension != "png" && extension != "jpeg" && extension != "gif") {
+            $('#errorAvatar').text('*El archivo no es una imagen');
+            error = true;
+        }
+    }
+    if (!error) {
+        //Comprobar si exite el usuario, sino registramos
+        fetch(URL_PATH+"/api/comprobarLogin/"+login)
+            .then(function (response) {
+                return response.text()
+            }).then (function (datos){
+                if (datos == "si") {
+                    $('#errorLogin').text('*El usuario ya existe');
+                    error = true;
+                } else {
+                    $('#enviar').click();
+                }
         })
-        */
+    }
 }

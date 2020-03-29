@@ -2,7 +2,7 @@ AMBOS:
 Probar Bootstrap con Vendor y quitarlo del Main.
 Logo
 GONZALO:
-Registro
+comprobar cosas cambiadas
 Perfil
 JORGE:
 Lobby

@@ -2,8 +2,7 @@
 namespace controller;
 class LobbyController extends Controller {
     function lobby() {
-        //TO DO
-        global $config;
-        var_dump($config);
+        $title = "Lobby";
+        echo \dawfony\Ti::render("view/MainView.phtml", compact('title'));
     }
 }

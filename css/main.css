@@ -12,7 +12,7 @@ form#registro {
     color: gray;
 }
 .personalizarNav {
-    padding-left: 10%;
+    text-align: center;
     font-size: 30px;
 }
 .bg-morado {
@@ -23,6 +23,22 @@ form#registro {
     color: purple;
 }
 .boton-naranja:hover {
-    background-color: rgba(255, 166, 0, 0.822);
-    color: rgba(128, 0, 128, 0.781);
+    background-color: rgba(255, 166, 0, 0.685);
+    color: rgba(128, 0, 128, 0.61);
+}
+.bloqueRegistro {
+    display: flex;
+    flex-direction: column;
+}
+.bloqueRegistro > a {
+    color: orange;
+    font-size: 13px;
+    text-align: center;
+}
+.perfil {
+    color: orange;
+    font-size: 20px;
+}
+.perfil:hover {
+    color: rgba(255, 166, 0, 0.685);
 }
