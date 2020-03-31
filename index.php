@@ -22,6 +22,9 @@ Macaw::get($URL_PATH . '/perfil/(:any)', "controller\UserController@perfil");
 
 Macaw::get($URL_PATH . '/mesa/(:any)', "controller\MesaController@partida");
 
+Macaw::get($URL_PATH . '/api/estadisticas/(:any)', "controller\ApiController@obtenerEstadisticas");
+
+
 Macaw::error(function() {
     echo '404 :: Not Found';
 });

@@ -24,4 +24,10 @@ class ApiController extends Controller {
         }
         echo $error ? "si" :  "no";
     }
+
+    function obtenerEstadisticas($login) {
+        header('Content-type: application/json');
+        $orm = new OrmUser;
+        echo json_encode($orm->obtenerEstadisticas($login));
+    }
 }

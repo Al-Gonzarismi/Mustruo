@@ -16,10 +16,7 @@ usuarios = [];
 io.on('connection', (socket) => {
     console.log(`usuario ${socket.id} conectado`);
     socket.on('lobby', (data) => {        
-        if (data != "anonimo") {
-            usuarios = usuarios.filter((user) => {
-                return user.login != data.login;
-            })
+        if (data != "anonimo") {           
             usuarios.push(data);
             usuarios = usuarios.sort((a, b) => {
                 if (a.login.toLowerCase() < b.login.toLowerCase()) {
