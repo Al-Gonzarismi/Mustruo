@@ -27,7 +27,7 @@ class OrmUser {
     public function obtenerUsuario($login) {
         $bd = Klasto::getInstance();
         $params = [$login];
-        $sql = "SELECT login, rol_id, nombre, email FROM usuario WHERE login = ?";
+        $sql = "SELECT login, rol_id, imagen, email FROM usuario WHERE login = ?";
         return $bd->queryOne($sql, $params, "objects\Usuario");
     }
 }

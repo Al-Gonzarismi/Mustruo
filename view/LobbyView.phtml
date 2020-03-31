@@ -1,0 +1,78 @@
+<?php global $URL_PATH; ?>
+<?php \dawfony\Ti::extend("view/MainView.phtml"); ?>
+<?php \dawfony\Ti::startBlock("content"); ?>
+<!-- clasificaciones Mustruo -->
+<div>
+
+    <head>
+        <h3>Mustruo del/de la <br>
+            <a href="#">semana</a>/<a href="#">mes</a>/<a href="#">año</a></h3>
+    </head>
+    <section>
+        <ol id="clasificacion"></ol>
+    </section>
+</div>
+<!-- mesas -->
+<section id="mesas"></section>
+<!-- boton nueva mesa-->
+<?php if (isset($_SESSION["login"])) : ?>
+    <button id="nuevamesa"></button>
+<?php endif; ?>
+<!-- Usuarios online-->
+<div>
+
+    <head>
+        <h3>Usuarios online</h3>
+    </head>
+    <section>
+        <ul id="usuariosonline"></ul>
+    </section>
+</div>
+<!-- Estadisticas-->
+<div>
+
+    <head>
+        <h3 id="encabezadoestadisiticas">Estadisticas</h3>
+    </head>
+    <section id="cuerpoestadisticas">
+        Pincha sobre un usuario
+    </section>
+</div>
+<!-- chat-->
+<div>
+    <section id="chat"></section>
+    <input type="text" id="mensaje" placeholder="Escribe algo...">
+    <button id="enviarmensaje">enviar</button>
+</div>
+<!-- modal de nueva mesa. TODO -->
+<div class="modal fade" id="viajeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titulo">titulo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="descripcion">descripcion:?></p>
+        <p id="precioprivado" class="text-success font-weight-bold">precioprivado: </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- javascript -->
+<script>
+    var usuario = JSON.parse(<?= json_encode($usuario) ?>)
+    var path = <?= $URL_PATH ?>
+    console.log(usuario, path);
+</script>
+<script src="http://localhost:3300/socket.io/socket.io.js"></script>
+<script src="js/socketscliente.js"></script>
+<script src="js/lobby.js"></script>
+
+<?php \dawfony\Ti::endBlock(); ?>
+<?php \dawfony\Ti::endExtend(); ?>
