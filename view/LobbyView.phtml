@@ -16,7 +16,7 @@
 <section id="mesas"></section>
 <!-- boton nueva mesa-->
 <?php if (isset($_SESSION["login"])) : ?>
-    <button id="nuevamesa"></button>
+    <button id="nuevamesa">Nueva mesa</button>
 <?php endif; ?>
 <!-- Usuarios online-->
 <div>
@@ -66,12 +66,10 @@
 </div>
 <!-- javascript -->
 <script>
-    var usuario = JSON.parse(<?= json_encode($usuario) ?>)
-    var path = <?= $URL_PATH ?>
-    console.log(usuario, path);
+    var usuario = <?= json_encode($usuario) ?>;
+    var path = "<?= $URL_PATH ?>";
 </script>
 <script src="http://localhost:3300/socket.io/socket.io.js"></script>
-<script src="js/socketscliente.js"></script>
 <script src="js/lobby.js"></script>
 
 <?php \dawfony\Ti::endBlock(); ?>
