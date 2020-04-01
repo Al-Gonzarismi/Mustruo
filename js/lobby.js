@@ -6,6 +6,10 @@ var enviar = document.getElementById("enviarmensaje");
 var mensaje = document.getElementById("mensaje");
 var encabezadoEstadisiticas = document.getElementById("encabezadoestadisiticas");
 var cuerpoEstadisticas = document.getElementById("cuerpoestadisticas");
+var semana = document.getElementById("semana");
+var mes = document.getElementById("mes");
+var anno = document.getElementById("anno");
+var clasificacion = document.getElementById("clasificacion");
 
 //functions
 function renderStats(login) {
@@ -19,8 +23,56 @@ function renderStats(login) {
         <tr><th>Mustruos</th><td>${res.mustruo_semana}</td><td>${res.mustruo_mes}</td><td>${res.mustruo_anno}</td></tr>
         <tr><th>Abandonos</th><td>${res.abandonos}</td></tr></table>`;
         });
-    
 }
+
+function hacerLista(zona, data) {
+    zona.innerHTML = "";
+    var previo = "";
+    for (let user of data) {
+        if (user.login != previo) {
+            let li = document.createElement("li");
+            let login = user.login;
+            li.innerHTML = `<a>${login}</a><span class="puntos">${zona == clasificacion? user.puntos : ""}</span>`;
+            zona.append(li);
+            li.addEventListener("click", () => {
+                encabezadoEstadisiticas.innerHTML = `Estadisticas de ${login}`;
+                renderStats(login);
+            });
+            previo = user.login;
+        }
+    }
+}
+
+//rankings
+fetch(`${path}/api/ranking/0`)
+        .then((res) => res.json())
+        .then((res) => {
+            hacerLista(clasificacion, res);
+        })
+        
+semana.addEventListener("click", () => {
+    fetch(`${path}/api/ranking/0`)
+        .then((res) => res.json())
+        .then((res) => {
+            hacerLista(clasificacion, res);
+        })
+})
+
+mes.addEventListener("click", () => {
+    fetch(`${path}/api/ranking/1`)
+        .then((res) => res.json())
+        .then((res) => {
+            hacerLista(clasificacion, res);
+        })
+})
+
+anno.addEventListener("click", () => {
+    fetch(`${path}/api/ranking/2`)
+        .then((res) => res.json())
+        .then((res) => {
+            hacerLista(clasificacion, res);
+        })
+})
 
 //sockets
 socket.on('connect', () => {
@@ -29,22 +81,8 @@ socket.on('connect', () => {
 });
 
 socket.on('refrescarusuarios', (data) => {
-    usuarios.innerHTML = "";
-    var previo = "";
-    for (let user of data) {
-        if (user.login != previo) {
-            var li = document.createElement("li");
-            let login = user.login;
-            li.innerHTML = `<a>${login}</a>`;
-            usuarios.append(li);
-            li.addEventListener("click", () => {
-                encabezadoEstadisiticas.innerHTML = `Estadisticas de ${login}`;
-                renderStats(login);
-            });
-            previo = user.login;
-        }
-        
-    }
+    hacerLista(usuarios, data);
+
 });
 
 if (usuario != "anonimo") {

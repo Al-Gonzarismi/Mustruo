@@ -18,7 +18,9 @@ class OrmUser {
         $sql = "INSERT INTO usuario VALUES (?, ?, ?, ?, ?)";        
         $params2 = [$login];
         $sql2 = "INSERT INTO estadisticas (`login`) VALUES (?)";
-        $todoOk = $bd->execute($sql, $params) && $bd->execute($sql2, $params2);
+        $params3 = [$login, $login, $login];
+        $sql3 = "INSERT INTO mustruo_temporal (`login`, `tipo_mustruo`) VALUES (?, 0), (?, 1), (?, 2)";
+        $todoOk = $bd->execute($sql, $params) && $bd->execute($sql2, $params2) && $bd->execute($sql3, $params3);
         $bd->commit();
         return $todoOk;
     }
@@ -42,5 +44,12 @@ class OrmUser {
         $params = [$login];
         $sql = "SELECT `juegos_jugados`, `juegos_ganados`, `vacas_jugadas`, `vacas_ganadas`, `abandonos`, `mustruo_semana`, `mustruo_mes`, `mustruo_anno` FROM `estadisticas` WHERE login = ?";
         return $bd->queryOne($sql, $params);
+    }
+
+    public function obtenerRanking($tipo) {
+        $bd = Klasto::getInstance();
+        $params = [$tipo];
+        $sql = "SELECT `login`, `puntos` FROM `mustruo_temporal` WHERE `tipo_mustruo` = ? ORDER BY puntos DESC LIMIT 10";
+        return $bd->query($sql, $params);
     }
 }

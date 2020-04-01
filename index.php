@@ -24,6 +24,8 @@ Macaw::get($URL_PATH . '/mesa/(:any)', "controller\MesaController@partida");
 
 Macaw::get($URL_PATH . '/api/estadisticas/(:any)', "controller\ApiController@obtenerEstadisticas");
 
+Macaw::get($URL_PATH . '/api/ranking/(:any)', "controller\ApiController@obtenerRanking");
+
 
 Macaw::error(function() {
     echo '404 :: Not Found';

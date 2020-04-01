@@ -30,4 +30,11 @@ class ApiController extends Controller {
         $orm = new OrmUser;
         echo json_encode($orm->obtenerEstadisticas($login));
     }
+
+    function obtenerRanking($tipo) {
+        header('Content-type: application/json');
+        $orm = new OrmUser;
+        //echo var_dump(json_encode($orm->obtenerRanking($tipo)));
+        echo json_encode($orm->obtenerRanking($tipo));        
+    }
 }

@@ -64,6 +64,9 @@ CREATE TABLE IF NOT EXISTS `mustruobd`.`mesa` (
   `fecha` DATETIME NOT NULL,
   `contrasenna` VARCHAR(45) NULL,
   `privacidad_id` INT NOT NULL,
+  `vacas` INT NOT NULL DEFAULT 2,
+  `juegos` INT NOT NULL DEFAULT 3,
+  `puntos` INT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_mesa_privacidad1_idx` (`privacidad_id` ASC),
   CONSTRAINT `fk_mesa_privacidad1`
@@ -222,6 +225,32 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `mustruobd`.`mustruo_temporal`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mustruobd`.`mustruo_temporal` (
+  `login` VARCHAR(20) NOT NULL,
+  `tipo_mustruo` INT NOT NULL,
+  `juegos_jugados` INT NULL DEFAULT 0,
+  `juegos_ganados` INT NULL DEFAULT 0,
+  `vacas_jugadas` INT NULL DEFAULT 0,
+  `vacas_ganadas` INT NULL DEFAULT 0,
+  `puntos` INT NULL DEFAULT 0,
+  PRIMARY KEY (`login`, `tipo_mustruo`),
+  INDEX `fk_mustruo_temporal_tipo_mustruo1_idx` (`tipo_mustruo` ASC),
+  CONSTRAINT `fk_mustruo_temporal_usuario1`
+    FOREIGN KEY (`login`)
+    REFERENCES `mustruobd`.`usuario` (`login`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_mustruo_temporal_tipo_mustruo1`
+    FOREIGN KEY (`tipo_mustruo`)
+    REFERENCES `mustruobd`.`tipo_mustruo` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `mustruobd`.`estado_cartas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mustruobd`.`estado_cartas` (
@@ -284,8 +313,9 @@ INSERT INTO `tipo_mustruo` (`id`, `descripcion`) VALUES ('0', 'semanal'), ('1', 
 -- -----------------------------------------------------
 -- Insercion administrador (admin, administrador)
 -- -----------------------------------------------------
-INSERT INTO `usuario` (`login`, `email`, `imagen`, `contrasenna`, `rol_id`) VALUES ('admin', 'admin_mustruo@gmail.com', NULL, '$2y$10$vNaSRMtKhqqJ.Qbg1T0.se8L00GtrffdbuQBnVrJMDtlYbMcsXUfC', '0');
-
+INSERT INTO `usuario` (`login`, `email`, `imagen`, `contrasenna`, `rol_id`) VALUES ('admin', 'admin_mustruo@gmail.com', 'anonimus.jpg', '$2y$10$vNaSRMtKhqqJ.Qbg1T0.se8L00GtrffdbuQBnVrJMDtlYbMcsXUfC', '0');
+INSERT INTO `estadisticas` (`login`) VALUES ('admin');
+INSERT INTO `mustruo_temporal` (`login`, `tipo_mustruo`) VALUES ('admin', '0'), ('admin', '1'), ('admin', '2');
 -- -----------------------------------------------------
 -- Insercion estado_cartas
 -- -----------------------------------------------------
