@@ -1,9 +1,11 @@
 AMBOS:
-Probar Bootstrap con Vendor y quitarlo del Main.
 Logo
 GONZALO:
+cambiar Bootstrap
 comprobar cosas cambiadas
 Perfil
+Lobby
+cambiar cadena a ECS6
 JORGE:
 Lobby
 repensar BD para la mesa (seria necesario conocer la posicion de cada usuario),
