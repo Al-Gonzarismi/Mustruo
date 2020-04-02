@@ -10,6 +10,7 @@ var semana = document.getElementById("semana");
 var mes = document.getElementById("mes");
 var anno = document.getElementById("anno");
 var clasificacion = document.getElementById("clasificacion");
+var nuevaMesa = document.getElementById("nuevamesa");
 
 //functions
 function renderStats(login) {
@@ -100,3 +101,23 @@ if (usuario != "anonimo") {
 socket.on('chatlobby:message', (data) => {
     chat.innerHTML += `<p>${data.nombre}: ${data.mensaje}</p>`;
 });
+
+//mesas
+nuevaMesa.addEventListener("click", () => $('#nuevamesamodal').modal('show'));
+var botpr = document.getElementById("botpr");
+botpr.addEventListener("click", () => {
+    let priv = document.getElementById("privacidad");
+    let clave = document.getElementById("clave")
+    if (botpr.innerText == "Privada") {
+        botpr.setAttribute("class", "btn btn-success");
+        botpr.innerText = "Publica";
+        clave.setAttribute("disabled", "disabled");
+        privacidad.value = "publica";
+    } else {
+        botpr.setAttribute("class", "btn btn-danger");
+        botpr.innerText = "Privada";
+        clave.removeAttribute("disabled");
+        privacidad.value = "privada";
+    }
+    
+})

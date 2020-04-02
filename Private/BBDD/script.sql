@@ -66,15 +66,23 @@ CREATE TABLE IF NOT EXISTS `mustruobd`.`mesa` (
   `privacidad_id` INT NOT NULL,
   `vacas` INT NOT NULL DEFAULT 2,
   `juegos` INT NOT NULL DEFAULT 3,
-  `puntos` INT NULL,
+  `puntos` INT NOT NULL DEFAULT 30,
+  `login` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_mesa_privacidad1_idx` (`privacidad_id` ASC),
+  INDEX `fk_mesa_usuario1_idx` (`login` ASC),
   CONSTRAINT `fk_mesa_privacidad1`
     FOREIGN KEY (`privacidad_id`)
     REFERENCES `mustruobd`.`privacidad` (`id`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_mesa_usuario1`
+    FOREIGN KEY (`login`)
+    REFERENCES `mustruobd`.`usuario` (`login`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
@@ -91,15 +99,16 @@ ENGINE = InnoDB;
 -- Table `mustruobd`.`usuarios_por_mesa`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mustruobd`.`usuarios_por_mesa` (
-  `usuario_login` VARCHAR(20) NOT NULL,
+  `login` VARCHAR(20) NOT NULL,
   `mesa_id` INT NOT NULL,
   `pareja_id` INT NOT NULL,
-  PRIMARY KEY (`usuario_login`, `mesa_id`),
+  `posicion` INT NOT NULL,
+  PRIMARY KEY (`login`),
   INDEX `fk_usuario_has_mesa_mesa1_idx` (`mesa_id` ASC),
-  INDEX `fk_usuario_has_mesa_usuario1_idx` (`usuario_login` ASC),
+  INDEX `fk_usuario_has_mesa_usuario1_idx` (`login` ASC),
   INDEX `fk_usuarios_por_mesa_pareja1_idx` (`pareja_id` ASC),
   CONSTRAINT `fk_usuario_has_mesa_usuario1`
-    FOREIGN KEY (`usuario_login`)
+    FOREIGN KEY (`login`)
     REFERENCES `mustruobd`.`usuario` (`login`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
