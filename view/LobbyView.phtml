@@ -4,12 +4,12 @@
 <!-- clasificaciones Mustruo -->
 <div>
 
-  <head>
+  <header>
     <h3>Mustruo del/de la <br>
       <a href="javascript:void(0)" id="semana">semana</a>/
       <a href="javascript:void(0)" id="mes">mes</a>/
       <a href="javascript:void(0)" id="anno">año</a></h3>
-  </head>
+  </header>
   <section>
     <ol id="clasificacion"></ol>
   </section>
@@ -23,9 +23,9 @@
 <!-- Usuarios online-->
 <div>
 
-  <head>
+  <header>
     <h3>Usuarios online</h3>
-  </head>
+  </header>
   <section>
     <ul id="usuariosonline"></ul>
   </section>
@@ -33,9 +33,9 @@
 <!-- Estadisticas-->
 <div>
 
-  <head>
+  <header>
     <h3 id="encabezadoestadisiticas">Estadisticas</h3>
-  </head>
+  </header>
   <section id="cuerpoestadisticas">
     Pincha sobre un usuario
   </section>
@@ -53,7 +53,7 @@
       <div class="modal-header">
         <h5 class="modal-title font-weight-bold">Crear Nueva Mesa</h5>
       </div>
-      <form action="<?= $URL_PATH ?>/nuevamesa" method="POST">
+      <form action="<?= $URL_PATH ?>/mesa/nuevamesa" method="POST">
 
         <div class="modal-body">
           Vacas a ganar:
@@ -73,7 +73,7 @@
           <input type="hidden" name="creador" value="<?= $usuario->login ?>">
           <button id="botpr" type="button" class="btn btn-danger" >Privada</button>
           <input id="clave" type="text" name="contrasenna" placeholder="Introduce clave">
-          <input id="privacidad" type="hidden" name="privacidad" value="privada">
+          <input id="privacidad" type="hidden" name="privacidad" value="0">
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-light">Crear Mesa</button>
@@ -86,7 +86,7 @@
 <!-- javascript -->
 <script>
   var usuario = <?= json_encode($usuario) ?>;
-  var path = "<?= $URL_PATH ?>";
+  var path = "<?= $URL_PATH ?>";  
 </script>
 <script src="http://localhost:3300/socket.io/socket.io.js"></script>
 <script src="js/lobby.js"></script>

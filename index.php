@@ -26,7 +26,15 @@ Macaw::get($URL_PATH . '/api/estadisticas/(:any)', "controller\ApiController@obt
 
 Macaw::get($URL_PATH . '/api/ranking/(:any)', "controller\ApiController@obtenerRanking");
 
-Macaw::post($URL_PATH . '/nuevamesa', "controller\mesaController@crearMesa");
+Macaw::post($URL_PATH . '/mesa/nuevamesa', "controller\mesaController@crearMesa");
+
+Macaw::get($URL_PATH . '/api/mesas', "controller\apiController@obtenerMesas");
+
+Macaw::get($URL_PATH . '/api/usuariosmesa/(:any)', "controller\apiController@obtenerUsuariosMesa");
+
+Macaw::get($URL_PATH . '/api/sentarse/(:any)/(:any)/(:any)', "controller\apiController@sentarseEnMesa");
+
+Macaw::get($URL_PATH . '/api/levantarse/(:any)/(:any)', "controller\apiController@levantarseDeLaMesa");
 
 
 Macaw::error(function() {

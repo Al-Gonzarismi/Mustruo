@@ -7,9 +7,11 @@ class LobbyController extends Controller {
         if (isset($_SESSION["login"])) {
             $orm = new OrmUser;
             $usuario = $orm->obtenerUsuario($_SESSION["login"]);
+            $usuario->estaSentado = $orm->comprobarEstadoUsuario($usuario->login)? true : false;
         } else {
             $usuario = "anonimo";
         }
+
         echo \dawfony\Ti::render("view/LobbyView.phtml", compact('title', 'usuario'));
     }
 }

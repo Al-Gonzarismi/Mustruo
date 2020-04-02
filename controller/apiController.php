@@ -1,6 +1,9 @@
 <?php
 namespace controller;
 use \orm\OrmUser;
+use \orm\OrmMesa;
+use objects\Mesa;
+
 class ApiController extends Controller {
     function comprobarLogin($login) {
         $orm = new OrmUser;
@@ -34,7 +37,36 @@ class ApiController extends Controller {
     function obtenerRanking($tipo) {
         header('Content-type: application/json');
         $orm = new OrmUser;
-        //echo var_dump(json_encode($orm->obtenerRanking($tipo)));
         echo json_encode($orm->obtenerRanking($tipo));        
+    }
+
+    function obtenerUsuariosMesa($id) {
+        header('Content-type: application/json');
+        $orm = new OrmMesa;
+        echo json_encode($orm->obtenerUsuariosMesa($id));
+    }
+
+    function obtenerMesas() {
+        header('Content-type: application/json');
+        $orm = new OrmMesa;
+        echo json_encode($orm->obtenerMesas());
+    }
+
+    function sentarseEnMesa($id, $pos, $login) {
+        $orm = new OrmMesa;
+        if ($orm->sentarseEnMesa($id, $pos, $login)) {
+            echo "ok";
+        } else {
+            echo "nook";
+        }
+    }
+
+    function levantarseDeLaMesa($id, $pos) {
+        $orm = new OrmMesa;
+        if ($orm->levantarseDeLaMesa($id, $pos)) {
+            echo "ok";
+        } else {
+            echo "nook";
+        }
     }
 }
