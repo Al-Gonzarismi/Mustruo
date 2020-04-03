@@ -6,5 +6,3 @@ comprobar cosas cambiadas
 Perfil
 JORGE:
 Lobby
-repensar BD para la mesa (seria necesario conocer la posicion de cada usuario),
-clasificaciones temporales de mustruos (no tenemos un buen sistema para mantener las cosas actualizadas--tabla por clasificacion)

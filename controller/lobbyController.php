@@ -2,7 +2,7 @@
 namespace controller;
 use orm\OrmUser;
 class LobbyController extends Controller {
-    function lobby() {
+    function lobby($arg = "principal") {
         $title = "Lobby";
         if (isset($_SESSION["login"])) {
             $orm = new OrmUser;
@@ -12,6 +12,6 @@ class LobbyController extends Controller {
             $usuario = "anonimo";
         }
 
-        echo \dawfony\Ti::render("view/LobbyView.phtml", compact('title', 'usuario'));
+        echo \dawfony\Ti::render("view/LobbyView.phtml", compact('title', 'usuario', 'arg'));
     }
 }

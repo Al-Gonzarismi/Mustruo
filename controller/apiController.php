@@ -61,12 +61,17 @@ class ApiController extends Controller {
         }
     }
 
-    function levantarseDeLaMesa($id, $pos) {
-        $orm = new OrmMesa;
-        if ($orm->levantarseDeLaMesa($id, $pos)) {
+    function levantarseDeLaMesa($id, $pos, $login) {
+        $orm = new OrmMesa;        
+        if ($_SESSION["login"] == $login && $orm->levantarseDeLaMesa($id, $pos, $login)) {
             echo "ok";
         } else {
-            echo "nook";
+            echo "te reviento";
         }
+    }
+
+    function comprobarEstadoUsuario($login) {
+        $orm = new OrmUser; 
+        echo $orm->comprobarEstadoUsuario($login)? "sentado" : "no sentado";
     }
 }

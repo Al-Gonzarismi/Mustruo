@@ -1,7 +1,7 @@
 <?php
 namespace objects;
 class Mesa {
-    public $id;
+    public $id_mesa;
     public $fecha;
     public $contrasenna;
     public $privacidad_id;

@@ -27,6 +27,6 @@ class MesaController extends Controller
         $mesa->puntos =  $_POST["puntos"];
         $mesa->login = $_POST["creador"];
         $orm->crearMesa($mesa);
-        header("Location: $URL_PATH");
+        header("Location: $URL_PATH/mc");
     }
 }

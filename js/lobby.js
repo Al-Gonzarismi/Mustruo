@@ -10,8 +10,11 @@ var semana = document.getElementById("semana");
 var mes = document.getElementById("mes");
 var anno = document.getElementById("anno");
 var clasificacion = document.getElementById("clasificacion");
-var nuevaMesa = document.getElementById("nuevamesa");
 var mesas = document.getElementById("mesas");
+//varibles solo para registrados;
+if (usuario != "anonimo") {
+    var nuevaMesa = document.getElementById("nuevamesa");
+}
 
 //functions
 function renderStats(login) {
@@ -45,88 +48,110 @@ function hacerLista(zona, data) {
     }
 }
 
+function levantarse(id, i, boton, span) {
+    fetch(`${path}/api/levantarse/${id}/${i}/${span.innerText}`)
+        .then((res) => res.text())
+        .then((res) => {
+            if (res == "ok") {
+                boton.innerText = "Sentarse";
+                span.innerText = "libre";
+                //sockets:probablemente mejorable
+                socket.emit('actualizarmesas');
+            } else {
+                window.alert("Intentelo otra vez");
+            }
+        })
+}
+
+function sentarse(id, i, boton, span) {
+    fetch(`${path}/api/sentarse/${id}/${i}/${usuario.login}`)
+        .then((res) => res.text())
+        .then((res) => {
+            console.log(res);
+            if (res == "ok") {
+                boton.innerText = "Levantarse";
+                span.innerText = usuario.login;
+                //sockets:probablemente mejorable
+                socket.emit("actualizarmesas");
+            } else {
+                window.alert("Intentelo otra vez");
+            }
+        })
+}
+
+function crearAsientos(id, mesa, i) {
+    let asiento = document.createElement("div");
+    asiento.setAttribute("class", `posicion${i}`);
+    let span = document.createElement("span");
+    span.innerText = "Libre";
+    let boton = document.createElement("button");
+    boton.innerText = "Sentarse";
+    boton.addEventListener("click", () => {
+        if (usuario != "anonimo") {
+            if (boton.innerText == "Sentarse") {
+                if (!usuario.estaSentado) {
+                    sentarse(id, i, boton, span);
+                } else {
+                    window.alert("Ya estas sentado en otro lugar");
+                }
+            } else {
+                levantarse(id, i, boton, span);
+            }
+        } else {
+            window.alert("Tienes que estar conectado");
+        }
+    });
+    asiento.append(boton);
+    asiento.append(span);
+    mesa.append(asiento);
+}
+
 function renderUsuarios(id, mesa) {
-    console.log("estoy en render Usuarios");
     fetch(`${path}/api/usuariosmesa/${id}`)
         .then((res) => res.json())
         .then((res) => {
             for (let i = 0; i < 4; i++) {
-                let asiento = document.createElement("div");
-                asiento.setAttribute("class", `posicion${i}`);
-                let boton = document.createElement("button");
-                let span = document.createElement("span");
-                span.innerText("libre");
-                boton.addEventListener("click", () => {
-                    //sentarse-levantarse
-                    if (usuario != "anonimo") {
-                        if (boton.innerText == "sentarse") {
-                            fetch(`${path}/api/sentarse/${mesa.id}/${i}/${usuario.login}`)
-                                .then((res) => res.text())
-                                .then((res) => {
-                                    if (res = "ok") {
-                                        boton.innerText = "levantarse";
-                                        span.innerText = usuario.login;
-                                        usuario.estaSentado = true;
-                                        //sockets:probablemente mejorable
-                                        socket.emit("actualizarmesas");
-                                    } else {
-                                        window.alert("Intentelo otra vez");
-                                    }
-                                })
-                        } else {
-                            fetch(`${path}/api/levantarse/${mesa.id}/${i}`)
-                                .then((res) => res.text())
-                                .then((res) => {
-                                    if (res = "ok") {
-                                        boton.innerText = "sentarse";
-                                        span.innerText = "libre";
-                                        usuario.estaSentado = false;
-                                        //sockets:probablemente mejorable
-                                        socket.emit('actualizarmesas');
-                                    } else {
-                                        window.alert("Intentelo otra vez");
-                                    }
-                                })
-                        }
-                    }
-                   
-                });
-                asiento.append(boton);
-                asiento.append(span);
-                mesa.append(asiento);
+                crearAsientos(id, mesa, i);
             }
             for (let usu of res) {
                 let asiento = mesa.childNodes[usu.posicion];
-                asiento.chlidNodes[0].innerText = "levantarse";
+                asiento.childNodes[0].innerText = "levantarse";
                 asiento.childNodes[1].innerText = usu.login;
             }
+            var listo = document.createElement("button");
+            listo.setAttribute("class", "listo");
+            listo.innerText = "Listo!";
+            mesa.append(listo);
+            //dar funcionalidad al boton de empezar
         })
 
 }
 
 function renderMesa(mesa) {
-    console.log("estoy en render mesas");
     var div = document.createElement("div");
-    div.id = `mesa${mesa.id}`;
-    var listo = document.createElement("button");
-    listo.setAttribute("class", "listo");
-    listo.append(div);
-    //dar funcionalidad al boton
-    renderUsuarios(mesa.id, div);
+    div.id = `mesa${mesa.id_mesa}`;
+    renderUsuarios(mesa.id_mesa, div);
     mesas.append(div);
 }
 
 function actualizarMesas() {
-    console.log("estoy en actualizar mesas");
-    fetch(`${path}/api/mesas`)
-        .then((res) => res.json())
+    fetch(`${path}/api/estadousuario/${usuario.login}`)
+        .then((res) => res.text())
         .then((res) => {
             console.log(res);
-            mesas.innerHTML = "";
-            for (let mesa of res) {
-                renderMesa(mesa);
-            }
+            usuario.estaSentado = res == "sentado";
+            console.log(usuario.estaSentado);
+            fetch(`${path}/api/mesas`)
+                .then((res) => res.json())
+                .then((res) => {
+                    mesas.innerHTML = "";
+                    //sobrecogedor
+                    for (let mesa of res) {
+                        renderMesa(mesa);
+                    }
+                })
         })
+
 
 }
 
@@ -182,26 +207,39 @@ socket.on('chatlobby:message', (data) => {
 });
 
 //crear mesa
-nuevaMesa.addEventListener("click", () => $('#nuevamesamodal').modal('show'));
-var botpr = document.getElementById("botpr");
-botpr.addEventListener("click", () => {
-    let priv = document.getElementById("privacidad");
-    let clave = document.getElementById("clave")
-    if (botpr.innerText == "Privada") {
-        botpr.setAttribute("class", "btn btn-success");
-        botpr.innerText = "Publica";
-        clave.setAttribute("disabled", "disabled");
-        privacidad.value = "1";
-    } else {
-        botpr.setAttribute("class", "btn btn-danger");
-        botpr.innerText = "Privada";
-        clave.removeAttribute("disabled");
-        privacidad.value = "0";
-    }
+if (usuario != "anonimo") {
+    nuevaMesa.addEventListener("click", () => {
+        if (usuario.estaSentado) {
+            window.alert("Ya estas sentado en una mesa");
+        } else {
+            $('#nuevamesamodal').modal('show');
+            var botpr = document.getElementById("botpr");
+            botpr.addEventListener("click", () => {
+                let priv = document.getElementById("privacidad");
+                let clave = document.getElementById("clave")
+                if (botpr.innerText == "Privada") {
+                    botpr.setAttribute("class", "btn btn-success");
+                    botpr.innerText = "Publica";
+                    clave.setAttribute("disabled", "disabled");
+                    priv.value = "1";
+                } else {
+                    botpr.setAttribute("class", "btn btn-danger");
+                    botpr.innerText = "Privada";
+                    clave.removeAttribute("disabled");
+                    priv.value = "0";
+                }
+            })
+        }
+    })
+}
 
-});
 //actualizar mesas
-actualizarMesas();
-socket.on('actualizarmesas', ()=>{
+if (arg == "mc") {
+    socket.emit("actualizarmesas");
+} else {
+
+    actualizarMesas();
+}
+socket.on('actualizarmesas', () => {
     actualizarMesas();
 })

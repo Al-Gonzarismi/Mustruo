@@ -60,7 +60,7 @@ ENGINE = InnoDB;
 -- Table `mustruobd`.`mesa`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mustruobd`.`mesa` (
-  `id` INT NOT NULL,
+  `id_mesa` INT NOT NULL AUTO_INCREMENT,
   `fecha` DATETIME NOT NULL,
   `contrasenna` VARCHAR(45) NULL,
   `privacidad_id` INT NOT NULL,

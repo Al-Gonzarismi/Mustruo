@@ -8,6 +8,8 @@ session_start();
 
 Macaw::get($URL_PATH . '/', "controller\LobbyController@lobby");
 
+Macaw::get($URL_PATH . '/(:any)', "controller\LobbyController@lobby");
+
 Macaw::get($URL_PATH . '/registrate', "controller\UserController@registro");
 
 Macaw::post($URL_PATH . '/registrate', "controller\UserController@registrar");
@@ -34,7 +36,11 @@ Macaw::get($URL_PATH . '/api/usuariosmesa/(:any)', "controller\apiController@obt
 
 Macaw::get($URL_PATH . '/api/sentarse/(:any)/(:any)/(:any)', "controller\apiController@sentarseEnMesa");
 
-Macaw::get($URL_PATH . '/api/levantarse/(:any)/(:any)', "controller\apiController@levantarseDeLaMesa");
+Macaw::get($URL_PATH . '/api/levantarse/(:any)/(:any)/(:any)', "controller\apiController@levantarseDeLaMesa");
+
+Macaw::get($URL_PATH . '/api/estadousuario/(:any)', "controller\apiController@comprobarEstadoUsuario");
+
+
 
 
 Macaw::error(function() {

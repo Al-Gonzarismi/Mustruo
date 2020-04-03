@@ -86,7 +86,8 @@
 <!-- javascript -->
 <script>
   var usuario = <?= json_encode($usuario) ?>;
-  var path = "<?= $URL_PATH ?>";  
+  var path = "<?= $URL_PATH ?>";
+  var arg = "<?=$arg?>";  
 </script>
 <script src="http://localhost:3300/socket.io/socket.io.js"></script>
 <script src="js/lobby.js"></script>
