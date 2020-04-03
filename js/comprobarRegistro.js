@@ -27,10 +27,10 @@ function comprobarRegistro() {
         $('#errorEmail').text('');
     }
     //Comprobacion contraseñas
-    if (contrasenna < 1) {
+    if (contrasenna.length < 1) {
         $('#errorContrasenna').text('*La contraseña es campo obligatorio');
         error = true;
-    } else if (contrasenna <= 3) {
+    } else if (contrasenna.length <= 3) {
         $('#errorContrasenna').text('*La contraseña tiene que tener al menos 4 carácteres');
         error = true;
     } else if (contrasenna != repitecontrasenna) {
@@ -49,7 +49,7 @@ function comprobarRegistro() {
     }
     if (!error) {
         //Comprobar si exite el usuario, sino registramos
-        fetch(URL_PATH+"/api/comprobarLogin/"+login)
+        fetch(`${URL_PATH}/api/comprobarLogin/${login}`)
             .then(function (response) {
                 return response.text()
             }).then (function (datos){

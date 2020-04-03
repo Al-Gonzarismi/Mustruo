@@ -1,11 +1,11 @@
 AMBOS:
 Logo
 GONZALO:
-cambiar Bootstrap
-comprobar cosas cambiadas
-Perfil
+cambiar Bootstrap (pooper y jquery?)
+Perfil {
+    comprobar modificar login (tres tablas)
+}
 Lobby
-cambiar cadena a ECS6
 JORGE:
 Lobby
 repensar BD para la mesa (seria necesario conocer la posicion de cada usuario),

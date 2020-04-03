@@ -1,0 +1,76 @@
+<?php global $URL_PATH;?>
+<?php \dawfony\Ti::extend("view/MainView.phtml"); ?>
+<?php \dawfony\Ti::startBlock("content"); ?>
+<div class="info">
+    <div class="bloqueImagen">
+        <img src="<?= $URL_PATH ?>/media/avatares/<?= $usuario->imagen ?>" class="imagenUsuario">
+        <?php if (isset($_SESSION)) : ?>
+            <?php if($_SESSION["login"] == $usuario->login) : ?>
+            <label for="avatar" class="subir">Editar <i class="fa fa-pencil"></i></label>
+            <form action="<?= $URL_PATH ?>/cambiarAvatar/<?= $usuario->login ?>/<?= $usuario->imagen ?>" method="POST" enctype="multipart/form-data">
+                <input id="avatar" name="avatar" type="file" style='display: none;' accept="image/*">
+                <input type="submit" id="cambiarAvatar" style="visibility:hidden">
+            </form>
+            <?php endif;?>
+        <?php endif;?>    
+    </div>
+    <div class="datos">
+        <div>
+            <span>Login:</span> 
+            <div class="editarDatos">
+                <span id="spanLogin"><?= $usuario->login ?></span>
+            </div>
+        </div>
+        <?php if (isset($_SESSION)) : ?>
+            <?php if($_SESSION["login"] == $usuario->login) : ?>
+                <div>
+                    <span>Contraseña:</span>
+                    <div class="editarDatos">
+                        <span class="normalContrasennas">**********</span>
+                        <a href="javascript:void(0);" class="btn boton-naranja btn-chiquitin normalContrasennas" id="editarContrasenna">Editar <i class="fa fa-pencil"></i></a>
+                        <input class="editarInput editarContrasennas" type="password" id="contrasenna" placeholder="  contraseña nueva">
+                        <input class="editarInput editarContrasennas" type="password" id="repitecontrasenna" placeholder="  repita contraseña">
+                        <a href="javascript:void(0);" class="btn boton-naranja btn-chiquitin editarContrasennas" id="cambiarContrasenna">Cambiar <i class="fa fa-pencil"></i></a>
+                        <a href="javascript:void(0);" class="btn boton-morado btn-chiquitin editarContrasennas" id="cancelarContrasenna">Cancelar</a>   
+                    </div>
+                </div>
+            <?php endif;?>
+        <?php endif;?> 
+        <div>
+            <span>Email:</span>
+            <div class="editarDatos">
+                <?php if (isset($_SESSION)) : ?>
+                    <?php if($_SESSION["login"] == $usuario->login) : ?>
+                        <span class="normalEmail" id="spanEmail"><?= $usuario->email ?></span>
+                        <a href="javascript:void(0);" class="btn boton-naranja btn-chiquitin normalEmail" id="editarEmail">Editar <i class="fa fa-pencil"></i></a>
+                        <input class="editarInput editarEmail" type="text" value="<?= $usuario->email ?>" id="email">
+                        <a href="javascript:void(0);" class="btn boton-naranja btn-chiquitin editarEmail" id="cambiarEmail">Cambiar <i class="fa fa-pencil"></i></a>
+                        <a href="javascript:void(0);" class="btn boton-morado btn-chiquitin editarEmail" id="cancelarEmail">Cancelar</a>
+                    <?php else : ?>
+                        <?= $usuario->email ?>
+                    <?php endif;?>
+                <?php endif;?>    
+            </div>
+        </div>
+    </div> 
+</div>    
+<hr>
+<div class="info">
+    <h1>Estadisticas:</h1>
+    <div class="datos">
+        <div class="stats">Juegos jugados: <div class="numero"><?= $estadisticas["juegos_jugados"] ?></div></div>
+        <div class="stats">Juegos ganados: <div class="numero"><?= $estadisticas["juegos_ganados"] ?></div></div>
+        <div class="stats">Vacas jugadas: <div class="numero"><?= $estadisticas["vacas_jugadas"] ?></div></div>
+        <div class="stats">Vacas ganadas: <div class="numero"><?= $estadisticas["vacas_jugadas"] ?></div></div>
+        <div class="stats">Abandonos: <div class="numero"><?= $estadisticas["abandonos"] ?></div></div>
+        <div class="stats">Mustruo de la semana: <div class="numero"><?= $estadisticas["mustruo_semana"] ?></div></div>
+        <div class="stats">Mustruo del mes: <div class="numero"><?= $estadisticas["mustruo_mes"] ?></div></div>
+        <div class="stats">Mustruo del año: <div class="numero"><?= $estadisticas["mustruo_anno"] ?></div></div>
+    </div>
+</div>
+<script>
+var URL_PATH = '<?= $URL_PATH ?>';
+</script>
+<script src="<?= $URL_PATH ?>/js/cambiosPerfil.js"></script>
+<?php \dawfony\Ti::endBlock(); ?>
+<?php \dawfony\Ti::endExtend(); ?>

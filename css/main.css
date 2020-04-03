@@ -1,16 +1,35 @@
+/* General */
 body {
     background-color: #004d1a;
     color: white;
     font-family: "Comic Sans MS", cursive, sans-serif;
+    
 }
-form#registro {
-    margin-top: 3%;
-    margin-left: 20%;
-    margin-right: 20%;
+.boton-morado {
+    background-color: purple;
+    color: orange;
 }
-#registro > div > small {
-    color: gray;
+.boton-naranja {
+    background-color: orange;
+    color: purple;
 }
+.boton-morado:hover {
+    background-color:  rgba(128, 0, 128, 0.61);;
+    color: rgba(255, 166, 0, 0.685);
+}
+.boton-naranja:hover {
+    background-color: rgba(255, 166, 0, 0.685);
+    color: rgba(128, 0, 128, 0.61);
+}
+hr {
+    background-color: purple; 
+}
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Nav */
 .personalizarNav {
     text-align: center;
     font-size: 30px;
@@ -18,19 +37,7 @@ form#registro {
 .bg-morado {
     background-color: purple;
 }
-.boton-naranja {
-    background-color: orange;
-    color: purple;
-}
-.boton-naranja:hover {
-    background-color: rgba(255, 166, 0, 0.685);
-    color: rgba(128, 0, 128, 0.61);
-}
-.bloqueRegistro {
-    display: flex;
-    flex-direction: column;
-}
-.bloqueRegistro > a {
+.registrate {
     color: orange;
     font-size: 13px;
     text-align: center;
@@ -41,4 +48,88 @@ form#registro {
 }
 .perfil:hover {
     color: rgba(255, 166, 0, 0.685);
+}
+
+
+/* Registro */
+form#registro {
+    margin-top: 3%;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+#registro > div > small {
+    color: gray;
+}
+
+
+/* Perfil */
+.info {
+    display: flex;
+    margin-top: 2%; 
+    margin-left: 6%;
+    color: orange;
+}
+.bloqueImagen {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    height: 325px;
+}
+.imagenUsuario {
+    width: 250px;
+    height: 250px;
+}
+.datos {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-left: 15%;
+    font-size: 20px;
+}
+.editarDatos {
+    margin-left: 9%;
+    display: inline;
+    color:white;
+    font-size: 15px;
+}
+.editarInput {
+    width: 18%;
+    background-color: palegreen;
+    border: 1px solid palegreen;
+    color: green;
+    border-radius: 5px;
+}
+.btn-chiquitin {
+    font-size: 10px;
+    margin-left: 2%;
+    display: inline;
+}
+.informacionEditar {
+    font-size: 10px;
+    color: orange;
+}
+.subir{
+    padding: 5px;
+    text-align: center;
+    background-color: orange;
+    color: purple;
+}
+.subir:hover{
+    background-color: rgba(255, 166, 0, 0.685);
+    color: rgba(128, 0, 128, 0.61);
+}
+.stats {
+    margin-bottom: 2%;
+    width: 35%;
+}
+.stats > .numero {
+    display: inline;
+    color: white;
+}
+.editarContrasennas {
+    display: none;
+}
+.editarEmail {
+    display: none;
 }

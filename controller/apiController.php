@@ -37,4 +37,23 @@ class ApiController extends Controller {
         //echo var_dump(json_encode($orm->obtenerRanking($tipo)));
         echo json_encode($orm->obtenerRanking($tipo));        
     }
+
+    function cambiarEmail($login, $emailCambio) {
+        $orm = new OrmUser;
+        if ($orm->modificarEmail($login, $emailCambio)) {
+            echo 1;
+        } else {
+            echo 0;
+        }
+    }
+
+    function cambiarContrasenna($login, $contrasenna) {
+        $orm = new OrmUser;
+        $contrasenna = password_hash($contrasenna, PASSWORD_DEFAULT);
+        if ($orm->modificarContrasenna($login, $contrasenna)) {
+            echo 1;
+        } else {
+            echo 2;
+        }
+    }
 }
