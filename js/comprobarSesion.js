@@ -7,7 +7,7 @@ function comprobarSesion() {
                 return response.text()
             }).then (function (datos){
                 if (datos == "si") {
-                    alert('Compruebe de nuevo su login y/o contraseña 2')
+                    alert('Compruebe de nuevo su login y/o contraseña')
                 } else {
                     location.replace(URL_PATH+"/");
                 }

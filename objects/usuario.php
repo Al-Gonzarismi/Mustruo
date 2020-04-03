@@ -5,4 +5,5 @@ class Usuario {
     public $email;
     public $imagen;
     public $rol_id;
+    public $estaSentado;
 }

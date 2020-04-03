@@ -41,4 +41,8 @@ io.on('connection', (socket) => {
         io.emit('chatlobby:message', data);
     })
 
+    socket.on('actualizarmesas', () => {
+        io.emit('actualizarmesas');
+    })
+
 })

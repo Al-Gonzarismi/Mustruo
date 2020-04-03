@@ -52,4 +52,11 @@ class OrmUser {
         $sql = "SELECT `login`, `puntos` FROM `mustruo_temporal` WHERE `tipo_mustruo` = ? ORDER BY puntos DESC LIMIT 10";
         return $bd->query($sql, $params);
     }
+
+    public function comprobarEstadoUsuario($login) {
+        $bd = Klasto::getInstance();
+        $params = [$login];
+        $sql = "SELECT `login` FROM `usuarios_por_mesa` WHERE `login` = ?";
+        return $bd->queryOne($sql, $params);
+    }
 }
