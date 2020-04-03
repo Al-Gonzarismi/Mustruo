@@ -12,7 +12,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Propia hoja de estilos -->
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="<?= $URL_PATH ?>/css/main.css">
     <?php \dawfony\Ti::startBlock("extrahead"); ?>
     <?php \dawfony\Ti::endBlock() ?>
     <title>
@@ -33,24 +33,24 @@
                 <source media="(min-width: 650px)" srcset="images/image-medium.png">
                 <source media="(min-width: 465px)" srcset="images/image-small.png">
             -->    
-                <img src="media/logoPrueba.png" >
+                <img src="<?= $URL_PATH ?>/media/logoPrueba.png" >
             </picture>
         </div>
         <div class="col-md-5">
-            <?php if (isset($_SESSION["login"])) : ?>
-            <div class="float-right">
-                <a class="perfil" href="<?= $URL_PATH ?>/perfil/<?= $_SESSION["login"] ?>">Perfil de <?= $_SESSION["login"] ?></a>
-                <a class="btn boton-naranja ml-5" href="<?= $URL_PATH ?>/cerrarSesion">Cerrar Sesión</a>
-            </div>    
-            <?php elseif (isset($registro)) : ?>
+            <?php if (isset($enLobby)) : ?>
                 <a class="btn boton-naranja float-right" href="<?= $URL_PATH ?>/">Volver a Lobby</a>
+            <?php elseif (isset($_SESSION["login"])) : ?>
+                <div class="float-right">
+                    <a class="perfil" href="<?= $URL_PATH ?>/perfil/<?= $_SESSION["login"] ?>">Ir a perfil</a>
+                    <a class="btn boton-naranja ml-5" href="<?= $URL_PATH ?>/cerrarSesion">Cerrar Sesión</a>
+                </div>               
             <?php else : ?>
                 <div class="form-inline float-right">
                     <input type="text" class="form-control mr-sm-2" id="login" name="login" placeholder="login">
                     <input type="password" class="form-control mr-sm-2" id="contrasenna" name="contrasenna" placeholder="******">
-                    <div class="bloqueRegistro">
+                    <div class="flexColumn">
                         <input type="button" class="btn boton-naranja" onclick="comprobarSesion()" value="Iniciar Sesión">
-                        <a href="<?= $URL_PATH ?>/registrate">Regístrate</a>
+                        <a class="registrate" href="<?= $URL_PATH ?>/registrate">Regístrate</a>
                     </div>
                 </div>
                 <script>
@@ -60,9 +60,7 @@
             <?php endif; ?> 
         </div>
     </nav>
-    <div class="container">
     <?php \dawfony\Ti::startBlock("content"); ?>
     <?php \dawfony\Ti::endBlock() ?>
-    </div>
 </body>
 </html>

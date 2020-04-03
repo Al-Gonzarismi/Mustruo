@@ -1,10 +1,7 @@
 AMBOS:
 Logo
 GONZALO:
-cambiar Bootstrap
-comprobar cosas cambiadas
-Perfil
+cambiar Bootstrap (pooper y jquery?)
 Lobby
-cambiar cadena a ECS6
 JORGE:
 Lobby

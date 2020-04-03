@@ -59,4 +59,25 @@ class OrmUser {
         $sql = "SELECT `login` FROM `usuarios_por_mesa` WHERE `login` = ?";
         return $bd->queryOne($sql, $params);
     }
+        
+    public function modificarAvatar($login, $avatar) {
+        $bd = Klasto::getInstance();
+        $params = [$avatar, $login];
+        $sql = "UPDATE usuario SET imagen = ? WHERE `login` = ?";
+        return $bd->execute($sql, $params);
+    }
+
+    public function modificarEmail($login, $emailCambio) {
+        $bd = Klasto::getInstance();
+        $params = [$emailCambio, $login];
+        $sql = "UPDATE usuario SET `email` = ? WHERE `login` = ?";
+        return $bd->execute($sql, $params);
+    }
+
+    public function modificarContrasenna($login, $contrasenna) {
+        $bd = Klasto::getInstance();
+        $params = [$contrasenna, $login];
+        $sql = "UPDATE usuario SET `contrasenna` = ? WHERE `login` = ?";
+        return $bd->execute($sql, $params);
+    }
 }

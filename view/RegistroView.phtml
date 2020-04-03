@@ -1,6 +1,7 @@
 <?php global $URL_PATH;?>
 <?php \dawfony\Ti::extend("view/MainView.phtml"); ?>
 <?php \dawfony\Ti::startBlock("content"); ?>
+<div class="container">
 <form id="registro" action="registrate" method="POST" enctype="multipart/form-data">
     <div class="form-group">
         <label for="login">Login:</label>
@@ -29,6 +30,7 @@
     <input type="button" onclick="comprobarRegistro()" class="btn boton-naranja float-right" value="Registrarte!">
     <input type="submit" id="enviar" style="visibility:hidden">
 </form>
+</div>
 <script>
 var URL_PATH = '<?= $URL_PATH ?>';
 </script>

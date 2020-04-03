@@ -8,8 +8,8 @@ class UserController extends Controller {
     */
     function registro() {
         $title = "Registro";
-        $registro = true;
-        echo \dawfony\Ti::render("view/RegistroView.phtml", compact('title', 'registro'));
+        $enLobby = false;
+        echo \dawfony\Ti::render("view/RegistroView.phtml", compact('title', 'enLobby'));
     }
 
     /*
@@ -21,10 +21,14 @@ class UserController extends Controller {
         $login = sanitizar($_POST["login"]); //Login de registro
         $contrasenna = password_hash($_POST["contrasenna"], PASSWORD_DEFAULT); //Contraseña de registro con HASH
         $email = $_POST["email"]; //Email de registro
-        $img = $_FILES["avatar"]; 
+        $img = $_FILES["avatar"];
+        if (strlen($img["name"]) > 0) {
+            $img["name"] = cambiarNombreAvatar($img["name"], $login);
+        } else {
+            $img["name"] = "anonimus.jpg";
+        }
         guardarAvatar($img); //Almacenar imagen en carpeta avatares
-        $avatar = strlen($img["name"]) > 0 ? $img["name"] : "anonimus.jpg"; //anonimus.jpg por defecto
-        if ($orm->registrarUsuario($login, $email, $avatar, $contrasenna)) {
+        if ($orm->registrarUsuario($login, $email, $img["name"], $contrasenna)) {
             //OK
         } else {
             //Error Registro
@@ -42,6 +46,25 @@ class UserController extends Controller {
     }
 
     function perfil($login) {
-        echo $login;
+        $title = "Perfil de $login";
+        $enLobby = false;
+        $orm = new OrmUser;
+        $usuario = $orm->obtenerUsuario($login);
+        $estadisticas = $orm->obtenerEstadisticas($login);
+        echo \dawfony\Ti::render("view/PerfilView.phtml", compact('title', 'enLobby', 'usuario', 'estadisticas'));
+    }
+
+    function cambiarAvatar($login, $imgAntigua) {
+        global $URL_PATH;
+        $orm = new OrmUser;
+        if ($imgAntigua != "anonimus.jpg") {
+            eliminarAvatar($imgAntigua);
+        }
+        $imgNueva = $_FILES["avatar"];
+        $imgNueva["name"] = cambiarNombreAvatar($imgNueva["name"], $login);
+        if ($orm->modificarAvatar($login, $imgNueva["name"])) {
+            guardarAvatar($imgNueva);
+        }
+        header("Location: $URL_PATH/perfil/$login");
     }
 }
