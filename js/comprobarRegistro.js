@@ -17,7 +17,7 @@ function comprobarRegistro() {
         $('#errorLogin').text('');
     }
     //Comprobacion email
-    if (email < 1) {
+    if (email.length < 1) {
         $('#errorEmail').text('*El email es campo obligatorio');
         error = true;
     } else if (!(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/.test(email))) {
@@ -37,7 +37,7 @@ function comprobarRegistro() {
         $('#errorContrasenna').text('*Las contraseñas no coinciden');
         error = true;
     } else {
-        $('#errorEmail').text('');
+        $('#errorContrasenna').text('');
     }
     //Comprobacion avatar
     if (avatar.length > 0) {

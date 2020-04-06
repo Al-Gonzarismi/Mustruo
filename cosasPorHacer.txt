@@ -1,7 +1,6 @@
 AMBOS:
 Logo
 GONZALO:
-cambiar Bootstrap (pooper y jquery?)
 Lobby
 JORGE:
 Lobby

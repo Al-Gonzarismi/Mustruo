@@ -1,15 +1,13 @@
 {
-    "name": "victor/prudawfony",
+    "name": "mustruo",
     "type": "project",
     "require": {
         "noahbuscher/macaw": "dev-master",
-        "victorjfg/dawfony": "dev-master",
-        "twbs/bootstrap": "dev-master"
+        "victorjfg/dawfony": "dev-master"
     },
     "authors": [
         {
-            "name": "vjfernandez",
-            "email": "victor.fernandezgil@educa.madrid.org"
+            "name": "CodeRangers"
         }
     ],
     "minimum-stability": "dev"

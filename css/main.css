@@ -3,7 +3,6 @@ body {
     background-color: #004d1a;
     color: white;
     font-family: "Comic Sans MS", cursive, sans-serif;
-    
 }
 .boton-morado {
     background-color: purple;
@@ -132,4 +131,87 @@ form#registro {
 }
 .editarEmail {
     display: none;
+}
+/* Lobby */
+.principal {
+    display: flex;
+    justify-content: space-between;
+    height: 824.4px;
+}
+/*1-3*/
+.primerTercio {
+    width: 20%;
+    margin: 1%;
+}
+.primerTercio > header {
+    background-color: pink;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 2%;
+    display: flex;
+    position: relative;
+    color: darkgreen;
+}
+#trofeo {
+    width: 45px;
+    height: 45px;
+}
+span#textoRanking {
+    font-size: 20px;
+    margin-left: 8%;
+    margin-top: 3%;
+}
+.pestannas {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 10px;
+}
+.pestannas li {
+    list-style-type: none;
+    float: left;
+    text-align: center;
+    background-color: rgb(238, 113, 134);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: 2px solid bisque;
+    padding: 0px 7px 0px 7px;
+}
+.pestannas li:hover {
+    background-color: purple;
+    cursor: pointer;
+}
+.pestannas a:link {
+    text-decoration: none;
+    color: bisque;
+}
+#clasificacion {
+    background-color: white;
+    color: black;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+#clasificacion > li {
+    border-bottom: 1px solid black;
+}
+#clasificacion > li:hover {
+    background-color: pink;
+    color: green;
+    cursor: pointer;
+}
+.rank {
+    display: flex;
+    justify-content: space-between;
+    padding: 7%;
+}
+.puntos {
+    display: inline;
+}
+/*2-3*/
+.segundoTercio {
+    width: 60%;
+}
+/*3-3*/
+.tercerTercio {
+    width: 20%;
 }

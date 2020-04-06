@@ -33,17 +33,39 @@ function renderStats(login) {
 function hacerLista(zona, data) {
     zona.innerHTML = "";
     var previo = "";
-    for (let user of data) {
-        if (user.login != previo) {
+    for (let i = 0; i < data.length; i++) {
+        let login = data[i].login;
+        let puntos = data[i].puntos;
+        if (login != previo) {
             let li = document.createElement("li");
-            let login = user.login;
-            li.innerHTML = `<a>${login}</a><span class="puntos">${zona == clasificacion ? user.puntos : ""}</span>`;
+            let div = document.createElement("div");
+            div.setAttribute("class", "rank");
+            if (zona == clasificacion) {
+                switch (i) {
+                    case 0:
+                        div.innerHTML = `<a>${login}</a><div class='puntos'><img src='${path}/media/oro.png'><span>${puntos}pts</span><div>`;
+                        break;
+                    case 1:
+                        div.innerHTML = `<a>${login}</a><div class='puntos'><img src='${path}/media/plata.png'><span>${puntos}pts</span><div>`;
+                        break;
+                    case 2:
+                        div.innerHTML = `<a>${login}</a><div class='puntos'><img src='${path}/media/bronce.png'><span>${puntos}pts</span><div>`;
+                        break;   
+                    default:
+                        div.innerHTML = `<a>${login}</a><div class='puntos'><span>${puntos}pts</span><div>`;
+                        break;        
+                }
+            } else {
+                div.innerHTML = `<a>${login}</a>`;
+            }
+            
+            li.append(div);
             zona.append(li);
             li.addEventListener("click", () => {
                 encabezadoEstadisiticas.innerHTML = `Estadisticas de ${login}`;
                 renderStats(login);
             });
-            previo = user.login;
+            previo = login;
         }
     }
 }
