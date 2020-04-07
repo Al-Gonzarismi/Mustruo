@@ -39,8 +39,8 @@ function hacerLista(zona, data) {
         if (login != previo) {
             let li = document.createElement("li");
             let div = document.createElement("div");
-            div.setAttribute("class", "rank");
             if (zona == clasificacion) {
+                div.setAttribute("class", "rank");
                 switch (i) {
                     case 0:
                         div.innerHTML = `<a>${login}</a><div class='puntos'><img src='${path}/media/oro.png'><span>${puntos}pts</span><div>`;
@@ -56,13 +56,14 @@ function hacerLista(zona, data) {
                         break;        
                 }
             } else {
+                div.setAttribute("class", "online");
                 div.innerHTML = `<a>${login}</a>`;
             }
             
             li.append(div);
             zona.append(li);
             li.addEventListener("click", () => {
-                encabezadoEstadisiticas.innerHTML = `Estadisticas de ${login}`;
+                encabezadoEstadisiticas.innerHTML = `Estadísticas de <a href="${path}/perfil/${login}">${login}</a>`;
                 renderStats(login);
             });
             previo = login;
@@ -103,7 +104,7 @@ function sentarse(id, i, boton, span) {
 
 function crearAsientos(id, mesa, i) {
     let asiento = document.createElement("div");
-    asiento.setAttribute("class", `posicion${i}`);
+    asiento.setAttribute("class", `posicion${i} asiento`);
     let span = document.createElement("span");
     span.innerText = "Libre";
     let boton = document.createElement("button");
@@ -152,6 +153,7 @@ function renderUsuarios(id, mesa) {
 function renderMesa(mesa) {
     var div = document.createElement("div");
     div.id = `mesa${mesa.id_mesa}`;
+    div.setAttribute("class", "itemMesa");
     renderUsuarios(mesa.id_mesa, div);
     mesas.append(div);
 }

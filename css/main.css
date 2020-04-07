@@ -6,23 +6,24 @@ body {
 }
 .boton-morado {
     background-color: purple;
-    color: orange;
-}
-.boton-naranja {
-    background-color: orange;
-    color: purple;
+    color: lightblue;
 }
 .boton-morado:hover {
     background-color:  rgba(128, 0, 128, 0.61);;
-    color: rgba(255, 166, 0, 0.685);
+    color: rgba(173, 216, 230, 0.74);
+}
+.boton-naranja {
+    background-color: lightblue;
+    color: purple;
 }
 .boton-naranja:hover {
-    background-color: rgba(255, 166, 0, 0.685);
+    background-color: rgba(173, 216, 230, 0.74);
     color: rgba(128, 0, 128, 0.61);
 }
-hr {
-    background-color: purple; 
+.bg-morado {
+    background-color: purple;
 }
+
 .flexColumn {
     display: flex;
     flex-direction: column;
@@ -33,20 +34,17 @@ hr {
     text-align: center;
     font-size: 30px;
 }
-.bg-morado {
-    background-color: purple;
-}
 .registrate {
-    color: orange;
+    color: lightblue;
     font-size: 13px;
     text-align: center;
 }
 .perfil {
-    color: orange;
+    color: lightblue;
     font-size: 20px;
 }
 .perfil:hover {
-    color: rgba(255, 166, 0, 0.685);
+    color: rgba(173, 216, 230, 0.74);
 }
 
 
@@ -66,7 +64,7 @@ form#registro {
     display: flex;
     margin-top: 2%; 
     margin-left: 6%;
-    color: orange;
+    color: lightblue;
 }
 .bloqueImagen {
     display: flex;
@@ -106,16 +104,16 @@ form#registro {
 }
 .informacionEditar {
     font-size: 10px;
-    color: orange;
+    color: lightblue;
 }
 .subir{
     padding: 5px;
     text-align: center;
-    background-color: orange;
+    background-color: lightblue;
     color: purple;
 }
 .subir:hover{
-    background-color: rgba(255, 166, 0, 0.685);
+    background-color: rgba(173, 216, 230, 0.74);
     color: rgba(128, 0, 128, 0.61);
 }
 .stats {
@@ -136,15 +134,9 @@ form#registro {
 .principal {
     display: flex;
     justify-content: space-between;
-    height: 824.4px;
 }
-/*1-3*/
-.primerTercio {
-    width: 20%;
-    margin: 1%;
-}
-.primerTercio > header {
-    background-color: pink;
+.header {
+    background-color: lightblue;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     padding: 2%;
@@ -152,14 +144,30 @@ form#registro {
     position: relative;
     color: darkgreen;
 }
-#trofeo {
+.imgCabecera {
     width: 45px;
     height: 45px;
 }
-span#textoRanking {
+.textoHeader {
     font-size: 20px;
-    margin-left: 8%;
-    margin-top: 3%;
+    margin-left: 40px;
+    margin-top: 8px;
+}
+.bodyHeader {
+    background-color: white;
+    color: black;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    text-align: center;
+}
+.scroll {
+    overflow-x: auto;
+    height: 80%;
+}
+/*1-3*/
+.primerTercio {
+    width: 20%;
+    margin: 1%;
 }
 .pestannas {
     position: absolute;
@@ -171,18 +179,17 @@ span#textoRanking {
     list-style-type: none;
     float: left;
     text-align: center;
-    background-color: rgb(238, 113, 134);
+    background-color: purple;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border: 2px solid bisque;
     padding: 0px 7px 0px 7px;
 }
 .pestannas li:hover {
-    background-color: purple;
+    background-color: gray;
     cursor: pointer;
 }
 .pestannas a:link {
-    text-decoration: none;
     color: bisque;
 }
 #clasificacion {
@@ -195,7 +202,7 @@ span#textoRanking {
     border-bottom: 1px solid black;
 }
 #clasificacion > li:hover {
-    background-color: pink;
+    background-color: lightblue;
     color: green;
     cursor: pointer;
 }
@@ -210,8 +217,89 @@ span#textoRanking {
 /*2-3*/
 .segundoTercio {
     width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 1%;
+}
+.mesas {
+    height: 72.5%;
+    position: relative;
+    width: 90%;
+    align-self: center;
+}
+.chat {
+    height: 27.5%;
+    position: relative;
+    width: 90%;
+    align-self: center;
+}
+.nuevaMesa {
+    position: absolute;
+    right: 10%;
+    top: 25%;
+    bottom: 25%
+}
+.crearMesas {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.itemMesa {
+    width: 29%;
+    margin: 2%; 
+}
+.divChat {
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+}
+#chat {
+    width: 100%;
+}
+.enviarTexto {
+    width: 100%;
+    display: flex;
+    border-top: 1px solid purple;
+    padding-top: 2px;  
+}
+.enviarTexto > input {
+    width: 85%;
+    border-radius: 10px;
+    background-color: lightblue;
+}
+.enviarTexto > button {
+    width: 15%;
 }
 /*3-3*/
 .tercerTercio {
     width: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 1%;
+}
+.usuarios {
+    height: 60%;
+    position: relative;
+}
+.estadisticas {
+    height: 40%;
+    position: relative;
+}
+#usuariosonline {
+    color: lightgreen;
+    font-size: 25px;
+}
+#usariosonline > li {
+    border-bottom: 1px solid black;
+}
+.online {
+    font-size: 20px;
+    text-align: left;
+    padding: 2%;
+}
+.online > a {
+    cursor: pointer;
 }

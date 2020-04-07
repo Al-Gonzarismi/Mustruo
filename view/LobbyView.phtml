@@ -4,9 +4,9 @@
 <div class="principal">
 <!-- clasificaciones Mustruo -->
   <div class="primerTercio">
-    <header>
-      <img src="<?= $URL_PATH?>/media/trofeo.png" id="trofeo">
-      <span id="textoRanking"> Ranking de Mustruos </span>
+    <header class="header">
+      <img src="<?= $URL_PATH?>/media/trofeo.png" class="imgCabecera">
+      <span class="textoHeader"> Ranking de Mustruos </span>
       <div class="pestannas">
         <ul>
           <li id="semana"><a href="javascript:void(0)">semana</a></li>
@@ -19,37 +19,54 @@
       <ol id="clasificacion"></ol>
     </section>
   </div>  
-<!-- mesas -->
+<!-- 2/3 -->
   <div class="segundoTercio">
-    <section id="mesas"></section>
-    <!-- boton nueva mesa-->
-    <?php if (isset($_SESSION["login"])) : ?>
-      <button id="nuevamesa">Nueva mesa</button>
+  <!-- mesas -->
+  <div class="mesas">
+    <header class="header">
+      <img src="<?= $URL_PATH ?>/media/mesas.png" class="imgCabecera">
+      <span class="textoHeader">Únete a una mesa para jugar</span>
+      <?php if (isset($_SESSION["login"])) : ?>
+      <button id="nuevamesa" class="btn boton-morado nuevaMesa">Nueva mesa</button>
     <?php endif; ?>
+    </header>
+  <!-- boton nueva mesa-->
+    <section id="mesas" class="bodyHeader scroll crearMesas"></section>
+  </div>  
     <!-- chat-->
-    <div>
-      <section id="chat"></section>
-      <input type="text" id="mensaje" placeholder="Escribe algo...">
-      <button id="enviarmensaje">enviar</button>
+    <div class="chat">
+      <header class="header">
+        <img src="<?= $URL_PATH ?>/media/chat.png" class="imgCabecera">
+        <span class="textoHeader">Dialoga con los usuarios online</span>
+      </header>
+      <div class="bodyHeader divChat">
+        <section id="chat" class="scroll"></section>
+        <div class="enviarTexto">
+          <input type="text" id="mensaje" placeholder="Escribe algo...">
+          <button id="enviarmensaje" class="btn boton-morado">enviar</button>
+        </div>  
+      </div>
     </div>
   </div>
 
   <div class="tercerTercio"><!--Inicio 3/3-->
   <!-- Usuarios online-->
-    <div>
-      <header>
-        <h3>Usuarios online</h3>
+    <div class="usuarios">
+      <header class="header">
+        <img src="<?= $URL_PATH ?>/media/online.png" class="imgCabecera">
+        <span class="textoHeader">Usuarios online</span>
       </header>
-      <section>
+      <section class="bodyHeader scroll">
         <ul id="usuariosonline"></ul>
       </section>
     </div>
 <!-- Estadisticas-->
-    <div>
-      <header>
-        <h3 id="encabezadoestadisiticas">Estadisticas</h3>
+    <div class="estadisticas">
+      <header class="header">
+        <img src="<?= $URL_PATH ?>/media/estadistica.png" class="imgCabecera">
+        <span id="encabezadoestadisiticas" class="textoHeader">Estadisticas</span>
       </header>
-      <section id="cuerpoestadisticas">
+      <section id="cuerpoestadisticas" class="bodyHeader">
         Pincha sobre un usuario
       </section>
     </div>

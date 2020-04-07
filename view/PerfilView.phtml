@@ -4,7 +4,7 @@
 <div class="info">
     <div class="bloqueImagen">
         <img src="<?= $URL_PATH ?>/media/avatares/<?= $usuario->imagen ?>" class="imagenUsuario">
-        <?php if (isset($_SESSION)) : ?>
+        <?php if (isset($_SESSION["login"])) : ?>
             <?php if($_SESSION["login"] == $usuario->login) : ?>
             <label for="avatar" class="subir">Editar <i class="fa fa-pencil"></i></label>
             <form action="<?= $URL_PATH ?>/cambiarAvatar/<?= $usuario->login ?>/<?= $usuario->imagen ?>" method="POST" enctype="multipart/form-data">
@@ -21,7 +21,7 @@
                 <span id="spanLogin"><?= $usuario->login ?></span>
             </div>
         </div>
-        <?php if (isset($_SESSION)) : ?>
+        <?php if (isset($_SESSION["login"])) : ?>
             <?php if($_SESSION["login"] == $usuario->login) : ?>
                 <div>
                     <span>Contraseña:</span>
@@ -39,22 +39,20 @@
         <div>
             <span>Email:</span>
             <div class="editarDatos">
-                <?php if (isset($_SESSION)) : ?>
+                <span class="normalEmail" id="spanEmail"><?= $usuario->email ?></span>
+                <?php if (isset($_SESSION["login"])) : ?>
                     <?php if($_SESSION["login"] == $usuario->login) : ?>
-                        <span class="normalEmail" id="spanEmail"><?= $usuario->email ?></span>
                         <a href="javascript:void(0);" class="btn boton-naranja btn-chiquitin normalEmail" id="editarEmail">Editar <i class="fa fa-pencil"></i></a>
                         <input class="editarInput editarEmail" type="text" value="<?= $usuario->email ?>" id="email">
                         <a href="javascript:void(0);" class="btn boton-naranja btn-chiquitin editarEmail" id="cambiarEmail">Cambiar <i class="fa fa-pencil"></i></a>
                         <a href="javascript:void(0);" class="btn boton-morado btn-chiquitin editarEmail" id="cancelarEmail">Cancelar</a>
-                    <?php else : ?>
-                        <?= $usuario->email ?>
                     <?php endif;?>
                 <?php endif;?>    
             </div>
         </div>
     </div> 
 </div>    
-<hr>
+<hr id="bg-morado">
 <div class="info">
     <h1>Estadisticas:</h1>
     <div class="datos">

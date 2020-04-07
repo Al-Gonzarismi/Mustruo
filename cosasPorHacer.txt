@@ -1,6 +1,11 @@
 AMBOS:
 Logo
 GONZALO:
-Lobby
+Lobby {
+    cambiar interior (MESAS)
+    cambiar interior (CHAT)
+    cambiar interior (USUARIOS ONLINE)
+    cambiar interior (ESTADISTICAS)
+}
 JORGE:
 Lobby
