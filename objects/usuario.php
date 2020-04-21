@@ -6,4 +6,6 @@ class Usuario {
     public $imagen;
     public $rol_id;
     public $estaSentado;
+    public $posicion;
+    public $mesa_id;
 }

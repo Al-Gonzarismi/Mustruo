@@ -27,10 +27,13 @@
       <img src="<?= $URL_PATH ?>/media/mesas.png" class="imgCabecera">
       <span class="textoHeader">Únete a una mesa para jugar</span>
       <?php if (isset($_SESSION["login"])) : ?>
+       <!-- boton nueva mesa-->
       <button id="nuevamesa" class="btn boton-morado nuevaMesa">Nueva mesa</button>
     <?php endif; ?>
+     <!-- boton levantarse de mesa-->
+     <button id="levantarse" class="btn boton-morado hidden">Dejar mesa</button>
     </header>
-  <!-- boton nueva mesa-->
+ 
     <section id="mesas" class="bodyHeader scroll crearMesas"></section>
   </div>  
     <!-- chat-->

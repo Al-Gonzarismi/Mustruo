@@ -11,6 +11,7 @@ var mes = document.getElementById("mes");
 var anno = document.getElementById("anno");
 var clasificacion = document.getElementById("clasificacion");
 var mesas = document.getElementById("mesas");
+var btnlevantarse = document.getElementById("levantarse");
 //varibles solo para registrados;
 if (usuario != "anonimo") {
     var nuevaMesa = document.getElementById("nuevamesa");
@@ -31,7 +32,7 @@ function renderStats(login) {
 }
 
 function hacerLista(zona, data) {
-    zona.innerHTML = "";
+    var container = document.createElement("div");
     var previo = "";
     for (let i = 0; i < data.length; i++) {
         let login = data[i].login;
@@ -50,18 +51,18 @@ function hacerLista(zona, data) {
                         break;
                     case 2:
                         div.innerHTML = `<a>${login}</a><div class='puntos'><img src='${path}/media/bronce.png'><span>${puntos}pts</span><div>`;
-                        break;   
+                        break;
                     default:
                         div.innerHTML = `<a>${login}</a><div class='puntos'><span>${puntos}pts</span><div>`;
-                        break;        
+                        break;
                 }
             } else {
                 div.setAttribute("class", "online");
                 div.innerHTML = `<a>${login}</a>`;
             }
-            
+
             li.append(div);
-            zona.append(li);
+            container.append(li);
             li.addEventListener("click", () => {
                 encabezadoEstadisiticas.innerHTML = `Estadísticas de <a href="${path}/perfil/${login}">${login}</a>`;
                 renderStats(login);
@@ -69,35 +70,35 @@ function hacerLista(zona, data) {
             previo = login;
         }
     }
+    zona.innerHTML = "";
+    zona.append(container);
 }
 
-function levantarse(id, i, boton, span) {
-    fetch(`${path}/api/levantarse/${id}/${i}/${span.innerText}`)
-        .then((res) => res.text())
-        .then((res) => {
-            if (res == "ok") {
-                boton.innerText = "Sentarse";
-                span.innerText = "libre";
-                //sockets:probablemente mejorable
-                socket.emit('actualizarmesas');
-            } else {
-                window.alert("Intentelo otra vez");
-            }
-        })
+function levantarse() {
+    if (usuario.estaSentado) {
+        fetch(`${path}/api/levantarse/${usuario.mesa_id}/${usuario.posicion}/${usuario.login}`)
+            .then((res) => res.text())
+            .then((res) => {
+                if (res == "ok") {
+                    //sockets:probablemente mejorable
+                    socket.emit('actualizarmesas');
+                } else {
+                    window.alert("falla levantarse");
+                }
+            })
+    }
 }
 
-function sentarse(id, i, boton, span) {
+function sentarse(id, i) {
     fetch(`${path}/api/sentarse/${id}/${i}/${usuario.login}`)
         .then((res) => res.text())
         .then((res) => {
             console.log(res);
-            if (res == "ok") {
-                boton.innerText = "Levantarse";
-                span.innerText = usuario.login;
+            if (res != "nook") {
                 //sockets:probablemente mejorable
                 socket.emit("actualizarmesas");
             } else {
-                window.alert("Intentelo otra vez");
+                window.alert("falla sentarse");
             }
         })
 }
@@ -105,26 +106,26 @@ function sentarse(id, i, boton, span) {
 function crearAsientos(id, mesa, i) {
     let asiento = document.createElement("div");
     asiento.setAttribute("class", `posicion${i} asiento`);
+    let img = document.createElement("img");
     let span = document.createElement("span");
-    span.innerText = "Libre";
-    let boton = document.createElement("button");
-    boton.innerText = "Sentarse";
-    boton.addEventListener("click", () => {
+    span.innerText = "";
+    img.setAttribute("src", `${path}/media/asientolibre.PNG`);//poner imagen y adaptar ruta    
+    img.addEventListener("click", () => {
         if (usuario != "anonimo") {
-            if (boton.innerText == "Sentarse") {
+            if (img.getAttribute("src") == `${path}/media/asientolibre.PNG`) {
                 if (!usuario.estaSentado) {
-                    sentarse(id, i, boton, span);
+                    sentarse(id, i);
                 } else {
                     window.alert("Ya estas sentado en otro lugar");
                 }
             } else {
-                levantarse(id, i, boton, span);
+                //plantearse llevar al perfil
             }
         } else {
             window.alert("Tienes que estar conectado");
         }
     });
-    asiento.append(boton);
+    asiento.append(img);
     asiento.append(span);
     mesa.append(asiento);
 }
@@ -138,45 +139,61 @@ function renderUsuarios(id, mesa) {
             }
             for (let usu of res) {
                 let asiento = mesa.childNodes[usu.posicion];
-                asiento.childNodes[0].innerText = "levantarse";
+                asiento.childNodes[0].setAttribute("src", `${path}/media/avatares/${usu.imagen}`);
                 asiento.childNodes[1].innerText = usu.login;
             }
-            var listo = document.createElement("button");
-            listo.setAttribute("class", "listo");
-            listo.innerText = "Listo!";
-            mesa.append(listo);
-            //dar funcionalidad al boton de empezar
+            if (usuario.mesa_id == id && usuario.listo) {
+                var listo = document.createElement("button");
+                listo.setAttribute("class", "listo");
+                listo.innerText = "Listo!";
+                mesa.append(listo);
+                listo.addEventListener("click", ()=>{
+                    socket.emit("empezarpartida", usuario.mesa_id);
+                })
+            }
+            
         })
 
 }
 
-function renderMesa(mesa) {
+function renderMesa(mesa, container) {
     var div = document.createElement("div");
     div.id = `mesa${mesa.id_mesa}`;
     div.setAttribute("class", "itemMesa");
     renderUsuarios(mesa.id_mesa, div);
-    mesas.append(div);
+    container.append(div);
 }
 
 function actualizarMesas() {
     fetch(`${path}/api/estadousuario/${usuario.login}`)
-        .then((res) => res.text())
+        .then((res) => res.json())
         .then((res) => {
-            console.log(res);
-            usuario.estaSentado = res == "sentado";
-            console.log(usuario.estaSentado);
+            usuario.estaSentado = res.posicion >= 0;
+            if (usuario.estaSentado) {
+                usuario.posicion = res.posicion;
+                usuario.mesa_id = res.mesa_id;
+                usuario.listo = usuario.posicion == 0 && res.jugadores_mesa == 4;
+            } else {
+                usuario.posicion = -1;
+                usuario.mesa_id = -1;
+            }
             fetch(`${path}/api/mesas`)
                 .then((res) => res.json())
                 .then((res) => {
-                    mesas.innerHTML = "";
-                    //sobrecogedor
+                    var container = document.createElement("div");
                     for (let mesa of res) {
-                        renderMesa(mesa);
+                        renderMesa(mesa, container);
                     }
-                })
+                    mesas.innerHTML = "";
+                    mesas.append(container);
+                    if (usuario.estaSentado) {
+                        btnlevantarse.setAttribute("class", "btn boton-morado");
+                    } else {
+                        btnlevantarse.setAttribute("class", "btn boton-morado hidden");
+                    }
+                })           
+            
         })
-
-
 }
 
 function renderRanking(tipo) {
@@ -230,7 +247,7 @@ socket.on('chatlobby:message', (data) => {
     chat.innerHTML += `<p>${data.nombre}: ${data.mensaje}</p>`;
 });
 
-//crear mesa
+//crear mesa y levantarse de mesa
 if (usuario != "anonimo") {
     nuevaMesa.addEventListener("click", () => {
         if (usuario.estaSentado) {
@@ -255,15 +272,22 @@ if (usuario != "anonimo") {
             })
         }
     })
+    btnlevantarse.addEventListener("click", levantarse);
 }
 
 //actualizar mesas
 if (arg == "mc") {
     socket.emit("actualizarmesas");
 } else {
-
     actualizarMesas();
 }
 socket.on('actualizarmesas', () => {
     actualizarMesas();
+})
+
+//empezar partida
+socket.on("empezarpartida", (data)=>{
+    if (usuario.mesa_id == data) {
+        window.location=`${path}/mesa/${data}`;
+    }
 })

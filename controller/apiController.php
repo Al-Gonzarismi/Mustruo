@@ -53,12 +53,10 @@ class ApiController extends Controller {
     }
 
     function sentarseEnMesa($id, $pos, $login) {
-        $orm = new OrmMesa;
-        if ($orm->sentarseEnMesa($id, $pos, $login)) {
-            echo "ok";
-        } else {
-            echo "nook";
-        }
+        if ($login == $_SESSION["login"]) {
+            $orm = new OrmMesa;
+            return $orm->sentarseEnMesa($id, $pos, $login);
+        }        
     }
 
     function levantarseDeLaMesa($id, $pos, $login) {
@@ -71,8 +69,9 @@ class ApiController extends Controller {
     }
 
     function comprobarEstadoUsuario($login) {
+        header('Content-type: application/json');
         $orm = new OrmUser; 
-        echo $orm->comprobarEstadoUsuario($login)? "sentado" : "no sentado";
+        echo json_encode($orm->comprobarEstadoUsuario($login));
     }
     function cambiarEmail($login, $emailCambio) {
         $orm = new OrmUser;

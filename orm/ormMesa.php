@@ -23,7 +23,8 @@ class OrmMesa {
     public function obtenerUsuariosMesa($id) {
         $bd = Klasto::getInstance();
         $params = [$id];
-        $sql = "SELECT `login`, `posicion` FROM `usuarios_por_mesa` WHERE `mesa_id` = ?";
+        $sql = "SELECT usuarios_por_mesa.login, usuarios_por_mesa.posicion, usuario.imagen FROM `usuarios_por_mesa`". 
+        "INNER JOIN usuario ON usuarios_por_mesa.login = usuario.login WHERE `mesa_id` = ?";
         return $bd->query($sql, $params);
     }
 
@@ -38,7 +39,10 @@ class OrmMesa {
         $bd = Klasto::getInstance();
         $params = [$login, $id, $pos % 2, $pos];
         $sql = "INSERT INTO `usuarios_por_mesa` (`login`, `mesa_id`, `pareja_id`, `posicion`) VALUES (?, ?, ?, ?)";
-        return $bd->execute($sql, $params);
+        if ($bd->execute($sql, $params)) {
+            return $bd->queryOne("SELECT imagen FROM usuario WHERE login = ?", [$login])[0];
+        }
+        return "nook";
     }
 
     public function levantarseDeLaMesa($id, $pos, $login) {

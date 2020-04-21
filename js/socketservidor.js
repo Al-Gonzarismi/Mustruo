@@ -45,4 +45,8 @@ io.on('connection', (socket) => {
         io.emit('actualizarmesas');
     })
 
+    socket.on('empezarpartida', (data) => {
+        io.emit('empezarpartida', data);
+    })
+
 })

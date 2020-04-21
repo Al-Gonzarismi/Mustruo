@@ -1,3 +1,5 @@
 vendor/
 node_modules/
 orm/ormPruebas.php
+composer.lock
+package-lock.json
