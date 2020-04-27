@@ -1,6 +1,6 @@
 /* General */
 body {
-    background-color: #004d1a;
+    background-image: url("/Mustruo/media/fondo-madera.png");
     color: white;
     font-family: "Comic Sans MS", cursive, sans-serif;
 }
@@ -23,12 +23,13 @@ body {
 .bg-morado {
     background-color: purple;
 }
-
 .flexColumn {
     display: flex;
     flex-direction: column;
 }
-
+.hidden {
+    display: none;
+}
 /* Nav */
 .personalizarNav {
     text-align: center;
@@ -198,10 +199,10 @@ form#registro {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
 }
-#clasificacion > li {
+#clasificacion > div > li {
     border-bottom: 1px solid black;
 }
-#clasificacion > li:hover {
+#clasificacion > div > li:hover {
     background-color: lightblue;
     color: green;
     cursor: pointer;
@@ -222,33 +223,94 @@ form#registro {
     justify-content: space-between;
     margin: 1%;
 }
+/*Mesas*/
 .mesas {
     height: 72.5%;
     position: relative;
     width: 90%;
     align-self: center;
 }
+.nuevaMesa {
+    position: absolute;
+    right: 20%;
+    top: 25%;
+    bottom: 25%;
+}
+.dejarMesa {
+    position: absolute;
+    right: 5%;
+    top: 25%;
+    bottom: 25%;
+}
+/*Parte Interna*/
+.crearMesas {
+    width: 100%;
+}
+.crearMesas > div {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+/*Personalizar item*/
+.itemMesa {
+    background-color: #004d1a;
+    color: white;
+    border-radius: 2%;
+    width: 29%;
+    height: 230px;
+    margin: 2%;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+}
+.posicion0 {
+    position: absolute;
+    top: 0%;
+    left: 40%;
+}
+.posicion1 {
+    position: absolute;
+    top: 40%;
+    left: 0%;
+}
+.posicion2 {
+    position: absolute;
+    bottom: 0%;
+    left: 40%;
+}
+.posicion3 {
+    position: absolute;
+    top: 40%;
+    right: 0%;
+}
+.asiento > img {
+    align-self: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+#bloqueUsu {
+    display: flex;
+    flex-direction: column;
+}
+.posicion0 + #bloqueUsu {
+    top: 35%;
+}
+.posicion2 + #bloqueUsu {
+    top: 35%;
+}
+.listo {
+    position: absolute;
+    top: 40%;
+    left: 37%;
+}
+/*Chat*/
 .chat {
     height: 27.5%;
     position: relative;
     width: 90%;
     align-self: center;
-}
-.nuevaMesa {
-    position: absolute;
-    right: 10%;
-    top: 25%;
-    bottom: 25%
-}
-.crearMesas {
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-}
-.itemMesa {
-    width: 29%;
-    margin: 2%; 
 }
 .divChat {
     display: flex;

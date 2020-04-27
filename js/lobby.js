@@ -119,7 +119,8 @@ function crearAsientos(id, mesa, i) {
                     window.alert("Ya estas sentado en otro lugar");
                 }
             } else {
-                //plantearse llevar al perfil
+                encabezadoEstadisiticas.innerHTML = `Estadísticas de <a href="${path}/perfil/${span.innerText}">${span.innerText}</a>`;
+                renderStats(span.innerText);
             }
         } else {
             window.alert("Tienes que estar conectado");
@@ -138,14 +139,16 @@ function renderUsuarios(id, mesa) {
                 crearAsientos(id, mesa, i);
             }
             for (let usu of res) {
+                mesa.childNodes[usu.posicion].setAttribute("id", "bloqueUsu");
                 let asiento = mesa.childNodes[usu.posicion];
                 asiento.childNodes[0].setAttribute("src", `${path}/media/avatares/${usu.imagen}`);
                 asiento.childNodes[1].innerText = usu.login;
             }
             if (usuario.mesa_id == id && usuario.listo) {
                 var listo = document.createElement("button");
-                listo.setAttribute("class", "listo");
+                listo.setAttribute("class", "listo btn boton-morado");
                 listo.innerText = "Listo!";
+                console.log(mesa.childNodes[1]);
                 mesa.append(listo);
                 listo.addEventListener("click", ()=>{
                     socket.emit("empezarpartida", usuario.mesa_id);
@@ -187,7 +190,7 @@ function actualizarMesas() {
                     mesas.innerHTML = "";
                     mesas.append(container);
                     if (usuario.estaSentado) {
-                        btnlevantarse.setAttribute("class", "btn boton-morado");
+                        btnlevantarse.setAttribute("class", "btn boton-morado dejarMesa");
                     } else {
                         btnlevantarse.setAttribute("class", "btn boton-morado hidden");
                     }
