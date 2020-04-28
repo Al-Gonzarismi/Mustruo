@@ -2,10 +2,10 @@
   "name": "mustruo",
   "version": "1.0.0",
   "description": "",
-  "main": "socketservidor.js",
+  "main": "lobbyservidor.js",
   "scripts": {
-    "start": "node js/socketservidor.js",
-    "dev": "nodemon js/socketservidor.js"
+    "start": "node js/lobbyservidor.js",
+    "dev": "nodemon js/lobbyservidor.js"
   },
   "repository": {
     "type": "git",
