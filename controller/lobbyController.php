@@ -14,7 +14,7 @@ class LobbyController extends Controller {
             $usuario->mesa_id = $usuario->estaSentado ? $estado["mesa_id"] : -1;
             if ($usuario->estaSentado) {
                 $orm = new OrmMesa;
-                if (!$orm->comprobarEstadoMesa($usuario->mesa_id)) {
+                if ($orm->comprobarEstadoMesa($usuario->mesa_id)) {
                     global $URL_PATH;
                     header("Location: $URL_PATH/mesa/$usuario->mesa_id");
                 }

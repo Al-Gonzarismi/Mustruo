@@ -96,4 +96,11 @@ class OrmMesa
         $sql = "SELECT `estado` FROM `mesa` WHERE id_mesa = ?";
         return $bd->queryOne($sql, $params)["estado"];
     }
+
+    public function cambiarEstadoPartida($id, $estado) {
+        $bd = Klasto::getInstance();
+        $params = [$estado, $id];
+        $sql = "UPDATE `mesa` SET estado = ? WHERE id_mesa = ?";
+        return $bd->execute($sql, $params);
+    }
 }

@@ -91,4 +91,13 @@ class ApiController extends Controller {
             echo 2;
         }
     }
+
+    public function cambiarEstadoPartida($id, $estado = 1) {
+        $orm = new OrmMesa;
+        if ($orm->cambiarEstadoPartida($id, $estado)) {
+            echo "ok";
+        } else {
+            echo "nook";
+        }        
+    }
 }

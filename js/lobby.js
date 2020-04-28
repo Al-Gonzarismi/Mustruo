@@ -151,7 +151,14 @@ function renderUsuarios(id, mesa) {
                 console.log(mesa.childNodes[1]);
                 mesa.append(listo);
                 listo.addEventListener("click", ()=>{
-                    socket.emit("empezarpartida", usuario.mesa_id);
+                    fetch(`${path}/api/empezarpartida/${usuario.mesa_id}`)
+                    .then((res)=> res.text())
+                    .then((res) => {
+                        if (res == "ok") {
+                            socket.emit("empezarpartida", usuario.mesa_id);
+                        }
+                    })
+                    
                 })
             }
             

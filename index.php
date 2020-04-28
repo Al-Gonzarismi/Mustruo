@@ -46,6 +46,8 @@ Macaw::get($URL_PATH . '/api/levantarse/(:any)/(:any)/(:any)', "controller\apiCo
 
 Macaw::get($URL_PATH . '/api/estadousuario/(:any)', "controller\apiController@comprobarEstadoUsuario");
 
+Macaw::get($URL_PATH . '/api/empezarpartida/(:any)', "controller\apiController@cambiarEstadoPartida");
+
 
 
 
