@@ -5,7 +5,8 @@
   "main": "lobbyservidor.js",
   "scripts": {
     "start": "node js/lobbyservidor.js",
-    "dev": "nodemon js/lobbyservidor.js"
+    "dev": "nodemon js/lobbyservidor.js",
+    "dev2": "nodemon js/mesaservidor.js"
   },
   "repository": {
     "type": "git",

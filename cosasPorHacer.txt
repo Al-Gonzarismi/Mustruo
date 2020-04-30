@@ -13,3 +13,4 @@ Lobby {
 }
 JORGE:
 Lobby
+usuario - compannero - rivalIzq - rivalDer
