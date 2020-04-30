@@ -11,7 +11,8 @@ class MesaController extends Controller
     function partida($id_mesa)
     {
         //TO DO
-        echo "$id_mesa";
+        $title = "Partida";
+        echo \dawfony\Ti::render("view/MesaView.phtml", compact('title'));
     }
 
     function crearMesa()

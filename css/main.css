@@ -1,8 +1,10 @@
 /* General */
-body {
+html, body {
     background-image: url("/Mustruo/media/fondo-madera.png");
     color: white;
     font-family: "Comic Sans MS", cursive, sans-serif;
+    width: 100%;
+    height: 100%;
 }
 .boton-morado {
     background-color: purple;
@@ -364,4 +366,167 @@ form#registro {
 }
 .online > a {
     cursor: pointer;
+}
+/*Mesa*/
+.principalMesa {
+    display: grid;
+    grid-template-rows: 4fr 1fr;
+    width: 100%;
+    height: 100%;
+}
+/*Partida*/
+.partida {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-bottom: 10px ridge white;
+}
+/*CuadroEnvites*/
+.cuadroEnvites {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 15%;
+    height: 23%;
+    color: green;
+    background-color: lightblue;
+    border: 5px ridge white;
+    border-top: 0;
+    border-left: 0;
+}
+.cuadroEnvites > div {
+    margin-left: 5%;
+    margin-top: 2%;
+}
+.cuadroEnvites > div > span > span {
+    right: 10%;
+}
+/*Interaccion*/
+.interaccion {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30%;
+    padding: 1%;
+    background-color: lightblue;
+    border: 5px ridge white;
+    border-top: 0;
+    border-right: 0;
+}
+.serieInteraccion {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+}
+.serieInteraccion > button {
+    width: 25%;
+    height: 60%;
+}
+.slider {
+    margin-top: 3.5%;
+    -webkit-appearance: none;
+    width: 25%;
+    height: 10px;
+    border-radius: 5px;
+    background-color: green;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+.slider:hover {
+    opacity: 1;
+}
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: purple;
+    cursor: pointer;
+}
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: purple;
+    cursor: pointer;
+}
+/*Puntos Partida*/
+.puntosPartida {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 25%;
+    height: 25%;
+    color: green;
+    background-color: lightblue;
+}
+.tablaPuntos {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+.tablaPuntos > div {
+    border: 5px ridge white;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 10%;
+}
+/*Usuarios*/
+.bloqueUsu {
+    width: 10%;
+    height: 25%;
+    display: flex;
+    flex-direction: column;
+}
+.bloqueUsu > img {
+    border-radius: 50%;
+}
+.bloqueUsu > span {
+    text-align: center; 
+}
+/*Posicionamiento*/
+.usuario {
+    position: absolute;
+    bottom: 0;
+    left: 40%;
+}
+.compannero {
+    position: absolute;
+    top: 0;
+    left: 40%;
+}
+.rivalDer {
+    position: absolute;
+    left: 68.5%;
+    top: 35%;
+}
+.rivalIzq {
+    position: absolute;
+    left: 11.5%;
+    top: 35%;
+}
+.tapete {
+    width: 45%;
+    height: 48%;
+    background-image: linear-gradient(to top, #014116, #016322) ;
+    border-radius: 2%;
+    position: absolute;
+    left: 22.5%;
+    top: 26%;
+}
+/*Chat Stats*/
+.chatStats {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
 }
