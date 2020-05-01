@@ -514,6 +514,7 @@ form#registro {
     left: 11.5%;
     top: 35%;
 }
+/*Tapete*/
 .tapete {
     width: 45%;
     height: 48%;
@@ -522,6 +523,18 @@ form#registro {
     position: absolute;
     left: 22.5%;
     top: 26%;
+}
+/*Reloj*/
+.reloj {
+    width: 125px;
+    height: 125px;
+    background: lightblue;
+    border: 2px solid white;
+    color: green;
+    border-radius: 50%;
+    position: absolute;
+    left: 2%;
+    bottom: 2%;
 }
 /*Chat Stats*/
 .chatStats {
