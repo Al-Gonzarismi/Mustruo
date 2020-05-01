@@ -1,6 +1,6 @@
 /* General */
 html, body {
-    background-image: url("/Mustruo/media/fondo-madera.png");
+    background: #401c50;
     color: white;
     font-family: "Comic Sans MS", cursive, sans-serif;
     width: 100%;
@@ -522,7 +522,8 @@ form#registro {
 .tapete {
     width: 45%;
     height: 48%;
-    background-image: linear-gradient(to top, #014116, #016322) ;
+    background-image: url("/Mustruo/media/fondo-madera.png");
+    /*background-image: linear-gradient(to top, #014116, #016322);*/
     border-radius: 2%;
     position: absolute;
     left: 22.5%;
@@ -596,24 +597,25 @@ form#registro {
     width: 100%;
     height: 100%;
     border: 5px ridge white;
+    background-color: lightblue;
+    color:green;
     display: grid;
-    grid-template-rows: 1fr 3fr;
+    grid-template-rows: 1fr 3fr 0.5fr;
 }
 .headerStats {
     width: 100%;
     height: 100%;
-    background-color: lightblue;
-    color: green;
     text-align: center;
 }
 .tablaEstadisticas {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr ;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
 }
 .tablaEstadisticas > div {
     border: 5px ridge white;
-    background-color: lightblue;
-    color:green;
+    text-align: center;
+}
+.abandonos {
     text-align: center;
 }
