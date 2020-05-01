@@ -55,6 +55,13 @@ class OrmMesa
         return $bd->query($sql, $params, "objects\Mesa");
     }
 
+    public function obtenerMesa($id) {
+        $bd = Klasto::getInstance();
+        $params = [$id];
+        $sql = "SELECT `id_mesa`, `fecha`, `contrasenna`, `privacidad_id`, `vacas`, `juegos`, `puntos`, `login` FROM `mesa` WHERE `id_mesa` = ?";
+        return $bd->queryOne($sql, $params, "objects\Mesa");
+    }
+
     public function sentarseEnMesa($id, $pos, $login)
     {
         $bd = Klasto::getInstance();
@@ -102,5 +109,9 @@ class OrmMesa
         $params = [$estado, $id];
         $sql = "UPDATE `mesa` SET estado = ? WHERE id_mesa = ?";
         return $bd->execute($sql, $params);
+    }
+
+    public function existeMesa($id) {
+        return $this->comprobarEstadoMesa($id) == 1;
     }
 }

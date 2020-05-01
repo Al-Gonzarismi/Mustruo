@@ -34,7 +34,6 @@ io.on('connection', (socket) => {
             return user.socketid != socket.id;
         });
         io.emit('refrescarusuarios', usuarios);
-        //habra que emitir algo para las mesas tambien
     });
 
     socket.on('chatlobby:message', (data) => {

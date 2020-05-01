@@ -1,6 +1,7 @@
-<?php global $URL_PATH;?>
+<?php global $URL_PATH; ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,9 +16,10 @@
     <!-- Propia hoja de estilos -->
     <link rel="stylesheet" href="<?= $URL_PATH ?>/css/main.css">
     <title>
-        <?=$data["title"]?> - Mustruo
+        <?= $data["title"] ?> - Mustruo
     </title>
 </head>
+
 <body>
     <div class="principalMesa">
         <!--Partida-->
@@ -88,23 +90,23 @@
             <!--Usuarios-->
             <!--Mi usario-->
             <div class="usuario bloqueUsu">
-                <img src="<?=$URL_PATH?>/media/avatares/<?=$usuario->imagen?>">
-                <span><?=$usuario->login?><span>
+                <img src="<?= $URL_PATH ?>/media/avatares/<?= $usuario->imagen ?>">
+                <span><?= $usuario->login ?><span>
             </div>
             <!--Comapannero-->
             <div class="compannero bloqueUsu">
-                <img src="<?=$URL_PATH?>/media/avatares/<?=$compannero->imagen?>">
-                <span><?=$compannero->login?><span>
+                <img src="<?= $URL_PATH ?>/media/avatares/<?= $compannero->imagen ?>">
+                <span><?= $compannero->login ?><span>
             </div>
             <!--RivalDer-->
             <div class="rivalDer bloqueUsu">
-                <img src="<?=$URL_PATH?>/media/avatares/<?=$rivalDer->imagen?>">
-                <span><?=$rivalDer->login?><span>
+                <img src="<?= $URL_PATH ?>/media/avatares/<?= $rivalDer->imagen ?>">
+                <span><?= $rivalDer->login ?><span>
             </div>
             <!--RivalIIzq-->
             <div class="rivalIzq bloqueUsu">
-                <img src="<?=$URL_PATH?>/media/avatares/<?=$rivalIzq->imagen?>">
-                <span><?=$rivalIzq->login?><span>
+                <img src="<?= $URL_PATH ?>/media/avatares/<?= $rivalIzq->imagen ?>">
+                <span><?= $rivalIzq->login ?><span>
             </div>
             <!--Tapete-->
             <div class="tapete"></div>
@@ -113,10 +115,41 @@
         </div>
         <!--Chat y estadisticas-->
         <div class="chatStats">
-            <div></div>
-            <div></div>
+            <!--Chat-->
+            <div class="chat">
+                <header class="header">
+                    <img src="<?= $URL_PATH ?>/media/chat.png" class="imgCabecera">
+                    <span class="textoHeader">Dialoga con los usuarios online</span>
+                </header>
+                <div class="bodyHeader divChat">
+                    <section id="chat" class="scroll"></section>
+                    <div class="enviarTexto">
+                        <input type="text" id="mensaje" placeholder="Escribe algo...">
+                        <button id="enviarmensaje" class="btn boton-morado">enviar</button>
+                    </div>
+                </div>
+            </div>
+            <!--Usuarios online-->
+            <div class="usuarios">
+                <header class="header">
+                    <img src="<?= $URL_PATH ?>/media/online.png" class="imgCabecera">
+                    <span class="textoHeader">Usuarios online</span>
+                </header>
+                <section class="bodyHeader scroll">
+                    <ul id="usuariosonline"></ul>
+                </section>
+            </div>
+            
         </div>
     </div>
-<script src="<?=$URL_PATH?>/js/rangoEnvite.js"></script>
+    <script src="<?= $URL_PATH ?>/js/rangoEnvite.js"></script>
+    <script>
+        var usuario = <?= json_encode($usuario) ?>;
+        var path = "<?= $URL_PATH ?>";
+        var mesa = <?=json_encode($mesa)?>;
+    </script>
+    <script src="http://localhost:3333/socket.io/socket.io.js"></script>
+    <script src="<?= $URL_PATH ?>/js/mesa.js"></script>
 </body>
+
 </html>
