@@ -17,7 +17,7 @@ io.on('connection', (socket) => {
     console.log(`usuario ${socket.id} conectado`);
     socket.on('partida', (data) => {
         jugadores.push(data);
-        let datos;
+        let datos = new Object();
         datos.users = jugadores.filter((us) => {
             return us.id_mesa == data.id_mesa;
         });
@@ -32,14 +32,13 @@ io.on('connection', (socket) => {
     })
 
     socket.on('disconnect', () => {
-        console.log("desconexion");
         userDesconectado = jugadores.filter((user) => {
-            return user.socketid == socket.id;
+            return user.socket_id == socket.id;
         })[0];
-        jugadores = usuarios.filter((user) => {
+        jugadores = jugadores.filter((user) => {
             return user != userDesconectado;
         });
-        let datos;
+        let datos = new Object();
         datos.mesa = userDesconectado.id_mesa;
         datos.users = jugadores.filter((us) => {
             return us.id_mesa == datos.mesa;

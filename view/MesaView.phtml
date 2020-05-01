@@ -1,0 +1,153 @@
+<?php global $URL_PATH; ?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Propia hoja de estilos -->
+    <link rel="stylesheet" href="<?= $URL_PATH ?>/css/main.css">
+    <title>
+        <?= $data["title"] ?> - Mustruo
+    </title>
+</head>
+
+<body>
+    <div class="principalMesa">
+        <!--Partida-->
+        <div class="partida">
+            <!--Cuadro Envites-->
+            <div class="cuadroEnvites scroll">
+                <div>
+                    <span>Grande: <span id="grande">-</span></span>
+                </div>
+                <div>
+                    <span>Chica: <span id="chica">-</span></span>
+                </div>
+                <div>
+                    <span>Pares: <span id="pares">-</span></span>
+                </div>
+                <div>
+                    <span>Juego: <span id="juego">-</span></span>
+                </div>
+                <div class="hidden">
+                    <span>Punto: <span id="punto">-</span></span>
+                </div>
+            </div>
+            <!--Interacción-->
+            <div class="interaccion hidden" id="interaccion">
+                <div class="hidden" id="haymus">
+                    <div class="serieInteraccion">
+                        <button id="mus" class="btn boton-morado">Mus</button>
+                        <button id="nomus" class="btn boton-morado">No Mus</button>
+                    </div>
+                </div>
+                <div class="hidden" id="nohayEnvite">
+                    <div class="serieInteraccion">
+                        <input type="range" class="slider" id="rangoEnvite" min="2" max="30" value="2">
+                        <button id="envidar" class="btn boton-morado">Envido 2</button>
+                        <button id="paso" class="btn boton-morado">Paso</button>
+                    </div>
+                </div>
+                <div class="hidden" id="hayEnvite">
+                    <div class="serieInteraccion">
+                        <button id="quiero" class="btn boton-morado">Quiero</button>
+                        <button id="noquiero" class="btn boton-morado">No Quiero</button>
+                    </div>
+                </div>
+                <div class="hidden" id="hayordago">
+                    <div class="serieInteraccion">
+                        <button id="quiero" class="btn boton-morado">Quiero</button>
+                        <button id="noquiero" class="btn boton-morado">No Quiero</button>
+                    </div>
+                </div>
+            </div>
+            <!--Puntos Partida-->
+            <div class="puntosPartida">
+                <div class="tablaPuntos scroll">
+                    <div></div>
+                    <div><span>Puntos</span></div>
+                    <div>Juegos</div>
+                    <div>Vacas</div>
+                    <div>Equipo A</div>
+                    <div id="puntosa">0</div>
+                    <div id="juegosa">0</div>
+                    <div id="vacasa">0</div>
+                    <div>Equipo B</div>
+                    <div id="puntosb">0</div>
+                    <div id="juegosb">0</div>
+                    <div id="vacasb">0</div>
+                </div>
+            </div>
+            <!--Usuarios-->
+            <!--Mi usario-->
+            <div class="usuario bloqueUsu">
+                <img src="<?= $URL_PATH ?>/media/avatares/<?= $usuario->imagen ?>">
+                <span><?= $usuario->login ?><span>
+            </div>
+            <!--Comapannero-->
+            <div class="compannero bloqueUsu">
+                <img src="<?= $URL_PATH ?>/media/avatares/<?= $compannero->imagen ?>">
+                <span><?= $compannero->login ?><span>
+            </div>
+            <!--RivalDer-->
+            <div class="rivalDer bloqueUsu">
+                <img src="<?= $URL_PATH ?>/media/avatares/<?= $rivalDer->imagen ?>">
+                <span><?= $rivalDer->login ?><span>
+            </div>
+            <!--RivalIIzq-->
+            <div class="rivalIzq bloqueUsu">
+                <img src="<?= $URL_PATH ?>/media/avatares/<?= $rivalIzq->imagen ?>">
+                <span><?= $rivalIzq->login ?><span>
+            </div>
+            <!--Tapete-->
+            <div class="tapete"></div>
+        </div>
+        <!--Chat y estadisticas-->
+        <div class="chatStats">
+            <!--Chat-->
+            <div class="chat">
+                <header class="header">
+                    <img src="<?= $URL_PATH ?>/media/chat.png" class="imgCabecera">
+                    <span class="textoHeader">Dialoga con los usuarios online</span>
+                </header>
+                <div class="bodyHeader divChat">
+                    <section id="chat" class="scroll"></section>
+                    <div class="enviarTexto">
+                        <input type="text" id="mensaje" placeholder="Escribe algo...">
+                        <button id="enviarmensaje" class="btn boton-morado">enviar</button>
+                    </div>
+                </div>
+            </div>
+            <!--Usuarios online-->
+            <div class="usuarios">
+                <header class="header">
+                    <img src="<?= $URL_PATH ?>/media/online.png" class="imgCabecera">
+                    <span class="textoHeader">Usuarios online</span>
+                </header>
+                <section class="bodyHeader scroll">
+                    <ul id="usuariosonline"></ul>
+                </section>
+            </div>
+            
+        </div>
+    </div>
+    <script src="<?= $URL_PATH ?>/js/rangoEnvite.js"></script>
+    <script>
+        var usuario = <?= json_encode($usuario) ?>;
+        var path = "<?= $URL_PATH ?>";
+        var mesa = <?=json_encode($mesa)?>;
+    </script>
+    <script src="http://localhost:3333/socket.io/socket.io.js"></script>
+    <script src="<?= $URL_PATH ?>/js/mesa.js"></script>
+</body>
+
+</html>

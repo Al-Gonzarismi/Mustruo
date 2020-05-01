@@ -42,7 +42,7 @@ socket.on('connect', () => {
 //mantener lista usuarios conectados
 socket.on('refrescarusuarios', (data) => {
     if (data.mesa == mesa.id_mesa) {
-        hacerLista(data);
+        hacerLista(data.users);
     }
 });
 
@@ -59,7 +59,7 @@ enviar.addEventListener("click", () => {
 });
 
 
-socket.on('chatlobby:message', (data) => {
+socket.on('chatpartida:message', (data) => {
     if (mesa.id_mesa == data.mesa) {
         chat.innerHTML += `<p>${data.nombre}: ${data.mensaje}</p>`;
     }

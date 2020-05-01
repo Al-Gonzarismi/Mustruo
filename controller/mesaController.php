@@ -2,9 +2,9 @@
 
 namespace controller;
 
-use DateTime;
 use orm\OrmMesa;
 use objects\Mesa;
+use objects\Usuario;
 
 class MesaController extends Controller
 {
@@ -17,26 +17,39 @@ class MesaController extends Controller
             $mesa = $orm->obtenerMesa($id_mesa);
             $usuariosMesa = $orm->obtenerUsuariosMesa($id_mesa);
             for ($i = 0; $i < 4; $i++) {
-                if ($usuariosMesa[$i]->login == $_SESSION["login"]) {
-                    $usuario = $usuariosMesa[$i];
+                if ($usuariosMesa[$i]["login"] == $_SESSION["login"]) {
+                    $usuario = new Usuario;
+                    $usuario->login = $usuariosMesa[$i]["login"];
+                    $usuario->posicion = $usuariosMesa[$i]["posicion"];
+                    $usuario->imagen = $usuariosMesa[$i]["imagen"];
                     break;
                 }
             }
             if (!isset($usuario)) {
-                header("Location: $URL_PATH");
+                header("Location: $URL_PATH");                
             }
             foreach ($usuariosMesa as $usu) {
-                if ($usu->login != $usuario->login) {
-                    if (($usu->posicion + $usuario->posicion) % 2 == 0) {
-                        $compannero = $usu;
-                    } else if (($usuario->posicion + 1) % 4 == $usu->posicion) {
-                        $rivalDer = $usu;
+                if ($usu["login"] != $usuario->login) {
+                    if (($usu["posicion"] + $usuario->posicion) % 2 == 0) {
+                        $compannero = new Usuario;
+                        $compannero->login = $usu["login"];
+                        $compannero->posicion = $usu["posicion"];
+                        $compannero->imagen = $usu["imagen"];
+                    } else if (($usuario->posicion + 1) % 4 == $usu["posicion"]) {
+                        $rivalDer = new Usuario;
+                        $rivalDer->login = $usu["login"];
+                        $rivalDer->posicion = $usu["posicion"];
+                        $rivalDer->imagen = $usu["imagen"];
                     } else {
-                        $rivalIzq = $usu;
+                        $rivalIzq = new Usuario;
+                        $rivalIzq->login = $usu["login"];
+                        $rivalIzq->posicion = $usu["posicion"];
+                        $rivalIzq->imagen = $usu["imagen"];
                     }
                 }
             }
             echo \dawfony\Ti::render("view/MesaView.phtml", compact('title', 'usuario', 'compannero', 'rivalIzq', 'rivalDer', 'mesa'));
+        
         } else {
             header("Location: $URL_PATH");
         }
