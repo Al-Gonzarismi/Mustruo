@@ -488,9 +488,13 @@ form#registro {
     flex-direction: column;
 }
 .bloqueUsu > img {
+    width: 100%;
+    height: 80%;
     border-radius: 50%;
 }
 .bloqueUsu > span {
+    width: 100%;
+    height: 20%;
     text-align: center; 
 }
 /*Posicionamiento*/
@@ -542,4 +546,74 @@ form#registro {
     height: 100%;
     display: grid;
     grid-template-columns: 2fr 1fr;
+}
+/*ChatUsu*/
+.chatusu {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+}
+/*Chat*/
+.chatmesa {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 3fr 1fr;
+}
+.text {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+}
+.sendText {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+}
+/*Usu*/
+.usuariosmesa {
+    width: 100%;
+    height: 100%;
+    border: 5px ridge white;
+    display: grid;
+    grid-template-rows: 1fr 3fr;
+}
+.headerUsu {
+    width: 100%;
+    height: 100%;
+    background-color: lightblue;
+    color: green;
+}
+.usus {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+}
+/*Estadisticas*/
+.stats {
+    width: 100%;
+    height: 100%;
+    border: 5px ridge white;
+    display: grid;
+    grid-template-rows: 1fr 3fr;
+}
+.headerStats {
+    width: 100%;
+    height: 100%;
+    background-color: lightblue;
+    color: green;
+    text-align: center;
+}
+.tablaEstadisticas {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr ;
+    grid-template-rows: 1fr 1fr;
+}
+.tablaEstadisticas > div {
+    border: 5px ridge white;
+    background-color: lightblue;
+    color:green;
+    text-align: center;
 }

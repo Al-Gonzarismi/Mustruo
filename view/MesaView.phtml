@@ -111,37 +111,47 @@
             <!--Tapete-->
             <div class="tapete"></div>
             <!--Cuenta Atras-->
-            <div class="reloj hidden" id="reloj"><div>
+            <div class="reloj hidden" id="reloj"></div>
         </div>
         <!--Chat y estadisticas-->
         <div class="chatStats">
+            <!--1/2-->
+            <div class="chatusu">
             <!--Chat-->
-            <div class="chat">
-                <header class="header">
-                    <img src="<?= $URL_PATH ?>/media/chat.png" class="imgCabecera">
-                    <span class="textoHeader">Dialoga con los usuarios online</span>
-                </header>
-                <div class="bodyHeader divChat">
-                    <section id="chat" class="scroll"></section>
-                    <div class="enviarTexto">
+            <div class="chatmesa">
+                    <section id="chat" class="text scroll"></section>
+                    <div class="sendText">
                         <input type="text" id="mensaje" placeholder="Escribe algo...">
                         <button id="enviarmensaje" class="btn boton-morado">enviar</button>
                     </div>
-                </div>
             </div>
             <!--Usuarios online-->
-            <div class="usuarios">
-                <header class="header">
-                    <img src="<?= $URL_PATH ?>/media/online.png" class="imgCabecera">
-                    <span class="textoHeader">Usuarios online</span>
+            <div class="usuariosmesa">
+                <header class="headerUsu">
+                    <span class="textoHeader">Usuarios</span>
                 </header>
-                <section class="bodyHeader scroll">
+                <section class="usus">
                     <ul id="usuariosonline"></ul>
                 </section>
             </div>
-            
+            </div>
+            <!--2/2-->
+            <div class="stats">
+                <header class="headerStats">
+                    <span class="textoHeader">Estadísticas <span id="usuestadisticas"></span></span>
+                </header>
+                <section class="tablaEstadisticas">
+                    <div>Jugados</div>
+                    <div>Ganados</div>
+                    <div>Abandonos</div>
+                    <div id="jugados">10</div>
+                    <div id="ganados">50%</div>
+                    <div id="abandonos">10%</div>
+                </section>
+            </div>
         </div>
     </div>
+    <!--SCRIPT-->
     <script src="<?= $URL_PATH ?>/js/rangoEnvite.js"></script>
     <script>
         var usuario = <?= json_encode($usuario) ?>;
@@ -151,5 +161,4 @@
     <script src="http://localhost:3333/socket.io/socket.io.js"></script>
     <script src="<?= $URL_PATH ?>/js/mesa.js"></script>
 </body>
-
 </html>
