@@ -96,17 +96,17 @@
             <!--Comapannero-->
             <div class="compannero bloqueUsu">
                 <img src="<?= $URL_PATH ?>/media/avatares/<?= $compannero->imagen ?>">
-                <div><?= $compannero->login ?></div>
+                <span id="compannero"><?= $compannero->login ?><span>
             </div>
             <!--RivalDer-->
             <div class="rivalDer bloqueUsu">
                 <img src="<?= $URL_PATH ?>/media/avatares/<?= $rivalDer->imagen ?>">
-                <div><?= $rivalDer->login ?></div>
+                <span id="rivalder"><?= $rivalDer->login ?><span>
             </div>
             <!--RivalIIzq-->
             <div class="rivalIzq bloqueUsu">
                 <img src="<?= $URL_PATH ?>/media/avatares/<?= $rivalIzq->imagen ?>">
-                <div><?= $rivalIzq->login ?></div>
+                <span id="rivalizq"><?= $rivalIzq->login ?><span>
             </div>
             <!--Tapete-->
             <div class="mesaJuego">
@@ -149,13 +149,13 @@
                     <div>Jugados</div>
                     <div>Ganados</div>
                     <div>Juegos</div>
-                    <div id="jegosJugados">10</div>
-                    <div id="juegosGanados">3</div>
+                    <div id="juegosJugados"></div>
+                    <div id="juegosGanados"></div>
                     <div>Vacas</div>
-                    <div id="vacasJugadas">5</div>
-                    <div id="vacasGanadas">1</div>
+                    <div id="vacasJugadas"></div>
+                    <div id="vacasGanadas"></div>
                 </section>
-                <span class="abandonos">Abandonos: <span id="abandonos">3</span></span>
+                <span class="abandonos">Abandonos: <span id="abandonos"></span></span>
             </div>
         </div>
     </div>
