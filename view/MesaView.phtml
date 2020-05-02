@@ -24,6 +24,23 @@
     <div class="principalMesa">
         <!--Partida-->
         <div class="partida">
+            <!--Puntos Partida-->
+            <div class="puntosPartida">
+                <div class="tablaPuntos">
+                    <div class="ocultarDeTabla"></div>
+                    <div><span>Puntos</span></div>
+                    <div>Juegos</div>
+                    <div>Vacas</div>
+                    <div><?=$usuario->login?> / <?=$compannero->login?></div>
+                    <div id="puntosa">3</div>
+                    <div id="juegosa">0</div>
+                    <div id="vacasa">0</div>
+                    <div><?=$rivalDer->login?> / <?=$rivalIzq->login?></div>
+                    <div id="puntosb">8</div>
+                    <div id="juegosb">0</div>
+                    <div id="vacasb">0</div>
+                </div>
+            </div>
             <!--Cuadro Envites-->
             <div class="cuadroEnvites">
                 <div>
@@ -38,55 +55,60 @@
                 <div>
                     <span>Juego: <span id="juego">-</span></span>
                 </div>
-                <div class="ocultar">
+                <div>
                     <span>Punto: <span id="punto">-</span></span>
                 </div>
             </div>
+            <!--Cuenta Atras-->
+            <div class="reloj hidden" id="reloj">10</div>
             <!--Interacción-->
-            <div class="interaccion hidden" id="interaccion">
+            <div class="interaccion" id="interaccion">
                 <div class="hidden" id="haymus">
                     <div class="serieInteraccion">
-                        <button id="mus" class="btn boton-morado">Mus</button>
-                        <button id="nomus" class="btn boton-morado">No Mus</button>
+                        <div></div>
+                        <div class="serieVertical">
+                            <button id="mus" class="btn boton-marron">Mus</button>
+                            <button id="nomus" class="btn boton-marron">No Mus</button>
+                        </div>
                     </div>
                 </div>
                 <div class="hidden" id="nohayEnvite">
                     <div class="serieInteraccion">
-                        <input type="range" class="slider" id="rangoEnvite" min="2" max="30" value="2">
-                        <button id="envidar" class="btn boton-morado">Envido 2</button>
-                        <button id="paso" class="btn boton-morado">Paso</button>
+                        <div class="serieHorizontal">
+                            <button id="menos" class="btn boton-marron">-</button>
+                            <div id="textoEnvidar">2</div>
+                            <button id="mas" class="btn boton-marron">+</button>
+                        </div>
+                        <div class="serieVertical">
+                            <button id="envidar" class="btn boton-marron">Envido 2</button>
+                            <button id="ordago" class="btn boton-marron">Órdago</button>
+                            <button id="paso" class="btn boton-marron">Paso</button>
+                        </div>
                     </div>
                 </div>
                 <div class="hidden" id="hayEnvite">
                     <div class="serieInteraccion">
-                        <button id="quiero" class="btn boton-morado">Quiero</button>
-                        <button id="noquiero" class="btn boton-morado">No Quiero</button>
+                        <div class="serieHorizontal">
+                            <button id="haymenos" class="btn boton-marron">-</button>
+                            <div id="haytextoEnvidar">2</div>
+                            <button id="haymas" class="btn boton-marron mas">+</button>
+                        </div>
+                        <div class="serieVertical">
+                            <button id="hayenvidar" class="btn boton-marron">Envido 2</button>
+                            <button id="hayordago" class="btn boton-marron">Órdago</button>
+                            <button id="hayquiero" class="btn boton-marron">Quiero</button>
+                            <button id="haynoquiero" class="btn boton-marron">No Quiero</button>
+                        </div>    
                     </div>
                 </div>
                 <div class="hidden" id="hayordago">
                     <div class="serieInteraccion">
-                        <button id="quiero" class="btn boton-morado">Quiero</button>
-                        <button id="noquiero" class="btn boton-morado">No Quiero</button>
+                        <button id="quiero" class="btn boton-marron">Quiero</button>
+                        <button id="noquiero" class="btn boton-marron">No Quiero</button>
                     </div>
                 </div>
             </div>
-            <!--Puntos Partida-->
-            <div class="puntosPartida">
-                <div class="tablaPuntos">
-                    <div class="ocultarDeTabla"></div>
-                    <div><span>Puntos</span></div>
-                    <div>Juegos</div>
-                    <div>Vacas</div>
-                    <div><?=$usuario->login?> / <?=$compannero->login?></div>
-                    <div id="puntosa">0</div>
-                    <div id="juegosa">0</div>
-                    <div id="vacasa">0</div>
-                    <div><?=$rivalDer->login?> / <?=$rivalIzq->login?></div>
-                    <div id="puntosb">0</div>
-                    <div id="juegosb">0</div>
-                    <div id="vacasb">0</div>
-                </div>
-            </div>
+            
             <!--Usuarios-->
             <!--Mi usario
             <div class="usuario bloqueUsu">
@@ -96,26 +118,25 @@
             <!--Comapannero-->
             <div class="compannero bloqueUsu">
                 <img src="<?= $URL_PATH ?>/media/avatares/<?= $compannero->imagen ?>">
-                <span id="compannero"><?= $compannero->login ?><span>
+                <div id="compannero"><?= $compannero->login ?></div>
             </div>
             <!--RivalDer-->
             <div class="rivalDer bloqueUsu">
                 <img src="<?= $URL_PATH ?>/media/avatares/<?= $rivalDer->imagen ?>">
-                <span id="rivalder"><?= $rivalDer->login ?><span>
+                <div id="rivalder"><?= $rivalDer->login ?></div>
             </div>
             <!--RivalIIzq-->
             <div class="rivalIzq bloqueUsu">
                 <img src="<?= $URL_PATH ?>/media/avatares/<?= $rivalIzq->imagen ?>">
-                <span id="rivalizq"><?= $rivalIzq->login ?><span>
+                <div id="rivalizq"><?= $rivalIzq->login ?></div>
             </div>
             <!--Tapete-->
             <div class="mesaJuego">
                 <div class="tapete"></div>
             </div>
             <!--Puerta Salir-->
-            <img src="<?= $URL_PATH ?>/media/salir.png" class="salir" id="salir" title="Abandonar partida">
-            <!--Cuenta Atras-->
-            <div class="reloj hidden" id="reloj"></div>
+            <img src="<?= $URL_PATH ?>/media/flecha.png" class="flecha" id="salir" title="Abandonar partida">
+            <img src="<?= $URL_PATH ?>/media/salir.png" class="puerta" id="salir" title="Abandonar partida">
         </div>
         <!--Chat y estadisticas-->
         <div class="chatStats">
@@ -160,12 +181,12 @@
         </div>
     </div>
     <!--SCRIPT-->
-    <script src="<?= $URL_PATH ?>/js/rangoEnvite.js"></script>
     <script>
         var usuario = <?= json_encode($usuario) ?>;
         var path = "<?= $URL_PATH ?>";
         var mesa = <?=json_encode($mesa)?>;
     </script>
+    <script src="<?= $URL_PATH ?>/js/rangoEnvite.js"></script>
     <script src="http://localhost:3333/socket.io/socket.io.js"></script>
     <script src="<?= $URL_PATH ?>/js/mesa.js"></script>
 </body>
