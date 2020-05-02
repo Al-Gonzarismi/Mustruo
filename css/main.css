@@ -32,6 +32,9 @@ html, body {
 .hidden {
     display: none;
 }
+.ocultar {
+    visibility: hidden;
+}
 /* Nav */
 .personalizarNav {
     text-align: center;
@@ -384,15 +387,12 @@ form#registro {
 /*CuadroEnvites*/
 .cuadroEnvites {
     position: absolute;
-    top:0;
+    bottom: 0;
     left: 0;
-    width: 15%;
-    height: 23%;
-    color: green;
-    background-color: lightblue;
-    border: 5px ridge white;
-    border-top: 0;
-    border-left: 0;
+    width: 12.5%;
+    background-color: black;
+    color: white;
+    border: 5px ridge #96623d;
 }
 .cuadroEnvites > div {
     margin-left: 5%;
@@ -400,6 +400,88 @@ form#registro {
 }
 .cuadroEnvites > div > span > span {
     right: 10%;
+}
+/*Puntos Partida*/
+.puntosPartida {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30%;
+    height: 25%;
+}
+.tablaPuntos {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+.ocultarDeTabla ~ div {
+    background-color: black;
+    color: white;
+    border: 5px ridge #96623d;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 7%;
+}
+/*Usuarios*/
+.bloqueUsu {
+    width: 10%;
+    height: 30%;
+}
+.bloqueUsu > img {
+    width: 100%;
+    height: 80%;
+    border-radius: 50%;
+}
+.bloqueUsu > div {
+    cursor: pointer;
+    width: 100%;
+    height: 20%;
+    text-align: center; 
+}
+/*Posicionamiento*/
+.usuario {
+    position: absolute;
+    bottom: 0;
+    left: 40%;
+}
+.compannero {
+    position: absolute;
+    top: 1.5%;
+    left: 46%;
+}
+.rivalDer {
+    position: absolute;
+    left: 77%;
+    bottom: 17.5%;
+}
+.rivalIzq {
+    position: absolute;
+    left: 15%;
+    bottom: 17.5%;
+}
+/*Tapete*/
+.mesaJuego {
+    width: 50%;
+    height: 67.5%;
+    background-image: url("/Mustruo/media/fondo-madera.png");
+    /*background-image: linear-gradient(to top, #014116, #016322);*/
+    border-radius: 2%;
+    position: absolute;
+    left: 26%;
+    bottom: 0;
+}
+.tapete {
+    position: absolute;
+    background-color: #004d1a;
+    border-radius: 2%;
+    width: 70%;
+    height: 70%;
+    top: 15%;
+    left: 15%;
 }
 /*Interaccion*/
 .interaccion {
@@ -455,79 +537,14 @@ form#registro {
     background-color: purple;
     cursor: pointer;
 }
-/*Puntos Partida*/
-.puntosPartida {
+/*Puerta Salir*/
+.salir {
+    cursor: pointer;
     position: absolute;
-    bottom: 0;
+    width: 7%;
+    height: 15%;
+    bottom: 2%;
     right: 0;
-    width: 25%;
-    height: 25%;
-    color: green;
-    background-color: lightblue;
-}
-.tablaPuntos {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-}
-.tablaPuntos > div {
-    border: 5px ridge white;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    padding-top: 10%;
-}
-/*Usuarios*/
-.bloqueUsu {
-    width: 10%;
-    height: 25%;
-    display: flex;
-    flex-direction: column;
-}
-.bloqueUsu > img {
-    width: 100%;
-    height: 80%;
-    border-radius: 50%;
-}
-.bloqueUsu > span {
-    width: 100%;
-    height: 20%;
-    text-align: center; 
-}
-/*Posicionamiento*/
-.usuario {
-    position: absolute;
-    bottom: 0;
-    left: 40%;
-}
-.compannero {
-    position: absolute;
-    top: 0;
-    left: 40%;
-}
-.rivalDer {
-    position: absolute;
-    left: 68.5%;
-    top: 35%;
-}
-.rivalIzq {
-    position: absolute;
-    left: 11.5%;
-    top: 35%;
-}
-/*Tapete*/
-.tapete {
-    width: 45%;
-    height: 48%;
-    background-image: url("/Mustruo/media/fondo-madera.png");
-    /*background-image: linear-gradient(to top, #014116, #016322);*/
-    border-radius: 2%;
-    position: absolute;
-    left: 22.5%;
-    top: 26%;
 }
 /*Reloj*/
 .reloj {

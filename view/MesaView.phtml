@@ -25,7 +25,7 @@
         <!--Partida-->
         <div class="partida">
             <!--Cuadro Envites-->
-            <div class="cuadroEnvites scroll">
+            <div class="cuadroEnvites">
                 <div>
                     <span>Grande: <span id="grande">-</span></span>
                 </div>
@@ -38,7 +38,7 @@
                 <div>
                     <span>Juego: <span id="juego">-</span></span>
                 </div>
-                <div class="hidden">
+                <div class="ocultar">
                     <span>Punto: <span id="punto">-</span></span>
                 </div>
             </div>
@@ -72,44 +72,48 @@
             </div>
             <!--Puntos Partida-->
             <div class="puntosPartida">
-                <div class="tablaPuntos scroll">
-                    <div></div>
+                <div class="tablaPuntos">
+                    <div class="ocultarDeTabla"></div>
                     <div><span>Puntos</span></div>
                     <div>Juegos</div>
                     <div>Vacas</div>
-                    <div>Equipo A</div>
+                    <div><?=$usuario->login?> / <?=$compannero->login?></div>
                     <div id="puntosa">0</div>
                     <div id="juegosa">0</div>
                     <div id="vacasa">0</div>
-                    <div>Equipo B</div>
+                    <div><?=$rivalDer->login?> / <?=$rivalIzq->login?></div>
                     <div id="puntosb">0</div>
                     <div id="juegosb">0</div>
                     <div id="vacasb">0</div>
                 </div>
             </div>
             <!--Usuarios-->
-            <!--Mi usario-->
+            <!--Mi usario
             <div class="usuario bloqueUsu">
                 <img src="<?= $URL_PATH ?>/media/avatares/<?= $usuario->imagen ?>">
-                <span><?= $usuario->login ?><span>
-            </div>
+                <span><?= $usuario->login ?></span>
+            </div>-->
             <!--Comapannero-->
             <div class="compannero bloqueUsu">
                 <img src="<?= $URL_PATH ?>/media/avatares/<?= $compannero->imagen ?>">
-                <span><?= $compannero->login ?><span>
+                <div><?= $compannero->login ?></div>
             </div>
             <!--RivalDer-->
             <div class="rivalDer bloqueUsu">
                 <img src="<?= $URL_PATH ?>/media/avatares/<?= $rivalDer->imagen ?>">
-                <span><?= $rivalDer->login ?><span>
+                <div><?= $rivalDer->login ?></div>
             </div>
             <!--RivalIIzq-->
             <div class="rivalIzq bloqueUsu">
                 <img src="<?= $URL_PATH ?>/media/avatares/<?= $rivalIzq->imagen ?>">
-                <span><?= $rivalIzq->login ?><span>
+                <div><?= $rivalIzq->login ?></div>
             </div>
             <!--Tapete-->
-            <div class="tapete"></div>
+            <div class="mesaJuego">
+                <div class="tapete"></div>
+            </div>
+            <!--Puerta Salir-->
+            <img src="<?= $URL_PATH ?>/media/salir.png" class="salir" id="salir" title="Abandonar partida">
             <!--Cuenta Atras-->
             <div class="reloj hidden" id="reloj"></div>
         </div>
