@@ -6,6 +6,9 @@ var enviar = document.getElementById("enviarmensaje");
 var mensaje = document.getElementById("mensaje");
 var encabezadoEstadisiticas = document.getElementById("encabezadoestadisiticas");
 var cuerpoEstadisticas = document.getElementById("cuerpoestadisticas");
+var compannero = document.getElementById("compannero");
+var rivalDer = document.getElementById("rivalder");
+var rivalIzq = document.getElementById("rivalizq");
 
 //functions
 function hacerLista(data) {
@@ -21,8 +24,7 @@ function hacerLista(data) {
             li.append(div);
             container.append(li);
             li.addEventListener("click", () => {
-                encabezadoEstadisiticas.innerHTML = `Estadísticas de <a href="${path}/perfil/${login}">${login}</a>`;
-                //renderStats(login);
+                renderStats(login);
             });
             previo = login;
         }
@@ -31,6 +33,18 @@ function hacerLista(data) {
     usuarios.append(container);
 }
 
+function renderStats(login) {
+    fetch(`${path}/api/estadisticas/${login}`)
+        .then((res) => res.json())
+        .then((res) => {
+            $("#usuestadisticas").text(login);
+            $("#juegosJugados").text(res.juegos_jugados);
+            $("#juegosGanados").text(res.juegos_ganados);
+            $("#vacasJugadas").text(res.vacas_jugadas);
+            $("#vacasGanadas").text(res.vacas_ganadas);
+            $("#abandonos").text(res.abandonos);            
+        });
+}
 
 //conectar socket
 socket.on('connect', () => {
@@ -64,3 +78,15 @@ socket.on('chatpartida:message', (data) => {
         chat.innerHTML += `<p>${data.nombre}: ${data.mensaje}</p>`;
     }
 });
+
+//estadisticas
+renderStats(usuario.login);
+compannero.addEventListener("click", () => {
+    renderStats(compannero.innerText);
+});
+rivalDer.addEventListener("click", () => {
+    renderStats(rivalDer.innerText);
+});
+rivalIzq.addEventListener("click", () => {
+    renderStats(rivalIzq.innerText);
+})

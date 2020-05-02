@@ -4,8 +4,6 @@ var chat = document.getElementById("chat");
 var usuarios = document.getElementById("usuariosonline");
 var enviar = document.getElementById("enviarmensaje");
 var mensaje = document.getElementById("mensaje");
-var encabezadoEstadisiticas = document.getElementById("encabezadoestadisiticas");
-var cuerpoEstadisticas = document.getElementById("cuerpoestadisticas");
 var semana = document.getElementById("semana");
 var mes = document.getElementById("mes");
 var anno = document.getElementById("anno");
@@ -22,12 +20,12 @@ function renderStats(login) {
     fetch(`${path}/api/estadisticas/${login}`)
         .then((res) => res.json())
         .then((res) => {
-            cuerpoEstadisticas.innerHTML = `<table><tr><td></td><td>Jugados</td><td>Ganados</td></tr>
-        <tr><th>Juegos</th><td>${res.juegos_jugados}</td><td>${res.juegos_ganados}</td></tr>
-        <tr><th>Vacas</th><td>${res.vacas_jugadas}</td><td>${res.vacas_ganadas}</td></tr>
-        <tr><td></td><td>Semanales</td><td>Mensuales</td><td>Anuales</td></tr>
-        <tr><th>Mustruos</th><td>${res.mustruo_semana}</td><td>${res.mustruo_mes}</td><td>${res.mustruo_anno}</td></tr>
-        <tr><th>Abandonos</th><td>${res.abandonos}</td></tr></table>`;
+            $("#usuestadisticas").text(login);
+            $("#juegosJugados").text(res.juegos_jugados);
+            $("#juegosGanados").text(res.juegos_ganados);
+            $("#vacasJugadas").text(res.vacas_jugadas);
+            $("#vacasGanadas").text(res.vacas_ganadas);
+            $("#abandonos").text(res.abandonos);
         });
 }
 
@@ -64,7 +62,6 @@ function hacerLista(zona, data) {
             li.append(div);
             container.append(li);
             li.addEventListener("click", () => {
-                encabezadoEstadisiticas.innerHTML = `Estadísticas de <a href="${path}/perfil/${login}">${login}</a>`;
                 renderStats(login);
             });
             previo = login;
@@ -235,11 +232,18 @@ socket.on('connect', () => {
     usuario.socketid = socket.id;
     socket.emit('lobby', usuario);
 });
+
 //mantener lista usuarios conectados
 socket.on('refrescarusuarios', (data) => {
     hacerLista(usuarios, data);
 
 });
+
+//estadisticas
+if (usuario != "anonimo") {
+renderStats(usuario.login)
+}
+
 //chat
 if (usuario != "anonimo") {
     enviar.addEventListener("click", () => {
@@ -301,3 +305,5 @@ socket.on("empezarpartida", (data)=>{
         window.location=`${path}/mesa/${data}`;
     }
 })
+
+

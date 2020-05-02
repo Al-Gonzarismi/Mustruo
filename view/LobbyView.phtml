@@ -2,10 +2,10 @@
 <?php \dawfony\Ti::extend("view/MainView.phtml"); ?>
 <?php \dawfony\Ti::startBlock("content"); ?>
 <div class="principal">
-<!-- clasificaciones Mustruo -->
+  <!-- clasificaciones Mustruo -->
   <div class="primerTercio">
     <header class="header">
-      <img src="<?= $URL_PATH?>/media/trofeo.png" class="imgCabecera">
+      <img src="<?= $URL_PATH ?>/media/trofeo.png" class="imgCabecera">
       <span class="textoHeader"> Ranking de Mustruos </span>
       <div class="pestannas">
         <ul>
@@ -13,29 +13,29 @@
           <li id="mes"><a href="javascript:void(0)">mes</a></li>
           <li id="anno"><a href="javascript:void(0)">año</a></li>
         </ul>
-      </div>  
+      </div>
     </header>
     <section>
       <ol id="clasificacion"></ol>
     </section>
-  </div>  
-<!-- 2/3 -->
+  </div>
+  <!-- 2/3 -->
   <div class="segundoTercio">
-  <!-- mesas -->
-  <div class="mesas">
-    <header class="header">
-      <img src="<?= $URL_PATH ?>/media/mesas.png" class="imgCabecera">
-      <span class="textoHeader">Únete a una mesa para jugar</span>
-      <?php if (isset($_SESSION["login"])) : ?>
-       <!-- boton nueva mesa-->
-      <button id="nuevamesa" class="btn boton-morado nuevaMesa">Nueva mesa</button>
-    <?php endif; ?>
-     <!-- boton levantarse de mesa-->
-     <button id="levantarse" class="btn boton-morado hidden dejarMesa">Dejar mesa</button>
-    </header>
- 
-    <section id="mesas" class="bodyHeader scroll crearMesas"></section>
-  </div>  
+    <!-- mesas -->
+    <div class="mesas">
+      <header class="header">
+        <img src="<?= $URL_PATH ?>/media/mesas.png" class="imgCabecera">
+        <span class="textoHeader">Únete a una mesa para jugar</span>
+        <?php if (isset($_SESSION["login"])) : ?>
+          <!-- boton nueva mesa-->
+          <button id="nuevamesa" class="btn boton-morado nuevaMesa">Nueva mesa</button>
+        <?php endif; ?>
+        <!-- boton levantarse de mesa-->
+        <button id="levantarse" class="btn boton-morado hidden dejarMesa">Dejar mesa</button>
+      </header>
+
+      <section id="mesas" class="bodyHeader scroll crearMesas"></section>
+    </div>
     <!-- chat-->
     <div class="chat">
       <header class="header">
@@ -47,13 +47,14 @@
         <div class="enviarTexto">
           <input type="text" id="mensaje" placeholder="Escribe algo...">
           <button id="enviarmensaje" class="btn boton-morado">enviar</button>
-        </div>  
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="tercerTercio"><!--Inicio 3/3-->
-  <!-- Usuarios online-->
+  <div class="tercerTercio">
+    <!--Inicio 3/3-->
+    <!-- Usuarios online-->
     <div class="usuarios">
       <header class="header">
         <img src="<?= $URL_PATH ?>/media/online.png" class="imgCabecera">
@@ -63,61 +64,71 @@
         <ul id="usuariosonline"></ul>
       </section>
     </div>
-<!-- Estadisticas-->
+    <!-- Estadisticas-->
     <div class="estadisticas">
       <header class="header">
         <img src="<?= $URL_PATH ?>/media/estadistica.png" class="imgCabecera">
-        <span id="encabezadoestadisiticas" class="textoHeader">Estadisticas</span>
+        <span class="textoHeader">Estadísticas <span id="usuestadisticas"></span></span>
       </header>
-      <section id="cuerpoestadisticas" class="bodyHeader">
-        Pincha sobre un usuario
+      <section class="tablaEstadisticas">
+        <div></div>
+        <div>Jugados</div>
+        <div>Ganados</div>
+        <div>Juegos</div>
+        <div id="juegosJugados"></div>
+        <div id="juegosGanados"></div>
+        <div>Vacas</div>
+        <div id="vacasJugadas"></div>
+        <div id="vacasGanadas"></div>
       </section>
-    </div>
-  </div><!--Fin 3/3-->
-<!-- modal de nueva mesa. TODO -->
-<div class="modal fade" id="nuevamesamodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content  bg-secondary">
-      <div class="modal-header">
-        <h5 class="modal-title font-weight-bold">Crear Nueva Mesa</h5>
-      </div>
-      <form action="<?= $URL_PATH ?>/mesa/nuevamesa" method="POST">
-
-        <div class="modal-body">
-          Vacas a ganar:
-          <input type="radio" name="vacas" value="1">1
-          <input type="radio" name="vacas" value="2" checked>2
-          <input type="radio" name="vacas" value="3">3
-          <br>
-          Juegos a ganar por vaca:
-          <input type="radio" name="juegos" value="2">2
-          <input type="radio" name="juegos" value="3" checked>3
-          <input type="radio" name="juegos" value="4">4
-          <br>
-          Puntos por juego:
-          <input type="radio" name="puntos" value="30" checked>30
-          <input type="radio" name="puntos" value="40">40
-          <br>
-          <input type="hidden" name="creador" value="<?= $usuario->login ?>">
-          <button id="botpr" type="button" class="btn btn-danger" >Privada</button>
-          <input id="clave" type="text" name="contrasenna" placeholder="Introduce clave">
-          <input id="privacidad" type="hidden" name="privacidad" value="0">
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-light">Crear Mesa</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        </div>
-      </form>
+      <span class="abandonos">Abandonos: <span id="abandonos"></span></span>
     </div>
   </div>
-</div>
+  <!--Fin 3/3-->
+  <!-- modal de nueva mesa. TODO -->
+  <div class="modal fade" id="nuevamesamodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content  bg-secondary">
+        <div class="modal-header">
+          <h5 class="modal-title font-weight-bold">Crear Nueva Mesa</h5>
+        </div>
+        <form action="<?= $URL_PATH ?>/mesa/nuevamesa" method="POST">
+
+          <div class="modal-body">
+            Vacas a ganar:
+            <input type="radio" name="vacas" value="1">1
+            <input type="radio" name="vacas" value="2" checked>2
+            <input type="radio" name="vacas" value="3">3
+            <br>
+            Juegos a ganar por vaca:
+            <input type="radio" name="juegos" value="2">2
+            <input type="radio" name="juegos" value="3" checked>3
+            <input type="radio" name="juegos" value="4">4
+            <br>
+            Puntos por juego:
+            <input type="radio" name="puntos" value="30" checked>30
+            <input type="radio" name="puntos" value="40">40
+            <br>
+            <input type="hidden" name="creador" value="<?= $usuario->login ?>">
+            <button id="botpr" type="button" class="btn btn-danger">Privada</button>
+            <input id="clave" type="text" name="contrasenna" placeholder="Introduce clave">
+            <input id="privacidad" type="hidden" name="privacidad" value="0">
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-light">Crear Mesa</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
 </div>
 <!-- javascript -->
 <script>
   var usuario = <?= json_encode($usuario) ?>;
   var path = "<?= $URL_PATH ?>";
-  var arg = "<?=$arg?>";  
+  var arg = "<?= $arg ?>";
 </script>
 <script src="http://localhost:3300/socket.io/socket.io.js"></script>
 <script src="js/lobby.js"></script>
