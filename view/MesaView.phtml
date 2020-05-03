@@ -133,6 +133,30 @@
             <!--Tapete-->
             <div class="mesaJuego">
                 <div class="tapete"></div>
+                <div class="misCartas cartasHorizontal">
+                    <img class="pointer" id="carta1" src="<?= $URL_PATH ?>/media/baraja/3_Copa.jpg">
+                    <img class="pointer" id="carta2" src="<?= $URL_PATH ?>/media/baraja/12_Oro.jpg">
+                    <img class="pointer" id="carta3" src="<?= $URL_PATH ?>/media/baraja/10_basto.jpg">
+                    <img class="pointer" id="carta4" src="<?= $URL_PATH ?>/media/baraja/1_Espada.jpg">
+                </div>
+                <div class="compiCartas cartasHorizontal">
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                </div>
+                <div class="rivalizqCartas cartasVertical">
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                </div>
+                <div class="rivalderCartas cartasVertical">
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                </div>
             </div>
             <!--Puerta Salir-->
             <img src="<?= $URL_PATH ?>/media/flecha.png" class="flecha" id="salir" title="Abandonar partida">
@@ -140,30 +164,28 @@
         </div>
         <!--Chat y estadisticas-->
         <div class="chatStats">
-            <!--1/2-->
-            <div class="chatusu">
             <!--Chat-->
-            <div class="chatmesa">
-                    <section id="chat" class="text scroll"></section>
-                    <div class="sendText">
+            <div class="chatMesa">
+                    <section class="mensajes scroll" id="chat">
+                    </section>
+                    <div class="enviarMensajes">
                         <input type="text" id="mensaje" placeholder="Escribe algo...">
-                        <button id="enviarmensaje" class="btn boton-morado">enviar</button>
+                        <button id="enviarmensaje">Enviar</button>
                     </div>
             </div>
             <!--Usuarios online-->
-            <div class="usuariosmesa">
-                <header class="headerUsu">
-                    <span class="textoHeader">Usuarios</span>
+            <div class="usuariosMesa">
+                <header class="headerUsuariosMesa">
+                    <span>Usuarios en partida</span>
                 </header>
-                <section class="usus">
+                <section class="bodyUsuariosMesa">
                     <ul id="usuariosonline"></ul>
                 </section>
             </div>
-            </div>
-            <!--2/2-->
-            <div class="stats">
-                <header class="headerStats">
-                    <span class="textoHeader">Estadísticas <span id="usuestadisticas"></span></span>
+            <!--Stats-->
+            <div class="statsMesa">
+                <header class="headerStatsMesa">
+                    <span class="">Estadísticas de <span id="usuestadisticas"></span></span>
                 </header>
                 <section class="tablaEstadisticas">
                     <div></div>
@@ -187,6 +209,7 @@
         var mesa = <?=json_encode($mesa)?>;
     </script>
     <script src="<?= $URL_PATH ?>/js/rangoEnvite.js"></script>
+    <script src="<?= $URL_PATH ?>/js/subirCarta.js"></script>
     <script src="http://localhost:3333/socket.io/socket.io.js"></script>
     <script src="<?= $URL_PATH ?>/js/mesa.js"></script>
 </body>

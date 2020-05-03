@@ -13,8 +13,8 @@ html, body {
 }
 .boton-marron:hover {
     background-color: #96623d;
-    color: white;
-    border: 7px ridge black;
+    color: black;
+    border: 7px ridge white;
 }
 .boton-morado {
     background-color: purple;
@@ -38,6 +38,9 @@ html, body {
 .flexColumn {
     display: flex;
     flex-direction: column;
+}
+.pointer {
+    cursor: pointer;
 }
 .hidden {
     display: none;
@@ -382,16 +385,17 @@ form#registro {
 }
 /*Mesa*/
 .principalMesa {
-    display: grid;
-    grid-template-rows: 4fr 1fr;
+    position: relative;
     width: 100%;
     height: 100%;
 }
 /*Partida*/
 .partida {
-    position: relative;
+    top: 0;
+    right: 0;
+    position: absolute;
     width: 100%;
-    height: 100%;
+    height: 80%;
     border-bottom: 10px ridge white;
 }
 /*CuadroEnvites*/
@@ -488,10 +492,74 @@ form#registro {
     position: absolute;
     background-color: #004d1a;
     border-radius: 2%;
-    width: 70%;
+    width: 60%;
     height: 70%;
     top: 15%;
-    left: 15%;
+    left: 20%;
+}
+/*Cartas*/
+.cartasHorizontal {
+    display: flex;
+    justify-content: space-between;
+}
+.cartasHorizontal > img {
+    width: 22.5%;
+    height: 80%;
+    border-radius: 10px;
+}
+.cartasVertical {
+    display: flex;
+    flex-direction: column;
+}
+.cartasVertical > img {
+    width: 80%;
+    height: 60%;
+    border-radius: 10px;
+}
+.cartasVertical > img:nth-child(4n+1) {
+    position: absolute;
+    top: 13.33%;
+}
+.cartasVertical > img:nth-child(4n+2) {
+    position: absolute;
+    top: 26.66%;
+}
+.cartasVertical > img:nth-child(4n+3) {
+    position: absolute;
+    top: 40%;
+}
+.subirCarta {
+    align-self: flex-start;
+}
+/*Posicon Cartas*/
+.misCartas {
+    width: 60%;
+    height: 45%;
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    align-items: flex-end;
+}
+.compiCartas {
+    width: 60%;
+    height: 45%;
+    position: absolute;
+    top: 0;
+    left: 20%;
+}
+.rivalizqCartas {
+    top: 17.5%;
+    width: 17.5%;
+    height: 65%;
+    position: absolute;
+}
+.rivalderCartas {
+    right: 0;
+    top: 17.5%;
+    width: 17.5%;
+    height: 65%;
+    position: absolute;
+    align-items: flex-end;
 }
 /*Reloj*/
 .reloj {
@@ -557,77 +625,117 @@ form#registro {
 .chatStats {
     width: 100%;
     height: 100%;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-}
-/*ChatUsu*/
-.chatusu {
+    position: absolute;
     width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 4fr 1fr;
+    height: 20%;
+    top: 80%;
 }
 /*Chat*/
-.chatmesa {
-    width: 100%;
+.chatMesa {
+    position: absolute;
+    width: 52.5%;
     height: 100%;
-    display: grid;
-    grid-template-rows: 3fr 1fr;
+    border-right: 5px ridge white;
 }
-.text {
+.mensajes {
+    position: absolute;
+    top: 0;
     width: 100%;
+    height: 80%;
+    background-color: black;
+    color: white;
+}
+.enviarMensajes {
+    position: absolute;
+    top: 80%;
+    width: 100%;
+    height: 20%;
+}
+.enviarMensajes > input {
+    position: absolute;
+    top: 0;
+    width: 85%;
+    height: 100%;
+}
+.enviarMensajes > button {
+    position: absolute;
+    right: 0;
+    width: 15%;
     height: 100%;
     background-color: black;
+    color: white;
+    border: 4px ridge #96623d;
 }
-.sendText {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 5fr 1fr;
+.enviarMensajes > button:hover {
+    background-color: #96623d;
+    color: black;
+    border: 4px ridge white;
 }
-/*Usu*/
-.usuariosmesa {
-    width: 100%;
-    height: 100%;
-    border: 5px ridge white;
-    display: grid;
-    grid-template-rows: 1fr 3fr;
+.textoMensaje > span {
+    color: #96623d;
 }
-.headerUsu {
-    width: 100%;
+/*Usuarios Mesa*/
+.usuariosMesa {
+    position: absolute;
+    left: 52.5%;
+    width: 15%;
     height: 100%;
-    background-color: lightblue;
-    color: green;
 }
-.usus {
+.headerUsuariosMesa {
+    position: absolute;
     width: 100%;
-    height: 100%;
+    height: 25%;
+    text-align: center;
+    font-size: 115%;
+    background-color: #96623d;
+    color: white;
+    border-right: 5px ridge white;
+    border-bottom: 5pt ridge white;
+}
+.bodyUsuariosMesa {
+    position: absolute;
+    width: 100%;
+    height: 75%;
+    bottom: 0;
     background-color: black;
+    border-right: 5px ridge white;
 }
 /*Estadisticas*/
-.stats {
-    width: 100%;
+.statsMesa {
+    position: absolute;
+    right: 0;
+    width: 32.5%;
     height: 100%;
-    border: 5px ridge white;
-    background-color: lightblue;
-    color:green;
-    display: grid;
-    grid-template-rows: 1fr 3fr 0.5fr;
+    background-color: black;
 }
-.headerStats {
+.headerStatsMesa {
+    position: absolute;
     width: 100%;
-    height: 100%;
+    height: 25%;
     text-align: center;
+    font-size: 115%;
+    background-color: #96623d;
+    color: white;
+    border-right: 5px ridge white;
+    border-bottom: 5pt ridge white;
 }
 .tablaEstadisticas {
+    position: absolute;
+    width: 100%;
+    height: 55%;
+    bottom: 20%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr ;
     grid-template-rows: 1fr 1fr 1fr;
 }
 .tablaEstadisticas > div {
-    border: 5px ridge white;
     text-align: center;
+    border: 3px ridge white;
 }
 .abandonos {
     text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20%;
 }

@@ -75,7 +75,8 @@ enviar.addEventListener("click", () => {
 
 socket.on('chatpartida:message', (data) => {
     if (mesa.id_mesa == data.mesa) {
-        chat.innerHTML += `<p>${data.nombre}: ${data.mensaje}</p>`;
+        chat.innerHTML += `<div class="textoMensaje"><span>${data.nombre}:</span> ${data.mensaje}</div>`;
+        $('#chat').scrollTop( $('#chat').prop('scrollHeight') );
     }
 });
 
