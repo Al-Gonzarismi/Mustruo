@@ -24,6 +24,7 @@ class MesaController extends Controller
                     $usuario->login = $usuariosMesa[$i]["login"];
                     $usuario->posicion = $usuariosMesa[$i]["posicion"];
                     $usuario->imagen = $usuariosMesa[$i]["imagen"];
+                    $usuario->pareja_id = $usuario->posicion % 2;
                     break;
                 }
             }
@@ -37,16 +38,19 @@ class MesaController extends Controller
                         $compannero->login = $usu["login"];
                         $compannero->posicion = $usu["posicion"];
                         $compannero->imagen = $usu["imagen"];
+                        $compannero->pareja_id = $compannero->posicion % 2;
                     } else if (($usuario->posicion + 1) % 4 == $usu["posicion"]) {
                         $rivalDer = new Usuario;
                         $rivalDer->login = $usu["login"];
                         $rivalDer->posicion = $usu["posicion"];
                         $rivalDer->imagen = $usu["imagen"];
+                        $rivalDer->pareja_id = $rivalDer->posicion % 2;
                     } else {
                         $rivalIzq = new Usuario;
                         $rivalIzq->login = $usu["login"];
                         $rivalIzq->posicion = $usu["posicion"];
                         $rivalIzq->imagen = $usu["imagen"];
+                        $rivalIzq->pareja_id = $rivalIzq->posicion % 2;
                     }
                 }
             }
