@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS `mustruobd`.`mesa` (
   `puntos` INT NOT NULL DEFAULT 30,
   `login` VARCHAR(20) NOT NULL,
   `estado` INT NOT NULL,
+  `mano` INT NOT NULL 0,
   PRIMARY KEY (`id_mesa`),
   INDEX `fk_mesa_privacidad1_idx` (`privacidad_id` ASC) ,
   INDEX `fk_mesa_usuario1_idx` (`login` ASC) ,
