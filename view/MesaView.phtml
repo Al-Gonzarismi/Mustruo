@@ -67,15 +67,15 @@
                 <!--Mus-->
                 <div class="hidden" id="haymus">
                     <button id="mus" class="btn boton-marron opcionUno centrarTexto"><span>Mus</span></button>
-                    <button id="nomus" class="btn boton-marron opcionDos centrarTexto"><span>No Mus</span</button>
+                    <button id="nomus" class="btn boton-marron opcionDos centrarTexto"><span>No Mus</span></button>
                 </div>
                 <!--No hay Envite-->
                 <div class="hidden" id="nohayEnvite">
                     <button id="menos" class="btn boton-marron mas centrarTexto"><span>-</span></button>
                     <div class="centrarTexto" id="textoEnvidar"><span>2</span></div>
-                    <button id="mas" class="btn boton-marron menos centrarTexto"><span>+</span</button>
-                    <button id="envidar" class="btn boton-marron centrarTexto"><span>Envido 2</span</button>
-                    <button id="ordago" class="btn boton-marron centrarTexto"><span>Órdago</span</button>
+                    <button id="mas" class="btn boton-marron menos centrarTexto"><span>+</span></button>
+                    <button id="envidar" class="btn boton-marron centrarTexto"><span>Envido 2</span></button>
+                    <button id="ordago" class="btn boton-marron centrarTexto"><span>Órdago</span></button>
                     <button id="paso" class="btn boton-marron centrarTexto"><span>Paso</span></button>
                 </div>
                 <!--Hay Envite-->
@@ -213,6 +213,10 @@
         var usuario = <?= json_encode($usuario) ?>;
         var path = "<?= $URL_PATH ?>";
         var mesa = <?=json_encode($mesa)?>;
+        var situacionEntrada = <?=json_encode($situacionEntrada)?>;
+        console.log(<?=json_encode($cartas)?>);
+        console.log(<?=json_encode($marcador)?>);
+        console.log(situacionEntrada);
     </script>
     <script src="<?= $URL_PATH ?>/js/movimientoMesa.js"></script>
     <script src="http://localhost:3333/socket.io/socket.io.js"></script>

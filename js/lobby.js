@@ -76,6 +76,7 @@ function levantarse() {
         fetch(`${path}/api/levantarse/${usuario.mesa_id}/${usuario.posicion}/${usuario.login}`)
             .then((res) => res.text())
             .then((res) => {
+                console.log(res);
                 if (res == "ok") {
                     //sockets:probablemente mejorable
                     socket.emit('actualizarmesas');
@@ -116,11 +117,14 @@ function crearAsientos(id, mesa, i) {
                     window.alert("Ya estas sentado en otro lugar");
                 }
             } else {
-                encabezadoEstadisiticas.innerHTML = `Estadísticas de <a href="${path}/perfil/${span.innerText}">${span.innerText}</a>`;
                 renderStats(span.innerText);
             }
         } else {
-            window.alert("Tienes que estar conectado");
+            if (img.getAttribute("src") == `${path}/media/asientolibre.PNG`) {
+                window.alert("Tienes que estar conectado");
+            } else {
+                renderStats(span.innerText);
+            }
         }
     });
     asiento.append(img);
@@ -147,18 +151,18 @@ function renderUsuarios(id, mesa) {
                 listo.innerText = "Listo!";
                 console.log(mesa.childNodes[1]);
                 mesa.append(listo);
-                listo.addEventListener("click", ()=>{
+                listo.addEventListener("click", () => {
                     fetch(`${path}/api/empezarpartida/${usuario.mesa_id}`)
-                    .then((res)=> res.text())
-                    .then((res) => {
-                        if (res == "ok") {
-                            socket.emit("empezarpartida", usuario.mesa_id);
-                        }
-                    })
-                    
+                        .then((res) => res.text())
+                        .then((res) => {
+                            if (res == "ok") {
+                                socket.emit("empezarpartida", usuario.mesa_id);
+                            }
+                        })
+
                 })
             }
-            
+
         })
 
 }
@@ -198,8 +202,8 @@ function actualizarMesas() {
                     } else {
                         btnlevantarse.setAttribute("class", "btn boton-morado hidden");
                     }
-                })           
-            
+                })
+
         })
 }
 
@@ -241,7 +245,7 @@ socket.on('refrescarusuarios', (data) => {
 
 //estadisticas
 if (usuario != "anonimo") {
-renderStats(usuario.login)
+    renderStats(usuario.login)
 }
 
 //chat
@@ -300,9 +304,9 @@ socket.on('actualizarmesas', () => {
 })
 
 //empezar partida
-socket.on("empezarpartida", (data)=>{
+socket.on("empezarpartida", (data) => {
     if (usuario.mesa_id == data) {
-        window.location=`${path}/mesa/${data}`;
+        window.location = `${path}/mesa/${data}`;
     }
 })
 

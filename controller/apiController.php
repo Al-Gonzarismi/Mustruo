@@ -1,17 +1,22 @@
 <?php
+
 namespace controller;
+
 use \orm\OrmUser;
 use \orm\OrmMesa;
 use objects\Mesa;
 
-class ApiController extends Controller {
-    function comprobarLogin($login) {
+class ApiController extends Controller
+{
+    function comprobarLogin($login)
+    {
         $orm = new OrmUser;
         $existe = $orm->existeLogin($login);
         echo $existe ? "si" : "no";
     }
 
-    function comprobarSesion($login, $contrasenna) {
+    function comprobarSesion($login, $contrasenna)
+    {
         $orm = new OrmUser;
         $error = false;
         if ($orm->existeLogin($login)) {
@@ -28,39 +33,45 @@ class ApiController extends Controller {
         echo $error ? "si" :  "no";
     }
 
-    function obtenerEstadisticas($login) {
+    function obtenerEstadisticas($login)
+    {
         header('Content-type: application/json');
         $orm = new OrmUser;
         echo json_encode($orm->obtenerEstadisticas($login));
     }
 
-    function obtenerRanking($tipo) {
+    function obtenerRanking($tipo)
+    {
         header('Content-type: application/json');
         $orm = new OrmUser;
-        echo json_encode($orm->obtenerRanking($tipo));        
+        echo json_encode($orm->obtenerRanking($tipo));
     }
 
-    function obtenerUsuariosMesa($id) {
+    function obtenerUsuariosMesa($id)
+    {
         header('Content-type: application/json');
         $orm = new OrmMesa;
         echo json_encode($orm->obtenerUsuariosMesa($id));
     }
 
-    function obtenerMesas() {
+    function obtenerMesas()
+    {
         header('Content-type: application/json');
         $orm = new OrmMesa;
         echo json_encode($orm->obtenerMesas());
     }
 
-    function sentarseEnMesa($id, $pos, $login) {
+    function sentarseEnMesa($id, $pos, $login)
+    {
         if ($login == $_SESSION["login"]) {
             $orm = new OrmMesa;
             return $orm->sentarseEnMesa($id, $pos, $login);
-        }        
+        }
     }
 
-    function levantarseDeLaMesa($id, $pos, $login) {
-        $orm = new OrmMesa;        
+    function levantarseDeLaMesa($id, $pos, $login)
+    {
+        $orm = new OrmMesa;
         if ($_SESSION["login"] == $login && $orm->levantarseDeLaMesa($id, $pos, $login)) {
             echo "ok";
         } else {
@@ -68,12 +79,14 @@ class ApiController extends Controller {
         }
     }
 
-    function comprobarEstadoUsuario($login) {
+    function comprobarEstadoUsuario($login)
+    {
         header('Content-type: application/json');
-        $orm = new OrmUser; 
+        $orm = new OrmUser;
         echo json_encode($orm->comprobarEstadoUsuario($login));
     }
-    function cambiarEmail($login, $emailCambio) {
+    function cambiarEmail($login, $emailCambio)
+    {
         $orm = new OrmUser;
         if ($orm->modificarEmail($login, $emailCambio)) {
             echo 1;
@@ -82,7 +95,8 @@ class ApiController extends Controller {
         }
     }
 
-    function cambiarContrasenna($login, $contrasenna) {
+    function cambiarContrasenna($login, $contrasenna)
+    {
         $orm = new OrmUser;
         $contrasenna = password_hash($contrasenna, PASSWORD_DEFAULT);
         if ($orm->modificarContrasenna($login, $contrasenna)) {
@@ -92,12 +106,13 @@ class ApiController extends Controller {
         }
     }
 
-    public function cambiarEstadoPartida($id, $estado = 1) {
+    public function cambiarEstadoPartida($id, $estado = 1)
+    {
         $orm = new OrmMesa;
         if ($orm->cambiarEstadoPartida($id, $estado)) {
             echo "ok";
         } else {
             echo "nook";
-        }        
+        }
     }
 }

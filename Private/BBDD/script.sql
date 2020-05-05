@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `mustruobd`.`mesa` (
   `juegos` INT NOT NULL DEFAULT 3,
   `puntos` INT NOT NULL DEFAULT 30,
   `login` VARCHAR(20) NOT NULL,
-  `estado` INT NOT NULL,
+  `estado` INT NOT NULL,  
   PRIMARY KEY (`id_mesa`),
   INDEX `fk_mesa_privacidad1_idx` (`privacidad_id` ASC) ,
   INDEX `fk_mesa_usuario1_idx` (`login` ASC) ,
@@ -171,23 +171,20 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mustruobd`.`jugadas` (
   `mesa_id` INT NOT NULL,
-  `pareja_id` INT NOT NULL,
-  `grande` VARCHAR(45) NULL,
-  `chica` VARCHAR(45) NULL,
-  `pares` VARCHAR(45) NULL,
-  `juego` VARCHAR(45) NULL,
-  `punto` VARCHAR(45) NULL,
-  PRIMARY KEY (`mesa_id`, `pareja_id`),
-  INDEX `fk_mesa_has_pareja_pareja2_idx` (`pareja_id` ASC),
+  `mano` INT NOT NULL,
+  `estado` VARCHAR(45) NOT NULL DEFAULT 'menu',
+  `turno` INT NOT NULL,
+  `jugada` VARCHAR(45) NOT NULL DEFAULT 'mus',
+  `grande` VARCHAR(45) NOT NULL DEFAULT '-',
+  `chica` VARCHAR(45) NOT NULL DEFAULT '-',
+  `pares` VARCHAR(45) NOT NULL DEFAULT '-',
+  `juego` VARCHAR(45) NOT NULL DEFAULT '-',
+  `punto` VARCHAR(45) NOT NULL DEFAULT '-',
+  PRIMARY KEY (`mesa_id`),
   INDEX `fk_mesa_has_pareja_mesa2_idx` (`mesa_id` ASC),
   CONSTRAINT `fk_mesa_has_pareja_mesa2`
     FOREIGN KEY (`mesa_id`)
     REFERENCES `mustruobd`.`mesa` (`id_mesa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_mesa_has_pareja_pareja2`
-    FOREIGN KEY (`pareja_id`)
-    REFERENCES `mustruobd`.`pareja` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
