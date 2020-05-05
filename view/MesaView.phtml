@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Propia hoja de estilos -->
     <link rel="stylesheet" href="<?= $URL_PATH ?>/css/main.css">
+    <link rel="stylesheet" href="<?= $URL_PATH ?>/css/mesa.css">
     <title>
         <?= $data["title"] ?> - Mustruo
     </title>
@@ -26,23 +27,22 @@
         <div class="partida">
             <!--Puntos Partida-->
             <div class="puntosPartida">
-                <div class="tablaPuntos">
-                    <div class="ocultarDeTabla"></div>
-                    <div><span>Puntos</span></div>
-                    <div>Juegos</div>
-                    <div>Vacas</div>
-                    <div><?=$usuario->login?> / <?=$compannero->login?></div>
-                    <div id="puntosa">0</div>
-                    <div id="juegosa">0</div>
-                    <div id="vacasa">0</div>
-                    <div><?=$rivalDer->login?> / <?=$rivalIzq->login?></div>
-                    <div id="puntosb">0</div>
-                    <div id="juegosb">0</div>
-                    <div id="vacasb">0</div>
-                </div>
+                    <div class="puntosPuntosPartida centrarTexto"><span>Puntos</span></div>
+                    <div class="juegosPuntosPartida centrarTexto"><span>Juegos</span></div>
+                    <div class="vacasPuntosPartida centrarTexto"><span>Vacas</span></div>
+                    <div class="equipoa centrarTexto"><span><?=$usuario->login?> / <?=$compannero->login?></span></div>
+                    <div class="puntosa centrarTexto"><span id="puntosa">0</span></div>
+                    <div class="juegosa centrarTexto"><span id="juegosa">0</span></div>
+                    <div class="vacasa centrarTexto"><span id="vacasa">0</span></div>
+                    <div class="equipob centrarTexto"><span><?=$rivalDer->login?> / <?=$rivalIzq->login?></span></div>
+                    <div class="puntosb centrarTexto"><span id="puntosb">0</span></div>
+                    <div class="juegosb centrarTexto"><span id="juegosb">0</span></div>
+                    <div class="vacasb centrarTexto"><span id="vacasb">0</span></div>
             </div>
             <!--Cuadro Envites-->
-            <div class="cuadroEnvites">
+            <button id="mostrarCuadro" class="boton-marron centrarTexto"><span>Mostras Cuadro Envites</span></button>
+            <!--Posible Modificacion-->
+            <div class="cuadroEnvites" id="cuadroEnvites">
                 <div>
                     <span>Grande: <span id="grande">-</span></span>
                 </div>
@@ -60,55 +60,39 @@
                 </div>
             </div>
             <!--Cuenta Atras-->
-            <div class="reloj hidden" id="reloj">10</div>
+            <div class="reloj hidden centrarTexto" id="reloj"><span>10</span></div>
             <!--Interacción-->
             <div class="interaccion" id="interaccion">
+                <!--Mus-->
                 <div class="hidden" id="haymus">
-                    <div class="serieInteraccion">
-                        <div></div>
-                        <div class="serieVertical">
-                            <button id="mus" class="btn boton-marron">Mus</button>
-                            <button id="nomus" class="btn boton-marron">No Mus</button>
-                        </div>
-                    </div>
+                    <button id="mus" class="btn boton-marron opcionUno centrarTexto"><span>Mus</span></button>
+                    <button id="nomus" class="btn boton-marron opcionDos centrarTexto"><span>No Mus</span></button>
                 </div>
+                <!--No hay Envite-->
                 <div class="hidden" id="nohayEnvite">
-                    <div class="serieInteraccion">
-                        <div class="serieHorizontal">
-                            <button id="menos" class="btn boton-marron">-</button>
-                            <div id="textoEnvidar">2</div>
-                            <button id="mas" class="btn boton-marron">+</button>
-                        </div>
-                        <div class="serieVertical">
-                            <button id="envidar" class="btn boton-marron">Envido 2</button>
-                            <button id="ordago" class="btn boton-marron">Órdago</button>
-                            <button id="paso" class="btn boton-marron">Paso</button>
-                        </div>
-                    </div>
+                    <button id="menos" class="btn boton-marron mas centrarTexto"><span>-</span></button>
+                    <div class="centrarTexto" id="textoEnvidar"><span>2</span></div>
+                    <button id="mas" class="btn boton-marron menos centrarTexto"><span>+</span></button>
+                    <button id="envidar" class="btn boton-marron centrarTexto"><span>Envido 2</span></button>
+                    <button id="ordago" class="btn boton-marron centrarTexto"><span>Órdago</span></button>
+                    <button id="paso" class="btn boton-marron centrarTexto"><span>Paso</span></button>
                 </div>
+                <!--Hay Envite-->
                 <div class="hidden" id="hayEnvite">
-                    <div class="serieInteraccion">
-                        <div class="serieHorizontal">
-                            <button id="haymenos" class="btn boton-marron">-</button>
-                            <div id="haytextoEnvidar">2</div>
-                            <button id="haymas" class="btn boton-marron mas">+</button>
-                        </div>
-                        <div class="serieVertical">
-                            <button id="hayenvidar" class="btn boton-marron">Envido 2</button>
-                            <button id="hayordago" class="btn boton-marron">Órdago</button>
-                            <button id="hayquiero" class="btn boton-marron">Quiero</button>
-                            <button id="haynoquiero" class="btn boton-marron">No Quiero</button>
-                        </div>    
-                    </div>
+                    <button id="haymenos" class="btn boton-marron menos centrarTexto"><span>-</span></button>
+                    <div class="centrarTexto textoEnvidar" id="haytextoEnvidar"><span>2</span></div>
+                    <button id="haymas" class="btn boton-marron mas centrarTexto"><span>+</span></button>
+                    <button id="hayenvidar" class="btn boton-marron centrarTexto"><span>Envido 2</span></button>
+                    <button id="hayordago" class="btn boton-marron centrarTexto"><span>Órdago</span></button>
+                    <button id="hayquiero" class="btn boton-marron centrarTexto"><span>Quiero</span></button>
+                    <button id="haynoquiero" class="btn boton-marron centrarTexto"><span>No Quiero</span></button>
                 </div>
+                <!--Ordago-->
                 <div class="hidden" id="hayordago">
-                    <div class="serieInteraccion">
-                        <button id="quiero" class="btn boton-marron">Quiero</button>
-                        <button id="noquiero" class="btn boton-marron">No Quiero</button>
-                    </div>
+                    <button id="quiero" class="btn boton-marron opcionUno centrarTexto"><span>Quiero</span></button>
+                    <button id="noquiero" class="btn boton-marron opcionDos centrarTexto"><span>No Quiero</span></button>
                 </div>
             </div>
-            
             <!--Usuarios-->
             <!--Mi usario
             <div class="usuario bloqueUsu">
@@ -118,44 +102,66 @@
             <!--Comapannero-->
             <div class="compannero bloqueUsu">
                 <img src="<?= $URL_PATH ?>/media/avatares/<?= $compannero->imagen ?>">
-                <div id="compannero"><?= $compannero->login ?></div>
+                <div class="centrarTexto"><span class="pointer" id="compannero"><?= $compannero->login ?></span></div>
             </div>
             <!--RivalDer-->
             <div class="rivalDer bloqueUsu">
                 <img src="<?= $URL_PATH ?>/media/avatares/<?= $rivalDer->imagen ?>">
-                <div id="rivalder"><?= $rivalDer->login ?></div>
+                <div class="centrarTexto"><span class="pointer" id="rivalder"><?= $rivalDer->login ?></span></div>
             </div>
             <!--RivalIIzq-->
             <div class="rivalIzq bloqueUsu">
                 <img src="<?= $URL_PATH ?>/media/avatares/<?= $rivalIzq->imagen ?>">
-                <div id="rivalizq"><?= $rivalIzq->login ?></div>
+                <div class="centrarTexto"><span class="pointer" id="rivalizq"><?= $rivalIzq->login ?></span></div>
             </div>
-            <!--Tapete-->
+            <!--Mesa-->
             <div class="mesaJuego">
+                <!--Tapete-->
                 <div class="tapete"></div>
+                <!--Yo-->
+                <!--Cartas-->
                 <div class="misCartas cartasHorizontal">
                     <img class="pointer" id="carta1" src="<?= $URL_PATH ?>/media/baraja/3_Copa.jpg">
                     <img class="pointer" id="carta2" src="<?= $URL_PATH ?>/media/baraja/12_Oro.jpg">
                     <img class="pointer" id="carta3" src="<?= $URL_PATH ?>/media/baraja/10_basto.jpg">
                     <img class="pointer" id="carta4" src="<?= $URL_PATH ?>/media/baraja/1_Espada.jpg">
                 </div>
-                <div class="compiCartas cartasHorizontal">
+                <!--Mano-->
+                <img class="mano manoUsuario hidden" id="mano<?=$usuario->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                <!--Compi-->
+                <!--Cartas-->
+                <div class="compiCartas cartasHorizontal hidden">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 </div>
+                <!--Mano-->
+                <img class="mano manoCompi hidden" id="mano<?=$compi->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                <!--Rival Izquierda-->
+                <!--Cartas-->
                 <div class="rivalizqCartas cartasVertical">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 </div>
+                <!--Mano-->
+                <img class="mano manoRivalIzq hidden" id="mano<?=$rivalIzq->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                <!--Rival Derecha-->
+                <!--Cartas-->
                 <div class="rivalderCartas cartasVertical">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                </div>
+                <!--Mano-->
+                <img class="mano manoRivalDer hidden" id="mano<?=$rivalDer->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                <!--Descartes-->
+                <div class="posDescartes centrarTexto hidden" id="divDescartes">
+                    <button class="boton-marron centrarTexto" id="descartar"><span>Descartar</span></button>
+                    <span>(Click a las cartas para descartar)</span>
                 </div>
             </div>
             <!--Puerta Salir-->
@@ -170,12 +176,12 @@
                     </section>
                     <div class="enviarMensajes">
                         <input type="text" id="mensaje" placeholder="Escribe algo...">
-                        <button id="enviarmensaje">Enviar</button>
+                        <button class="centrarTexto" id="enviarmensaje"><span>Enviar</span></button>
                     </div>
             </div>
             <!--Usuarios online-->
             <div class="usuariosMesa">
-                <header class="headerUsuariosMesa">
+                <header class="headerUsuariosMesa centrarTexto">
                     <span>Usuarios en partida</span>
                 </header>
                 <section class="bodyUsuariosMesa">
@@ -184,21 +190,20 @@
             </div>
             <!--Stats-->
             <div class="statsMesa">
-                <header class="headerStatsMesa">
-                    <span class="">Estadísticas de <span id="usuestadisticas"></span></span>
+                <header class="headerStatsMesa centrarTexto">
+                    <span>Estadísticas de <span id="usuestadisticas"></span></span>
                 </header>
                 <section class="tablaEstadisticas">
-                    <div></div>
-                    <div>Jugados</div>
-                    <div>Ganados</div>
-                    <div>Juegos</div>
-                    <div id="juegosJugados"></div>
-                    <div id="juegosGanados"></div>
-                    <div>Vacas</div>
-                    <div id="vacasJugadas"></div>
-                    <div id="vacasGanadas"></div>
+                    <div class="jugados centrarTexto"><span>Jugados</span></div>
+                    <div class="ganados centrarTexto"><span>Ganados</span></div>
+                    <div class="juegosTabla centrarTexto"><span>Juegos</span></div>
+                    <div class="juegosJugados centrarTexto"><span id="juegosJugados"></span></div>
+                    <div class="juegosGanados centrarTexto"><span id="juegosGanados"></span></div>
+                    <div class="vacasTabla centrarTexto"><span>Vacas</span></div>
+                    <div class="vacasJugadas centrarTexto"><span id="vacasJugadas"></span></div>
+                    <div class="vacasGanadas centrarTexto"><span id="vacasGanadas"></span></div>
                 </section>
-                <span class="abandonos">Abandonos: <span id="abandonos"></span></span>
+                <span class="abandonos centrarTexto"><span>Abandonos: <span id="abandonos"></span></span></span>
             </div>
         </div>
     </div>
@@ -208,8 +213,7 @@
         var path = "<?= $URL_PATH ?>";
         var mesa = <?=json_encode($mesa)?>;
     </script>
-    <script src="<?= $URL_PATH ?>/js/rangoEnvite.js"></script>
-    <script src="<?= $URL_PATH ?>/js/subirCarta.js"></script>
+    <script src="<?= $URL_PATH ?>/js/movimientoMesa.js"></script>
     <script src="http://localhost:3333/socket.io/socket.io.js"></script>
     <script src="<?= $URL_PATH ?>/js/mesa.js"></script>
 </body>
