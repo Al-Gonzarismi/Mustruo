@@ -33,40 +33,22 @@ window.onload = function () {
         }
     })
     //Subir Carta
-    $('#carta1').click(function () {
-        var clase = $('#carta1').attr('class');
+    function activarSubir() {
+        $('#carta1').off('click');
+        var clase = $(this).attr('class');
         if (clase.indexOf('subirCarta') > 0) {
-            $('#carta1').attr('class', 'pointer');
+            $(this).attr('class', 'pointer');
         } else {
-            $('#carta1').attr('class', clase + " subirCarta");
+            $(this).attr('class', clase + " subirCarta");
         }
-    })
-    $('#carta2').click(function () {
-        var clase = $('#carta2').attr('class');
-        if (clase.indexOf('subirCarta') > 0) {
-            $('#carta2').attr('class', 'pointer');
-        } else {
-            $('#carta2').attr('class', clase + " subirCarta");
-        }
-    })
-    $('#carta3').click(function () {
-        var clase = $('#carta3').attr('class');
-        if (clase.indexOf('subirCarta') > 0) {
-            $('#carta3').attr('class', 'pointer');
-        } else {
-            $('#carta3').attr('class', clase + " subirCarta");
-        }
-    })
-    $('#carta4').click(function () {
-        var clase = $('#carta4').attr('class');
-        if (clase.indexOf('subirCarta') > 0) {
-            $('#carta4').attr('class', 'pointer');
-        } else {
-            $('#carta4').attr('class', clase + " subirCarta");
-        }
-    })
+    }
+    $('#carta1').click(activarSubir);
+    $('#carta2').click(activarSubir);
+    $('#carta3').click(activarSubir);
+    $('#carta4').click(activarSubir);
     //Mostrar Cuadro Envites
     $('#mostrarCuadro').hover(function () {
+        $('#carta1').on('')
         $('#cuadroEnvites').show();
     }, function () {
         $('#cuadroEnvites').hide();
