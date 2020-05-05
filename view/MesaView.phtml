@@ -32,33 +32,33 @@
                     <div class="puntosPuntosPartida centrarTexto"><span>Puntos</span></div>
                     <div class="juegosPuntosPartida centrarTexto"><span>Juegos</span></div>
                     <div class="vacasPuntosPartida centrarTexto"><span>Vacas</span></div>
-                    <div class="equipoa centrarTexto"><span><?=$usuario->login?> / <?=$compannero->login?></span></div>
-                    <div class="puntosa centrarTexto"><span id="puntosa">0</span></div>
-                    <div class="juegosa centrarTexto"><span id="juegosa">0</span></div>
-                    <div class="vacasa centrarTexto"><span id="vacasa">0</span></div>
-                    <div class="equipob centrarTexto"><span><?=$rivalDer->login?> / <?=$rivalIzq->login?></span></div>
-                    <div class="puntosb centrarTexto"><span id="puntosb">0</span></div>
-                    <div class="juegosb centrarTexto"><span id="juegosb">0</span></div>
-                    <div class="vacasb centrarTexto"><span id="vacasb">0</span></div>
+                    <div class="equipoa centrarTexto"><span><?=$parejaA[0]?> / <?=$parejaA[1]?></span></div>
+                    <div class="puntosa centrarTexto"><span id="puntosa"><?=$marcador[0]->puntos?></span></div>
+                    <div class="juegosa centrarTexto"><span id="juegosa"><?=$marcador[0]->juegos?></span></div>
+                    <div class="vacasa centrarTexto"><span id="vacasa"><?=$marcador[0]->vacas?></span></div>
+                    <div class="equipob centrarTexto"><span><?=$parejaB[0]?> / <?=$parejaB[1]?></span></div>
+                    <div class="puntosb centrarTexto"><span id="puntosb"><?=$marcador[1]->puntos?></span></div>
+                    <div class="juegosb centrarTexto"><span id="juegosb"><?=$marcador[1]->juegos?></span></div>
+                    <div class="vacasb centrarTexto"><span id="vacasb"><?=$marcador[1]->vacas?></span></div>
             </div>
             <!--Cuadro Envites-->
             <div id="mostrarCuadro" class="boton-marron centrarTexto"><span>Mostrar Cuadro Envites</span></div>
             <!--Posible Modificacion-->
             <div class="cuadroEnvites hidden" id="cuadroEnvites">
                 <div>
-                    <span>Grande: <span id="grande">-</span></span>
+                    <span>Grande: <span id="grande"><?=$situacionEntrada["grande"]?></span></span>
                 </div>
                 <div>
-                    <span>Chica: <span id="chica">-</span></span>
+                    <span>Chica: <span id="chica"><?=$situacionEntrada["chica"]?></span></span>
                 </div>
                 <div>
-                    <span>Pares: <span id="pares">-</span></span>
+                    <span>Pares: <span id="pares"><?=$situacionEntrada["pares"]?></span></span>
                 </div>
                 <div>
-                    <span>Juego: <span id="juego">-</span></span>
+                    <span>Juego: <span id="juego"><?=$situacionEntrada["juego"]?></span></span>
                 </div>
                 <div>
-                    <span>Punto: <span id="punto">-</span></span>
+                    <span>Punto: <span id="punto"><?=$situacionEntrada["punto"]?></span></span>
                 </div>
             </div>
             <!--Cuenta Atras-->
@@ -176,43 +176,40 @@
                 <!--Yo-->
                 <!--Cartas-->
                 <div class="misCartas cartasHorizontal">
-                    <img class="pointer" id="carta1" src="<?= $URL_PATH ?>/media/baraja/3_Copa.jpg">
-                    <img class="pointer" id="carta2" src="<?= $URL_PATH ?>/media/baraja/12_Oro.jpg">
-                    <img class="pointer" id="carta3" src="<?= $URL_PATH ?>/media/baraja/10_basto.jpg">
-                    <img class="pointer" id="carta4" src="<?= $URL_PATH ?>/media/baraja/1_Espada.jpg">
+                    <img class="pointer" id="carta1" src="<?= $URL_PATH ?>/media/baraja/<?=$cartas[0]->imagen?>">
+                    <img class="pointer" id="carta2" src="<?= $URL_PATH ?>/media/baraja/<?=$cartas[1]->imagen?>">
+                    <img class="pointer" id="carta3" src="<?= $URL_PATH ?>/media/baraja/<?=$cartas[2]->imagen?>">
+                    <img class="pointer" id="carta4" src="<?= $URL_PATH ?>/media/baraja/<?=$cartas[3]->imagen?>">
                 </div>
                 <!--Mano-->
                 <img class="mano manoUsuario" id="mano<?=$usuario->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 <!--Compi-->
                 <!--Cartas-->
                 <div class="compiCartas cartasHorizontal hidden">
-                    <!--
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
-                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">-->
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 </div>
                 <!--Mano-->
                 <img class="mano manoCompi hidden" id="mano<?=$compi->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 <!--Rival Izquierda-->
                 <!--Cartas-->
                 <div class="rivalizqCartas cartasVertical">
-                    <!--
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
-                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">-->
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 </div>
                 <!--Mano-->
                 <img class="mano manoRivalIzq hidden" id="mano<?=$rivalIzq->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 <!--Rival Derecha-->
                 <!--Cartas-->
                 <div class="rivalderCartas cartasVertical">
-                    <!--
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                     <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
-                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">-->
+                    <img src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 </div>
                 <!--Mano-->
                 <img class="mano manoRivalDer hidden" id="mano<?=$rivalDer->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">

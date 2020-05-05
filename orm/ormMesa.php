@@ -173,6 +173,6 @@ class OrmMesa
         $bd = Klasto::getInstance();
         $params = [$id];
         $sql = "SELECT `mano`, `estado`, `turno`, `jugada`, `grande`, `chica`, `pares`, `juego`, `punto` FROM `jugadas` WHERE `mesa_id` = ?";
-        return $bd->query($sql, $params);
+        return $bd->queryOne($sql, $params);
     }
 }

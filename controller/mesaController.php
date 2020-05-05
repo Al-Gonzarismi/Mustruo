@@ -16,6 +16,8 @@ class MesaController extends Controller
         $title = "Mesa $id_mesa";
         $orm = new OrmMesa;
         if ($orm->existeMesa($id_mesa)) {
+            $parejaA = [];
+            $parejaB = []; 
             $mesa = $orm->obtenerMesa($id_mesa);
             $usuariosMesa = $orm->obtenerUsuariosMesa($id_mesa);
             for ($i = 0; $i < 4; $i++) {
@@ -24,7 +26,11 @@ class MesaController extends Controller
                     $usuario->login = $usuariosMesa[$i]["login"];
                     $usuario->posicion = $usuariosMesa[$i]["posicion"];
                     $usuario->imagen = $usuariosMesa[$i]["imagen"];
-                    $usuario->pareja_id = $usuario->posicion % 2;
+                    if ($usuario->posicion % 2 == 0) {
+                        array_push($parejaA, $usuario->login);
+                    } else {
+                        array_push($parejaB, $usuario->login);
+                    }
                     break;
                 }
             }
@@ -38,26 +44,38 @@ class MesaController extends Controller
                         $compannero->login = $usu["login"];
                         $compannero->posicion = $usu["posicion"];
                         $compannero->imagen = $usu["imagen"];
-                        $compannero->pareja_id = $compannero->posicion % 2;
+                        if ($compannero->posicion % 2 == 0) {
+                            array_push($parejaA, $compannero->login);
+                        } else {
+                            array_push($parejaB, $compannero->login);
+                        }
                     } else if (($usuario->posicion + 1) % 4 == $usu["posicion"]) {
                         $rivalDer = new Usuario;
                         $rivalDer->login = $usu["login"];
                         $rivalDer->posicion = $usu["posicion"];
                         $rivalDer->imagen = $usu["imagen"];
-                        $rivalDer->pareja_id = $rivalDer->posicion % 2;
+                        if ($rivalDer->posicion % 2 == 0) {
+                            array_push($parejaA, $rivalDer->login);
+                        } else {
+                            array_push($parejaB, $rivalDer->login);
+                        }
                     } else {
                         $rivalIzq = new Usuario;
                         $rivalIzq->login = $usu["login"];
                         $rivalIzq->posicion = $usu["posicion"];
                         $rivalIzq->imagen = $usu["imagen"];
-                        $rivalIzq->pareja_id = $rivalIzq->posicion % 2;
+                        if ($rivalIzq->posicion % 2 == 0) {
+                            array_push($parejaA, $rivalIzq->login);
+                        } else {
+                            array_push($parejaB, $rivalIzq->login);
+                        }
                     }
                 }
             }
             $cartas = $orm->obtenerCartas($id_mesa, $usuario->posicion);
             $marcador = $orm->obtenerMarcador($id_mesa);
             $situacionEntrada = $orm->obtenerSituacionActual($id_mesa);
-            echo \dawfony\Ti::render("view/MesaView.phtml", compact('title', 'usuario', 'compannero', 'rivalIzq', 'rivalDer', 'mesa', 'cartas', 'marcador', 'situacionEntrada'));
+            echo \dawfony\Ti::render("view/MesaView.phtml", compact('title', 'usuario', 'compannero', 'rivalIzq', 'rivalDer', 'mesa', 'cartas', 'marcador', 'situacionEntrada', 'parejaA', 'parejaB'));
         
         } else {
             header("Location: $URL_PATH");

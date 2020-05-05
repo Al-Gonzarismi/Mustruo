@@ -34,7 +34,6 @@ window.onload = function () {
     })
     //Subir Carta
     function activarSubir() {
-        $('#carta1').off('click');
         var clase = $(this).attr('class');
         if (clase.indexOf('subirCarta') > 0) {
             $(this).attr('class', 'pointer');
@@ -48,7 +47,6 @@ window.onload = function () {
     $('#carta4').click(activarSubir);
     //Mostrar Cuadro Envites
     $('#mostrarCuadro').hover(function () {
-        $('#carta1').on('')
         $('#cuadroEnvites').show();
     }, function () {
         $('#cuadroEnvites').hide();
