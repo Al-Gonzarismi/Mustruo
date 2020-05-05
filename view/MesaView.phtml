@@ -16,6 +16,7 @@
     <!-- Propia hoja de estilos -->
     <link rel="stylesheet" href="<?= $URL_PATH ?>/css/main.css">
     <link rel="stylesheet" href="<?= $URL_PATH ?>/css/mesa.css">
+    <link rel="stylesheet" href="<?= $URL_PATH ?>/css/mesaResponsive.css">
     <title>
         <?= $data["title"] ?> - Mustruo
     </title>
@@ -40,9 +41,9 @@
                     <div class="vacasb centrarTexto"><span id="vacasb">0</span></div>
             </div>
             <!--Cuadro Envites-->
-            <button id="mostrarCuadro" class="boton-marron centrarTexto"><span>Mostras Cuadro Envites</span></button>
+            <div id="mostrarCuadro" class="boton-marron centrarTexto"><span>Mostrar Cuadro Envites</span></div>
             <!--Posible Modificacion-->
-            <div class="cuadroEnvites" id="cuadroEnvites">
+            <div class="cuadroEnvites hidden" id="cuadroEnvites">
                 <div>
                     <span>Grande: <span id="grande">-</span></span>
                 </div>
