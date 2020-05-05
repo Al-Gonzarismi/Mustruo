@@ -8,4 +8,5 @@ class Usuario {
     public $estaSentado;
     public $posicion;
     public $mesa_id;
+    public $pareja_id;
 }
