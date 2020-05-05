@@ -151,13 +151,11 @@ class OrmMesa
 
     public function existeMesa($id) {
         return $this->comprobarEstadoMesa($id) == 1;
-    }
+    }  
 
-   
-
-    public function obtenerCartas($id, $posicion) {
+    public function obtenerCartas($id, $estado) {
         $bd = Klasto::getInstance();
-        $params = [$id, $posicion];
+        $params = [$id, $estado];
         $sql = "SELECT `mesa_id`, `numero`, `palo`, `imagen`, `valor`, `estado` FROM `cartas` WHERE `mesa_id` = ? AND `estado` = ?";
         return $bd->query($sql,$params, "objects\Carta");
     }
