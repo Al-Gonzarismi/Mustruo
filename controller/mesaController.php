@@ -5,6 +5,8 @@ namespace controller;
 use orm\OrmMesa;
 use objects\Mesa;
 use objects\Usuario;
+use objects\Carta;
+
 
 class MesaController extends Controller
 {
@@ -48,7 +50,10 @@ class MesaController extends Controller
                     }
                 }
             }
-            echo \dawfony\Ti::render("view/MesaView.phtml", compact('title', 'usuario', 'compannero', 'rivalIzq', 'rivalDer', 'mesa'));
+            $cartas = $orm->obtenerCartas($id_mesa, $usuario->posicion);
+            $marcador = $orm->obtenerMarcador($id_mesa);
+            $situacionEntrada = $orm->obtenerSituacionActual($id_mesa);
+            echo \dawfony\Ti::render("view/MesaView.phtml", compact('title', 'usuario', 'compannero', 'rivalIzq', 'rivalDer', 'mesa', 'cartas', 'marcador', 'situacionEntrada'));
         
         } else {
             header("Location: $URL_PATH");
@@ -67,7 +72,7 @@ class MesaController extends Controller
         $mesa->vacas =  $_POST["vacas"];
         $mesa->puntos =  $_POST["puntos"];
         $mesa->login = $_POST["creador"];
-        $orm->crearMesa($mesa);
+        $orm->crearMesa($mesa);    
         header("Location: $URL_PATH/mc");
     }
 }

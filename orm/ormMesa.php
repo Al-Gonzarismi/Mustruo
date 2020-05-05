@@ -21,6 +21,40 @@ class OrmMesa
         }
     }
 
+    public function repartirCartasIniciales($id) {
+        $bd = Klasto::getInstance();
+        $params = [$id];
+        $sql = "SELECT `mesa_id`, `numero`, `palo`, `imagen`, `valor`, `estado` FROM `cartas` WHERE `mesa_id` = ?";
+        $baraja = $bd->query($sql,$params, "objects\Carta");
+        if(shuffle($baraja)) {
+            for ($i = 0; $i < 16; $i++) {
+                $params = [$i % 4, $id, $baraja[$i]->numero, $baraja[$i]->palo];
+                $sql = "UPDATE `cartas` SET `estado` = ? WHERE `mesa_id` = ? AND `numero` = ? AND `palo` = ?";
+                $bd->execute($sql, $params);
+            }
+        }
+    }
+
+    public function empezarMano($id, $mano = 0) {
+        $bd = Klasto::getInstance();
+        $params = [$id];
+        $sql = "DELETE FROM `jugadas` WHERE mesa_id = ?";
+        $bd->execute($sql, $params);
+        $params = [$id, $mano, $mano];
+        $sql = "INSERT INTO `jugadas` (`mesa_id`, `mano`, `turno`) VALUES(?, ?, ?)";
+        $bd->execute($sql, $params);
+        $this-> repartirCartasIniciales($id);
+    }
+
+    public function generarMarcadores($id) {
+        $bd = Klasto::getInstance();
+        $params = [$id, 0];
+        $sql = "INSERT INTO `marcador` (`mesa_id`, `pareja_id`) VALUES (?, ?)";
+        $bd->execute($sql, $params);
+        $params = [$id, 1];
+        $bd->execute($sql, $params);
+    }
+
     public function crearMesa($mesa)
     {
         $bd = Klasto::getInstance();
@@ -35,6 +69,8 @@ class OrmMesa
         $sql = "INSERT INTO `usuarios_por_mesa` (`login`, `mesa_id`, `pareja_id`, `posicion`) VALUES (?, ?, 0, 0)";
         $bd->execute($sql, $params);
         $this->generarBaraja($mesa->id_mesa);
+        $this->generarMarcadores($mesa->id_mesa);
+        $this->empezarMano($mesa->id_mesa);
         $bd->commit();
     }
 
@@ -80,8 +116,10 @@ class OrmMesa
         $params = [$id];
         $sql = "DELETE FROM `usuarios_por_mesa` WHERE `mesa_id` = ?";
         $sql2= "DELETE FROM `cartas` WHERE `mesa_id` = ?";
-        $sql3 = "DELETE FROM `mesa` WHERE `id_mesa` = ?";
-        $todoOk = $bd->execute($sql, $params) && $bd->execute($sql2, $params) && $bd->execute($sql3, $params);
+        $sql3= "DELETE FROM `marcador` WHERE `mesa_id` = ?";
+        $sql4= "DELETE FROM `jugadas` WHERE `mesa_id` = ?";
+        $sql5 = "DELETE FROM `mesa` WHERE `id_mesa` = ?";
+        $todoOk = $bd->execute($sql, $params) && $bd->execute($sql2, $params) && $bd->execute($sql3, $params) && $bd->execute($sql4, $params) && $bd->execute($sql5, $params);
         $bd->commit();
         return $todoOk;
     }
@@ -113,5 +151,28 @@ class OrmMesa
 
     public function existeMesa($id) {
         return $this->comprobarEstadoMesa($id) == 1;
+    }
+
+   
+
+    public function obtenerCartas($id, $posicion) {
+        $bd = Klasto::getInstance();
+        $params = [$id, $posicion];
+        $sql = "SELECT `mesa_id`, `numero`, `palo`, `imagen`, `valor`, `estado` FROM `cartas` WHERE `mesa_id` = ? AND `estado` = ?";
+        return $bd->query($sql,$params, "objects\Carta");
+    }
+
+    public function obtenerMarcador($id) {
+        $bd = Klasto::getInstance();
+        $params = [$id];
+        $sql = "SELECT `pareja_id`, `puntos`, `juegos`, `vacas` FROM `marcador` WHERE `mesa_id` = ?";
+        return $bd->query($sql, $params, "objects\Marcador");
+    }
+
+    public function obtenerSituacionActual($id) {
+        $bd = Klasto::getInstance();
+        $params = [$id];
+        $sql = "SELECT `mano`, `estado`, `turno`, `jugada`, `grande`, `chica`, `pares`, `juego`, `punto` FROM `jugadas` WHERE `mesa_id` = ?";
+        return $bd->query($sql, $params);
     }
 }
