@@ -4,11 +4,9 @@ var chat = document.getElementById("chat");
 var usuarios = document.getElementById("usuariosonline");
 var enviar = document.getElementById("enviarmensaje");
 var mensaje = document.getElementById("mensaje");
-var encabezadoEstadisiticas = document.getElementById("encabezadoestadisiticas");
-var cuerpoEstadisticas = document.getElementById("cuerpoestadisticas");
-var compannero = document.getElementById("compannero");
-var rivalDer = document.getElementById("rivalder");
-var rivalIzq = document.getElementById("rivalizq");
+var mano = situacionEntrada.mano;
+var turno = situacionEntrada.turno;
+
 
 //functions
 function hacerLista(data) {
@@ -42,8 +40,29 @@ function renderStats(login) {
             $("#juegosGanados").text(res.juegos_ganados);
             $("#vacasJugadas").text(res.vacas_jugadas);
             $("#vacasGanadas").text(res.vacas_ganadas);
-            $("#abandonos").text(res.abandonos);            
+            $("#abandonos").text(res.abandonos);
         });
+}
+
+function comprobarYMostrarMenu() {
+    if (usuario.posicion == (mano + turno) % 4) {
+        if (situacionEntrada.jugada == mus) {
+            if (situacionEntrada.estado == menu) {
+                $("#haymus").removeClass("hidden");
+            } else {
+                $("#divDescartes").removeClass("hidden");
+                //habilitar subida de cartas
+            }
+        } else {
+            if (situacionEntrada.estado == "limpio") {
+                $("#nohayEnvite").removeClass("hidden");
+            } else if (situacionEntrada.estado == "envidado") {
+                $("#hayEnvite").removeClass("hidden");
+            } else {
+                $("#hayordago").removeClass("hidden");
+            }
+        }
+    }
 }
 
 //conectar socket
@@ -76,18 +95,35 @@ enviar.addEventListener("click", () => {
 socket.on('chatpartida:message', (data) => {
     if (mesa.id_mesa == data.mesa) {
         chat.innerHTML += `<div class="textoMensaje"><span>${data.nombre}:</span> ${data.mensaje}</div>`;
-        $('#chat').scrollTop( $('#chat').prop('scrollHeight') );
+        $('#chat').scrollTop($('#chat').prop('scrollHeight'));
     }
 });
 
 //estadisticas
 renderStats(usuario.login);
-compannero.addEventListener("click", () => {
-    renderStats(compannero.innerText);
+$('#compannero').click(() => {
+    renderStats(compannero.login);
 });
-rivalDer.addEventListener("click", () => {
-    renderStats(rivalDer.innerText);
+$('#rivalder').click(() => {
+    renderStats(rivalDer.login);
 });
-rivalIzq.addEventListener("click", () => {
-    renderStats(rivalIzq.innerText);
-})
+$('#rivalizq').click(() => {
+    renderStats(rivalIzq.login);
+});
+
+//control desconexion
+comprobarYMostrarMenu();
+
+//juego
+$('#mus').click(() => {
+    $('#mus').addClass("hidden");
+    fetch(`${path}/api/mus/${usuario.login}`)
+        .then((res) => res.json())
+        .then((res) => {
+            console.log(res);
+            //mus
+            datos = new Object();
+            
+
+        });
+});

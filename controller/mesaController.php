@@ -29,7 +29,7 @@ class MesaController extends Controller
                 }
             }
             if (!isset($usuario)) {
-                header("Location: $URL_PATH");                
+                header("Location: $URL_PATH");
             }
             foreach ($usuariosMesa as $usu) {
                 if ($usu["login"] != $usuario->login) {
@@ -58,7 +58,6 @@ class MesaController extends Controller
             $marcador = $orm->obtenerMarcador($id_mesa);
             $situacionEntrada = $orm->obtenerSituacionActual($id_mesa);
             echo \dawfony\Ti::render("view/MesaView.phtml", compact('title', 'usuario', 'compannero', 'rivalIzq', 'rivalDer', 'mesa', 'cartas', 'marcador', 'situacionEntrada'));
-        
         } else {
             header("Location: $URL_PATH");
         }
@@ -76,7 +75,7 @@ class MesaController extends Controller
         $mesa->vacas =  $_POST["vacas"];
         $mesa->puntos =  $_POST["puntos"];
         $mesa->login = $_POST["creador"];
-        $orm->crearMesa($mesa);    
+        $orm->crearMesa($mesa);
         header("Location: $URL_PATH/mc");
     }
 }
