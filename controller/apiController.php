@@ -180,4 +180,152 @@ class ApiController extends Controller
             echo json_encode($error);
         }
     }
+
+    public function noHayMus($id, $login) {
+        header('Content-type: application/json');
+        if ($_SESSION["login"] == $login) {
+            $orm = new OrmMesa;            
+            if ($orm->noHayMus($id)) {
+                $situacion = $orm->obtenerSituacionActual($id);
+                echo json_encode($situacion);
+            } else {
+                $error = "falla el paso a grande";
+                echo json_encode($error);
+            }
+        } else {
+            $error = "no coincide usuario";
+            echo json_encode($error);
+        }
+    }
+
+    public function envidar($id, $login, $envite) {
+        header('Content-type: application/json');
+        if ($_SESSION["login"] == $login) {
+            $orm = new OrmMesa; 
+            $situacion = $orm->obtenerSituacionActual($id);           
+            if ($orm->envidar($situacion, $login, $envite)) {
+                $situacion = $orm->obtenerSituacionActual($id);
+                echo json_encode($situacion);
+            } else {
+                $error = "falla el envite";
+                echo json_encode($error);
+            }
+        } else {
+            $error = "no coincide usuario";
+            echo json_encode($error);
+        }
+    }
+
+    public function pasar($id, $login) {
+        header('Content-type: application/json');
+        if ($_SESSION["login"] == $login) {
+            $orm = new OrmMesa;
+            $situacion = $orm->obtenerSituacionActual($id);
+            if ($situacion["turno"] == 3) {
+                if ($orm->siguienteJugada( $situacion)) {
+                    $situacion = $orm->obtenerSituacionActual($id);
+                    echo json_encode($situacion);
+                } else {
+                    $error = "falla cambio jugada";
+                    echo json_encode($error);
+                }
+            } else {
+                $situacion["turno"]++;
+                if ($orm->actualizarSituacion($id, $situacion["turno"])) {
+                    echo json_encode($situacion);
+                } else {
+                    $error = "falla actualizacion";
+                    echo json_encode($error);
+                }
+            }
+        } else {
+            $error = "no coincide usuario";
+            echo json_encode($error);
+        }
+    }
+
+    public function echarOrdago($id, $login) {
+        header('Content-type: application/json');
+        if ($_SESSION["login"] == $login) {
+            $orm = new OrmMesa; 
+            $situacion = $orm->obtenerSituacionActual($id);           
+            if ($orm->echarOrdago($situacion, $login)) {
+                $situacion = $orm->obtenerSituacionActual($id);
+                echo json_encode($situacion);
+            } else {
+                $error = "falla el ordago";
+                echo json_encode($error);
+            }
+        } else {
+            $error = "no coincide usuario";
+            echo json_encode($error);
+        }
+    }
+
+    public function noQuerer($id, $login) {
+        header('Content-type: application/json');
+        if ($_SESSION["login"] == $login) {
+            $orm = new OrmMesa;
+            $situacion = $orm->obtenerSituacionActual($id);
+            if ($situacion["turno"] + 2 > 3) {
+                if ($orm->anotarPuntos($situacion)) {
+                    $situacion = $orm->obtenerSituacionActual($id);
+                    $situacion["marcadores"] = $orm->obtenerMarcador($id);
+                    echo json_encode($situacion);
+                } else {
+                    $error = "fallan cambio jugada o puntos";
+                    echo json_encode($error);
+                }
+            } else {
+                $situacion["turno"]+= 2;
+                if ($orm->actualizarSituacion($id, $situacion["turno"])) {
+                    echo json_encode($situacion);
+                } else {
+                    $error = "falla actualizacion";
+                    echo json_encode($error);
+                }
+            }
+        } else {
+            $error = "no coincide usuario";
+            echo json_encode($error);
+        }
+    }
+
+    public function querer($id, $login) {
+        header('Content-type: application/json');
+        if ($_SESSION["login"] == $login) {
+            $orm = new OrmMesa;
+            $situacion = $orm->obtenerSituacionActual($id);
+            if ($situacion["estado"] == "envite") {
+                if ($orm->quererEnvite($situacion)) {
+                    $situacion = $orm->obtenerSituacionActual($id);
+                    echo json_encode($situacion);
+                } else {
+                    $error = "falla aceptacion envite";
+                    echo json_encode($error);
+                }
+            } 
+        } else {
+            $error = "no coincide usuario";
+            echo json_encode($error);
+        }
+    }
+
+    public function reenvidar($id, $login, $envite) {
+        header('Content-type: application/json');
+        if ($_SESSION["login"] == $login) {
+            $orm = new OrmMesa; 
+            $situacion = $orm->obtenerSituacionActual($id);           
+            if ($orm->reenvidar($situacion, $login, $envite)) {
+                $situacion = $orm->obtenerSituacionActual($id);
+                echo json_encode($situacion);
+            } else {
+                $error = "falla el envite";
+                echo json_encode($error);
+            }
+        } else {
+            $error = "no coincide usuario";
+            echo json_encode($error);
+        }
+    }
 }
