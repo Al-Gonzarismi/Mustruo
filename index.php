@@ -48,6 +48,10 @@ Macaw::get($URL_PATH . '/api/estadousuario/(:any)', "controller\apiController@co
 
 Macaw::get($URL_PATH . '/api/empezarpartida/(:any)', "controller\apiController@cambiarEstadoPartida");
 
+Macaw::get($URL_PATH . '/api/mus/(:any)/(:any)', "controller\apiController@pedirMus");
+
+Macaw::get($URL_PATH . '/api/descartar/(:any)/(:any)/(:any)', "controller\apiController@descartar");
+
 
 
 

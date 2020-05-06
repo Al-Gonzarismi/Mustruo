@@ -50,4 +50,8 @@ io.on('connection', (socket) => {
         io.emit('chatpartida:message', data);
     })
 
+    socket.on('interaccion', (data) => {
+        io.emit('interaccion', data);
+    })
+
 })
