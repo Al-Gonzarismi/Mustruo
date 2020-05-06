@@ -115,4 +115,69 @@ class ApiController extends Controller
             echo "nook";
         }
     }
+
+    public function pedirMus($id, $login)
+    {
+        header('Content-type: application/json');
+        if ($_SESSION["login"] == $login) {
+            $orm = new OrmMesa;
+            $situacion = $orm->obtenerSituacionActual($id);
+            if ($situacion["turno"] == 3) {
+                if ($orm->iniciarDescartes($id)) {
+                    $situacion = $orm->obtenerSituacionActual($id);
+                    echo json_encode($situacion);
+                } else {
+                    $error = "fallan descartes";
+                    echo json_encode($error);
+                }
+            } else {
+                $situacion["turno"]++;
+                if ($orm->actualizarSituacion($id, $situacion["turno"])) {
+                    echo json_encode($situacion);
+                } else {
+                    $error = "falla actualizacion";
+                    echo json_encode($error);
+                }
+            }
+        } else {
+            $error = "no coincide usuario";
+            echo json_encode($error);
+        }
+    }
+
+    public function descartar($id, $login, $descartes)
+    {
+        header('Content-type: application/json');
+        if ($_SESSION["login"] == $login) {
+            $descartes = explode("+", $descartes);
+            $nDescartes = $descartes[count($descartes) - 1];
+            $orm = new OrmMesa;
+            $situacion = $orm->obtenerSituacionActual($id);
+            $cartas = $orm->darMus($id, $login, $descartes);
+            if ($situacion["turno"] == 3) {
+                if ($orm->volverAMenuMus($id)) {
+                    $situacion = $orm->obtenerSituacionActual($id);
+                    $situacion["cartas"] = $cartas;
+                    $situacion["descartes"] = $nDescartes;
+                    echo json_encode($situacion);
+                } else {
+                    $error = "falla vuelta al mus";
+                    echo json_encode($error);
+                }
+            } else {
+                $situacion["turno"]++;
+                if ($orm->actualizarSituacion($id, $situacion["turno"])) {
+                    $situacion["cartas"] = $cartas;
+                    $situacion["descartes"] = $nDescartes;
+                    echo json_encode($situacion);
+                } else {
+                    $error = "falla actualizacion";
+                    echo json_encode($error);
+                }
+            }
+        } else {
+            $error = "no coincide usuario";
+            echo json_encode($error);
+        }
+    }
 }
