@@ -54,4 +54,12 @@ io.on('connection', (socket) => {
         io.emit('interaccion', data);
     })
 
+    socket.on('actualizarMarcadores', (data) => {
+        io.emit('actualizarMarcadores', data);
+    })
+
+    socket.on('showdown', (data) => {
+        io.emit('showdown', data);
+    })
+
 })

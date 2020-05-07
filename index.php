@@ -50,10 +50,25 @@ Macaw::get($URL_PATH . '/api/empezarpartida/(:any)', "controller\apiController@c
 
 Macaw::get($URL_PATH . '/api/mus/(:any)/(:any)', "controller\apiController@pedirMus");
 
+Macaw::get($URL_PATH . '/api/nomus/(:any)/(:any)', "controller\apiController@noHayMus");
+
 Macaw::get($URL_PATH . '/api/descartar/(:any)/(:any)/(:any)', "controller\apiController@descartar");
 
+Macaw::get($URL_PATH . '/api/envite/(:any)/(:any)/(:any)', "controller\apiController@envidar");
 
+Macaw::get($URL_PATH . '/api/reenvite/(:any)/(:any)/(:any)', "controller\apiController@reenvidar");
 
+Macaw::get($URL_PATH . '/api/paso/(:any)/(:any)', "controller\apiController@pasar");
+
+Macaw::get($URL_PATH . '/api/ordago/(:any)/(:any)', "controller\apiController@echarOrdago");
+
+Macaw::get($URL_PATH . '/api/noquiero/(:any)/(:any)', "controller\apiController@noQuerer");
+
+Macaw::get($URL_PATH . '/api/quiero/(:any)/(:any)', "controller\apiController@Querer");
+
+Macaw::get($URL_PATH . '/api/paresojuego/(:any)/(:any)', "controller\apiController@comprobarParesYJuego");
+
+Macaw::get($URL_PATH . '/api/menuparjuego/(:any)/(:any)', "controller\apiController@verificarParJuego");
 
 Macaw::error(function() {
     echo '404 :: Not Found';

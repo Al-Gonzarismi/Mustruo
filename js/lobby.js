@@ -217,7 +217,9 @@ function renderRanking(tipo) {
 
 
 //rankings
+
 renderRanking(0);
+
 
 semana.addEventListener("click", () => {
     renderRanking(0);

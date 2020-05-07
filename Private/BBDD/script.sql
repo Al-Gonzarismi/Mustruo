@@ -172,7 +172,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `mustruobd`.`jugadas` (
   `mesa_id` INT NOT NULL,
   `mano` INT NOT NULL,
-  `estado` VARCHAR(45) NOT NULL DEFAULT 'menu',
+  `estado` VARCHAR(45) NOT NULL DEFAULT 'repartir',
   `turno` INT NOT NULL,
   `jugada` VARCHAR(45) NOT NULL DEFAULT 'mus',
   `grande` VARCHAR(45) NOT NULL DEFAULT '-',
@@ -180,6 +180,8 @@ CREATE TABLE IF NOT EXISTS `mustruobd`.`jugadas` (
   `pares` VARCHAR(45) NOT NULL DEFAULT '-',
   `juego` VARCHAR(45) NOT NULL DEFAULT '-',
   `punto` VARCHAR(45) NOT NULL DEFAULT '-',
+  `acumulado` INT NOT NULL DEFAULT 0,
+  `rechazo` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`mesa_id`),
   INDEX `fk_mesa_has_pareja_mesa2_idx` (`mesa_id` ASC),
   CONSTRAINT `fk_mesa_has_pareja_mesa2`

@@ -81,6 +81,16 @@ function actualizarDatosJugada(situacion) {
     $("#punto").text(situacion.punto);
 }
 
+function mostrarMenu(estado) {
+    if (estado == "limpio") {
+        $("#nohayEnvite").removeClass("hidden");
+    } else if (estado == "envite") {
+        $("#hayEnvite").removeClass("hidden");
+    } else if (estado == "ordago") {
+        $("#responderOrdago").removeClass("hidden");
+    }
+}
+
 function comprobarYMostrarMenu(mano, turno, jugada, estado) {
     if (usuario.posicion == (mano + turno) % 4) {
         if (jugada == "mus") {
@@ -90,14 +100,42 @@ function comprobarYMostrarMenu(mano, turno, jugada, estado) {
                 $("#divDescartes").removeClass("hidden");
                 activarSubidaCartas();
             }
+        } else if (jugada == "pares" || jugada == "juego") {
+            fetch(`${path}/api/menuparjuego/${mesa.id_mesa}/${usuario.login}`)
+                .then((res) => res.json())
+                .then((res) => {
+                    console.log(res);
+                    if (res.comprobacion) {
+                        mostrarMenu(estado);
+                    } else {
+                        if (res.estado == "limpio") {
+                            fetch(`${path}/api/paso/${mesa.id_mesa}/${usuario.login}`)
+                                .then((res) => res.json())
+                                .then((res) => {
+                                    if (res.jugada == "mus") {
+                                        socket.emit('showdown', res);
+                                    } else {
+                                        socket.emit('interaccion', res);
+                                    }
+                                });
+                        } else {
+                            fetch(`${path}/api/noquiero/${mesa.id_mesa}/${usuario.login}`)
+                                .then((res) => res.json())
+                                .then((res) => {                                    
+                                    if (typeof res.marcadores !== 'undefined') {
+                                        socket.emit('actualizarMarcadores', res.marcadores);
+                                    }
+                                    if (res.jugada == "mus") {
+                                        socket.emit('showdown', res);// programar al final
+                                    } else {
+                                        socket.emit('interaccion', res);
+                                    }
+                                });
+                        }
+                    }
+                });
         } else {
-            if (estado == "limpio") {
-                $("#nohayEnvite").removeClass("hidden");
-            } else if (estado == "envidado") {
-                $("#hayEnvite").removeClass("hidden");
-            } else {
-                $("#hayordago").removeClass("hidden");
-            }
+            mostrarMenu(estado);
         }
     }
 }
@@ -213,7 +251,7 @@ $('#rivalizq').click(() => {
 });
 
 //control desconexion
-comprobarYMostrarMenu(situacionEntrada.mano, situacionEntrada.turno, situacionEntrada.jugada, situacionEntrada.estado);
+socket.emit('interaccion', situacionEntrada);
 
 //juego
 $('#mus').click(() => {
@@ -223,7 +261,6 @@ $('#mus').click(() => {
         .then((res) => {
             res.texto = "dame mus";
             res.login = usuario.login;
-            console.log(res);
             socket.emit('interaccion', res);
         });
 });
@@ -235,7 +272,6 @@ $('#descartar').click(() => {
     fetch(`${path}/api/descartar/${mesa.id_mesa}/${usuario.login}/${descartes}`)
         .then((res) => res.json())
         .then((res) => {
-            console.log(res);
             res.texto = res.descartes > 0 ? `Dame ${res.descartes} cartas` : "Me quedo servido";
             res.login = usuario.login;
             cartas = res.cartas;
@@ -248,15 +284,178 @@ $('#descartar').click(() => {
         });
 });
 
+$('#nomus').click(() => {
+    $('#haymus').addClass("hidden");
+    fetch(`${path}/api/nomus/${mesa.id_mesa}/${usuario.login}`)
+        .then((res) => res.json())
+        .then((res) => {
+            res.texto = "No hay mus";
+            res.login = usuario.login;
+            socket.emit('interaccion', res);
+        });
+});
+
+$('#paso').click(() => {
+    $('#nohayEnvite').addClass("hidden");
+    fetch(`${path}/api/paso/${mesa.id_mesa}/${usuario.login}`)
+        .then((res) => res.json())
+        .then((res) => {
+            res.texto = `Paso`;
+            res.login = usuario.login;
+            if (res.jugada == "mus") {
+                socket.emit('showdown', res);
+            } else {
+                socket.emit('interaccion', res);
+            }
+        });
+});
+
+$('#envidar').click(() => {
+    $('#nohayEnvite').addClass("hidden");
+    let envite = $('#textoEnvidar').text();
+    fetch(`${path}/api/envite/${mesa.id_mesa}/${usuario.login}/${envite}`)
+        .then((res) => res.json())
+        .then((res) => {
+            res.texto = `Envido ${envite}`;
+            res.login = usuario.login;
+            $('#textoEnvidar').text(2);
+            $('#envidar').text("Envido 2");
+            socket.emit('interaccion', res);
+        });
+});
+
+$('#ordago').click(() => {
+    $('#nohayEnvite').addClass("hidden");
+    fetch(`${path}/api/ordago/${mesa.id_mesa}/${usuario.login}`)
+        .then((res) => res.json())
+        .then((res) => {
+            res.texto = `¡¡ORDAGO!!`;
+            res.login = usuario.login;
+            socket.emit('interaccion', res);
+        });
+});
+
+$('#haynoquiero').click(() => {
+    $('#hayEnvite').addClass("hidden");
+    fetch(`${path}/api/noquiero/${mesa.id_mesa}/${usuario.login}`)
+        .then((res) => res.json())
+        .then((res) => {
+            res.texto = `No quiero`;
+            res.login = usuario.login;
+            if (typeof res.marcadores !== 'undefined') {
+                socket.emit('actualizarMarcadores', res.marcadores);
+            }
+            if (res.jugada == "mus") {
+                socket.emit('showdown', res);
+            } else {
+                socket.emit('interaccion', res);
+            }
+        });
+});
+
+$('#hayquiero').click(() => {
+    $('#hayEnvite').addClass("hidden");
+    fetch(`${path}/api/quiero/${mesa.id_mesa}/${usuario.login}`)
+        .then((res) => res.json())
+        .then((res) => {
+            res.texto = `Quiero`;
+            res.login = usuario.login;
+            if (res.jugada == "mus") {
+                socket.emit('showdown', res);
+            } else {
+                socket.emit('interaccion', res);
+            }
+        });
+});
+
+$('#hayenvidar').click(() => {
+    $('#hayEnvite').addClass("hidden");
+    let envite = $('#haytextoEnvidar').text();
+    fetch(`${path}/api/reenvite/${mesa.id_mesa}/${usuario.login}/${envite}`)
+        .then((res) => res.json())
+        .then((res) => {
+            res.texto = `${envite} más!!`;
+            res.login = usuario.login;
+            $('#haytextoEnvidar').text(2);
+            $('#hayEnvidar').text("Envido 2");
+            socket.emit('interaccion', res);
+        });
+});
+
+$('#hayordago').click(() => {
+    $('#hayEnvite').addClass("hidden");
+    fetch(`${path}/api/ordago/${mesa.id_mesa}/${usuario.login}`)
+        .then((res) => res.json())
+        .then((res) => {
+            res.texto = `¡¡ORDAGO!!`;
+            res.login = usuario.login;
+            socket.emit('interaccion', res);
+        });
+});
+
+$('#quiero').click(() => {
+    $('#responderOrdago').addClass("hidden");
+    let datos = new Object();
+    datos.login = usuario.login;
+    datos.texto = "Quiero";
+    socket.emit('showdown', datos);// programar al final
+});
+
+$('#noquiero').click(() => {
+    $('#responderOrdago').addClass("hidden");
+    fetch(`${path}/api/noquiero/${mesa.id_mesa}/${usuario.login}`)
+        .then((res) => res.json())
+        .then((res) => {
+            res.texto = `No quiero`;
+            res.login = usuario.login;
+            if (typeof res.marcadores !== 'undefined') {
+                socket.emit('actualizarMarcadores', res.marcadores);
+            }
+            if (res.jugada == "mus") {
+                socket.emit('showdown', res);
+            } else {
+                socket.emit('interaccion', res);
+            }
+        });
+});
+socket.on('actualizarMarcadores', (data) => {
+    $("#puntosa").text(data[0].puntos);
+    $("#juegosa").text(data[0].juegos);
+    $("#vacasa").text(data[0].vacas);
+    $("#puntosb").text(data[1].puntos);
+    $("#juegosb").text(data[1].juegos);
+    $("#vacasb").text(data[1].vacas);
+})
+
 socket.on('interaccion', (data) => {
     if (data.mesa_id == mesa.id_mesa) {
-        //imprimir bocadillo con data.texto y data.login
+        if (typeof data.texto !== 'undefined') {
+            //imprimir bocadillo con data.texto y data.login
+        }
         if (data.turno == 0) {
             //imprimir mensaje en el centro
         }
+        if (data.estado == "comprobando" && usuario.posicion == (data.mano + data.turno) % 4) {
+            fetch(`${path}/api/paresojuego/${mesa.id_mesa}/${usuario.login}`)
+                .then((res) => res.json())
+                .then((res) => {
+                    res.texto = res.comprobacion ? "Tengo" : "No tengo";
+                    res.login = usuario.login;
+                    if (res.jugada == "mus") {
+                        socket.emit('showdown', res);
+                    } else {
+                        socket.emit('interaccion', res);
+                    }
+                });
+        } else {
+            comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
+        }
         actualizarDatosJugada(data);
-        comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
     }
 });
+
+socket.on('showdown', (data) =>{
+    console.log("programa el showdown copon");
+})
 
 

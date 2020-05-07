@@ -12,5 +12,6 @@ Lobby {
     cambiar interior (ESTADISTICAS)
 }
 JORGE:
-Lobby
-usuario - compannero - rivalIzq - rivalDer
+estados mus: repartir, menus, descartar
+estados envites: limpio, envite || reenvite, ordago
+estado comprobacion pares y juego : comprobando
