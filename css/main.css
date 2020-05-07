@@ -59,19 +59,6 @@ html, body {
 .perfil:hover {
     color: rgba(173, 216, 230, 0.74);
 }
-
-
-/* Registro */
-form#registro {
-    margin-top: 3%;
-    margin-left: 20%;
-    margin-right: 20%;
-}
-#registro > div > small {
-    color: gray;
-}
-
-
 /* Perfil */
 .info {
     display: flex;
@@ -143,237 +130,108 @@ form#registro {
 .editarEmail {
     display: none;
 }
-/* Lobby */
-.principal {
-    display: flex;
-    justify-content: space-between;
+/*Contenedor*/
+.contenedor {
+    position: absolute;
+    width: 100%;
+    height: 90%;
+    bottom: 0;
 }
-.header {
-    background-color: lightblue;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    padding: 2%;
-    display: flex;
-    position: relative;
-    color: darkgreen;
+/*Nav*/
+.barraPrincipal {
+    position: absolute;
+    width: 100%;
+    height: 10%;
+    background-color: #1c0b22;
 }
-.imgCabecera {
-    width: 45px;
-    height: 45px;
+/*Titulo*/
+.barraTitulo {
+    position: absolute;
+    width: 27.5%;
+    height: 100%;
+    font-size: 190%;
 }
-.textoHeader {
-    font-size: 20px;
-    margin-left: 40px;
-    margin-top: 8px;
+/*Logo*/
+.barraLogo {
+    position: absolute;
+    width: 27.5%;
+    height: 100%;
+    left: 27.5%
 }
-.bodyHeader {
-    background-color: white;
-    color: black;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    text-align: center;
-}
-.scroll {
-    overflow-x: auto;
+.barraLogo > img {
+    position: absolute;
+    left: 35%;
+    top: 10%;
+    width: 30%;
     height: 80%;
 }
-/*1-3*/
-.primerTercio {
-    width: 20%;
-    margin: 1%;
-}
-.pestannas {
+/*Inicio Sesion*/
+.barraLogin {
     position: absolute;
-    top: 0;
+    width: 45%;
+    height: 100%;
     right: 0;
-    font-size: 10px;
 }
-.pestannas li {
-    list-style-type: none;
-    float: left;
-    text-align: center;
-    background-color: purple;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border: 2px solid bisque;
-    padding: 0px 7px 0px 7px;
-}
-.pestannas li:hover {
-    background-color: gray;
-    cursor: pointer;
-}
-.pestannas a:link {
-    color: bisque;
-}
-#clasificacion {
-    background-color: white;
+.barraLogin > input {
+    position: absolute;
+    top: 25%;
+    height: 50%;
+    width: 30%;
+    background-color: #96623d;
     color: black;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border: 7px ridge white;
+    font-size: 0.9em;
 }
-#clasificacion > div > li {
-    border-bottom: 1px solid black;
+.barraLogin > .inicioContrasenna {
+    left: 33.33%
 }
-#clasificacion > div > li:hover {
-    background-color: lightblue;
-    color: green;
-    cursor: pointer;
-}
-.rank {
-    display: flex;
-    justify-content: space-between;
-    padding: 7%;
-}/*
-.puntos {
-    display: inline;
-}*/
-/*2-3*/
-.segundoTercio {
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin: 1%;
-}
-/*Mesas*/
-.mesas {
-    height: 72.5%;
-    position: relative;
-    width: 90%;
-    align-self: center;
-}
-.nuevaMesa {
+.inicioBotones {
     position: absolute;
-    right: 20%;
-    top: 25%;
-    bottom: 25%;
-}
-.dejarMesa {
-    position: absolute;
-    right: 5%;
-    top: 25%;
-    bottom: 25%;
-}
-/*Parte Interna*/
-.crearMesas {
-    width: 100%;
-}
-.crearMesas > div {
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-}
-/*Personalizar item*/
-.itemMesa {
-    background-color: #004d1a;
-    color: white;
-    border-radius: 2%;
-    width: 29%;
-    height: 230px;
-    margin: 2%;
-    display: flex;
-    flex-wrap: wrap;
-    position: relative;
-}
-.posicion0 {
-    position: absolute;
-    top: 0%;
-    left: 40%;
-}
-.posicion1 {
-    position: absolute;
-    top: 40%;
-    left: 0%;
-}
-.posicion2 {
-    position: absolute;
-    bottom: 0%;
-    left: 40%;
-}
-.posicion3 {
-    position: absolute;
-    top: 40%;
-    right: 0%;
-}
-.asiento > img {
-    align-self: center;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
-}
-#bloqueUsu {
-    display: flex;
-    flex-direction: column;
-}
-.posicion0 + #bloqueUsu {
-    top: 35%;
-}
-.posicion2 + #bloqueUsu {
-    top: 35%;
-}
-.listo {
-    position: absolute;
-    top: 40%;
-    left: 37%;
-}
-/*Chat*/
-.chat {
-    height: 27.5%;
-    position: relative;
-    width: 90%;
-    align-self: center;
-}
-.divChat {
-    display: flex;
-    flex-wrap: wrap;
+    right: 3.33%;
+    width: 30%;
     height: 100%;
 }
-#chat {
-    width: 100%;
+.inicioBotones > input {
+    position: absolute;
+    top: 10%;
+    left: 15%;
+    width: 70%;
+    height: 50%;
 }
-.enviarTexto {
-    width: 100%;
-    display: flex;
-    border-top: 1px solid purple;
-    padding-top: 2px;  
-}
-.enviarTexto > input {
-    width: 85%;
-    border-radius: 10px;
-    background-color: lightblue;
-}
-.enviarTexto > button {
-    width: 15%;
-}
-/*3-3*/
-.tercerTercio {
-    width: 20%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin: 1%;
-}
-.usuarios {
-    height: 60%;
-    position: relative;
-}
-.estadisticas {
+.inicioBotones > a {
+    position: absolute;
+    left: 15%;
+    bottom: 0;
+    width: 70%;
     height: 40%;
-    position: relative;
+    color: #96623d;
 }
-#usuariosonline {
-    color: lightgreen;
-    font-size: 25px;
+/*Volver Lobby*/
+a.volverLobby {
+    position: absolute;
+    width: 30%;
+    height: 60%;
+    top: 20%;
+    right: 3.33%;
+    text-decoration: none;
 }
-#usariosonline > li {
-    border-bottom: 1px solid black;
+/*Logueado*/
+.irAPerfil {
+    position: absolute;
+    width: 30%;
+    height: 60%;
+    top: 20%;
+    right: 33.33%;
+    color: #96623d;
 }
-.online {
-    font-size: 20px;
-    text-align: left;
-    padding: 2%;
+a.irAPerfil:hover {
+    color: #96623d;
 }
-.online > a {
-    cursor: pointer;
+a.cerrarSesion {
+    position: absolute;
+    width: 30%;
+    height: 60%;
+    top: 20%;
+    right: 3.33%;
+    text-decoration: none;
 }

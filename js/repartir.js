@@ -33,25 +33,25 @@ window.onload = function () {
         var compiCartas = $('.compiCartas').children();
         var rivalDerCartas = $('.rivalderCartas').children();
         var rivalIzqCartas = $('.rivalizqCartas').children();
-        if (manoUsuario.attr('class').indexOf('hidden') < 0) {
+        if (!manoRivalDer.hasClass('hidden')) {
             $('#deUsu').show();
             repartoDerecha(rivalDerCartas);
             repartoCompi(compiCartas);
             repartoIzq(rivalIzqCartas);
             repartoUsuario(usuarioCartas);
-        } else if (manoRivalDer.attr('class').indexOf('hidden') < 0) {
+        } else if (!manoCompi.hasClass('hidden')) {
             $('#deRivalDer').show();
             repartoDerecha(compiCartas);
             repartoCompi(rivalIzqCartas);
             repartoIzq(usuarioCartas);
             repartoUsuario(rivalDerCartas);
-        } else if (manoRivalIzq.attr('class').indexOf('hidden') < 0) {
+        } else if (!manoUsuario.hasClass('hidden')) {
             $('#deRivalIzq').show();
             repartoDerecha(usuarioCartas);
             repartoCompi(rivalDerCartas);
             repartoIzq(compiCartas);
             repartoUsuario(rivalIzqCartas);
-        } else if (manoCompi.attr('class').indexOf('hidden') < 0) {
+        } else if (!manoRivalIzq.hasClass('hidden')) {
             $('#deCompi').show();
             repartoDerecha(rivalIzqCartas);
             repartoCompi(usuarioCartas);

@@ -32,11 +32,11 @@
                     <div class="puntosPuntosPartida centrarTexto"><span>Puntos</span></div>
                     <div class="juegosPuntosPartida centrarTexto"><span>Juegos</span></div>
                     <div class="vacasPuntosPartida centrarTexto"><span>Vacas</span></div>
-                    <div class="equipoa centrarTexto"><span><?=$parejaA[0]?> / <?=$parejaA[1]?></span></div>
+                    <div class="equipoa centrarTexto"><span>Pareja A</span><span><?=$parejaA[0]?> / <?=$parejaA[1]?></span></div>
                     <div class="puntosa centrarTexto"><span id="puntosa"><?=$marcador[0]->puntos?></span></div>
                     <div class="juegosa centrarTexto"><span id="juegosa"><?=$marcador[0]->juegos?></span></div>
                     <div class="vacasa centrarTexto"><span id="vacasa"><?=$marcador[0]->vacas?></span></div>
-                    <div class="equipob centrarTexto"><span><?=$parejaB[0]?> / <?=$parejaB[1]?></span></div>
+                    <div class="equipob centrarTexto"><span>Pareja B</span><span><?=$parejaB[0]?> / <?=$parejaB[1]?></span></div>
                     <div class="puntosb centrarTexto"><span id="puntosb"><?=$marcador[1]->puntos?></span></div>
                     <div class="juegosb centrarTexto"><span id="juegosb"><?=$marcador[1]->juegos?></span></div>
                     <div class="vacasb centrarTexto"><span id="vacasb"><?=$marcador[1]->vacas?></span></div>
@@ -104,7 +104,7 @@
             </div>
             <!--Bocadillo-->
             <div class="bocadillo bocataCompi hidden">
-                <div class="globo centrarTexto"><span id="bocatacompi">No quiero<span></div>
+                <div class="globo centrarTexto"><span id="bocatacompi"><span></div>
                 <div class="piquitoIzq"></div>
             </div>
             <!--RivalDer-->
@@ -115,7 +115,7 @@
             </div>
             <!--Bocadillo-->
             <div class="bocadillo bocataRivalDer hidden">
-                <div class="globo centrarTexto"><span id="bocatarivalder">Envido 30<span></div>
+                <div class="globo centrarTexto"><span id="bocatarivalder"><span></div>
                 <div class="piquitoIzq"></div>
             </div>
             <!--RivalIIzq-->
@@ -126,11 +126,12 @@
             </div>
             <!--Bocadillo-->
             <div class="bocadillo bocataRivalIzq hidden">
-                <div class="globo centrarTexto"><span id="bocatarivalizq">Paso<span></div>
+                <div class="globo centrarTexto"><span id="bocatarivalizq"><span></div>
                 <div class="piquitoDer"></div>
             </div>
             <!--Mesa-->
             <div class="mesaJuego">
+            <!--Repartir-->
                 <button class="boton-marron" id="repartir">Repartir</button>
                 <!--Tapete-->
                 <div class="tapete"></div>
@@ -207,31 +208,31 @@
                 <img class="mano manoUsuario hidden" id="mano<?=$usuario->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 <!--Compi-->
                 <!--Cartas-->
-                <div class="compiCartas cartasHorizontal hidden">
-                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
-                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
-                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
-                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                <div class="compiCartas cartasHorizontal" id="compi">
+                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="compi1">
+                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="compi2">
+                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="compi3">
+                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="compi4">
                 </div>
                 <!--Mano-->
                 <img class="mano manoCompi hidden" id="mano<?=$compi->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 <!--Rival Izquierda-->
                 <!--Cartas-->
-                <div class="rivalizqCartas cartasVertical">
-                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
-                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
-                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
-                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                <div class="rivalizqCartas cartasVertical" id="rivalizq">
+                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="rivalizq1">
+                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="rivalizq2">
+                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="rivalizq3">
+                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="rivalizq4">
                 </div>
                 <!--Mano-->
                 <img class="mano manoRivalIzq hidden" id="mano<?=$rivalIzq->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 <!--Rival Derecha-->
                 <!--Cartas-->
-                <div class="rivalderCartas cartasVertical">
-                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
-                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
-                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
-                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                <div class="rivalderCartas cartasVertical" id="rivalder">
+                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="rivalder1">
+                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="rivalder2">
+                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="rivalder3">
+                    <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="rivalder4">
                 </div>
                 <!--Mano-->
                 <img class="mano manoRivalDer" id="mano<?=$rivalDer->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
@@ -241,8 +242,9 @@
                     <span>(Click a las cartas para descartar)</span>
                 </div>
                 <!--Texto Tapete-->
-                <div class="textoTapete centrarTexto hidden">
-                    <span id="textotapete">Grande</span>
+                <div class="textoTapete centrarTexto">
+                    <span class="grandeTapete hidden" id="tapetej"></span>
+                    <div class="pequennoTapete centrarTexto hidden"><span id="tapetes"></span></div>
                 </div>
             </div>
             <!--Puerta Salir-->

@@ -22,36 +22,26 @@
     </title>
 </head>
 <body>
-    <nav class="navbar bg-morado row">
-        <div class="personalizarNav col-md-3">
-            <?=$data["title"]?>
+    <nav class="barraPrincipal">
+        <div class="barraTitulo centrarTexto">
+            <span><?=$data["title"]?></span>
         </div>
         <!--LOGO-->
-        <div class="personalizarNav col-md-4">
-            <picture>
-            <!--
-                <source media="(min-width: 650px)" srcset="images/image-medium.png">
-                <source media="(min-width: 465px)" srcset="images/image-small.png">
-            -->    
-                <img src="<?= $URL_PATH ?>/media/logoPrueba.png" >
-            </picture>
+        <div class="barraLogo">   
+            <img src="<?= $URL_PATH ?>/media/logoPrueba.png">
         </div>
-        <div class="col-md-5">
+        <div class="barraLogin">
             <?php if (isset($enLobby)) : ?>
-                <a class="btn boton-naranja float-right" href="<?= $URL_PATH ?>/">Volver a Lobby</a>
+                <a class="boton-marron volverLobby centrarTexto" href="<?= $URL_PATH ?>/"><span>Volver a Lobby</span></a>
             <?php elseif (isset($_SESSION["login"])) : ?>
-                <div class="float-right">
-                    <a class="perfil" href="<?= $URL_PATH ?>/perfil/<?= $_SESSION["login"] ?>">Ir a perfil</a>
-                    <a class="btn boton-naranja ml-5" href="<?= $URL_PATH ?>/cerrarSesion">Cerrar Sesión</a>
-                </div>               
+                <a class="irAPerfil centrarTexto" href="<?= $URL_PATH ?>/perfil/<?= $_SESSION["login"] ?>"><span>Ir a perfil</span></a>
+                <a class="boton-marron cerrarSesion centrarTexto" href="<?= $URL_PATH ?>/cerrarSesion"><span>Cerrar Sesión</span></a>             
             <?php else : ?>
-                <div class="form-inline float-right">
-                    <input type="text" class="form-control mr-sm-2" id="login" name="login" placeholder="login">
-                    <input type="password" class="form-control mr-sm-2" id="contrasenna" name="contrasenna" placeholder="******">
-                    <div class="flexColumn">
-                        <input type="button" class="btn boton-naranja" onclick="comprobarSesion()" value="Iniciar Sesión">
-                        <a class="registrate" href="<?= $URL_PATH ?>/registrate">Regístrate</a>
-                    </div>
+                <input type="text" class="inicioLogin" id="login" name="login" placeholder="usuario">
+                <input type="password" class="inicioContrasenna" id="contrasenna" name="contrasenna" placeholder="************">
+                <div class="inicioBotones">
+                    <input type="button" class="boton-marron" onclick="comprobarSesion()" value="Iniciar Sesión">
+                    <a class="registrate" href="<?= $URL_PATH ?>/registrate">Regístrate</a>
                 </div>
                 <script>
                     var URL_PATH = '<?= $URL_PATH ?>';
@@ -60,7 +50,9 @@
             <?php endif; ?> 
         </div>
     </nav>
+    <div class="contenedor">
     <?php \dawfony\Ti::startBlock("content"); ?>
     <?php \dawfony\Ti::endBlock() ?>
+    </div>
 </body>
 </html>
