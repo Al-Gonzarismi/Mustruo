@@ -367,9 +367,10 @@ class OrmMesa
         return $marcador;
     }
 
-    private function cerrarJugada($situacion) {
+    private function cerrarJugada($situacion)
+    {
         $bd = Klasto::getInstance();
-        $pareja = ($situacion["turno"] + $situacion["mano"] + 1) % 2 == 0? "A" : "B";
+        $pareja = ($situacion["turno"] + $situacion["mano"] + 1) % 2 == 0 ? "A" : "B";
         $params = [$situacion["mesa_id"]];
         switch ($situacion["jugada"]) {
             case 'grande':
@@ -408,7 +409,7 @@ class OrmMesa
             $todoOk = $todoOk || $bd->execute($sql, $params);
         }
         $todoOk = $todoOk && $this->cerrarJugada($situacion) && $this->siguienteJugada($situacion);
-        
+
         $bd->commit();
         return $todoOk;
     }
@@ -438,7 +439,7 @@ class OrmMesa
         $bd->commit();
         return $todoOk;
     }
-    
+
     public function reenvidar($situacion, $login, $envite)
     {
         $turno = ($situacion["turno"] + 1) % 2;
@@ -463,5 +464,92 @@ class OrmMesa
                 $sql = "UPDATE `jugadas` SET `turno` = ?, `punto` = ?, `acumulado` = ?, `rechazo` = ? WHERE `mesa_id` = ?";
         }
         return $bd->execute($sql, $params);
+    }
+
+    public function hayPares($id, $posicion) {
+        $cartas = $this->obtenerCartas($id, $posicion);
+        return  $cartas[0]->valor == $cartas[1]->valor || $cartas[1]->valor == $cartas[2]->valor ||
+        $cartas[2]->valor == $cartas[3]->valor;
+    }
+
+    public function actualizarPares($situacion)
+    {
+        $posicion = ($situacion["mano"] + $situacion["turno"]) % 4;
+        $tienePares = $this->hayPares($situacion["mesa_id"], $posicion);
+        if ($situacion["turno"] == 0) {
+            $situacion["turno"]++;
+            $situacion["pares"] = $tienePares ? "S" : "N";
+            $sql = "UPDATE `jugadas` SET `turno` = ?, `pares` = ? WHERE `mesa_id` = ?";
+        } else if ($situacion["turno"] == 3) {
+            $situacion["turno"] = 0;
+            $situacion["pares"] .= $tienePares ? "S" : "N";
+            $jugable = ($situacion["pares"][0] == 'S' && $situacion["pares"][1] == 'S') ||
+                ($situacion["pares"][0] == 'S' && $situacion["pares"][3] == 'S') ||
+                ($situacion["pares"][2] == 'S' && $situacion["pares"][1] == 'S') ||
+                ($situacion["pares"][2] == 'S' && $situacion["pares"][3] == 'S');
+            if ($jugable) {
+                $situacion["pares"] = "-";
+                $situacion["estado"] = "limpio";
+                $sql = "UPDATE `jugadas` SET `turno` = ?, estado = 'limpio', `pares` = ? WHERE `mesa_id` = ?";
+            } else {
+                $situacion["pares"] = "X";
+                $situacion["jugada"] = "juego";
+                $sql = "UPDATE `jugadas` SET `turno` = ?, `jugada` = 'juego', `pares` = ? WHERE `mesa_id` = ?";
+            }   
+        } else {
+            $situacion["pares"] .= $tienePares ? "S" : "N";
+            $situacion["turno"]++;
+            $sql = "UPDATE `jugadas` SET `turno` = ?, `pares` = ? WHERE `mesa_id` = ?";
+        }
+        $bd = Klasto::getInstance();
+        $params = [$situacion["turno"], $situacion["pares"], $situacion["mesa_id"]];
+        $bd->execute($sql, $params);
+        $situacion["comprobacion"] = $tienePares;
+        return $situacion;
+    }
+
+    public function hayJuego($id, $posicion) {
+        $cartas = $this->obtenerCartas($id, $posicion);
+        $suma = 0;
+        foreach ($cartas as $carta) {
+            $suma += $carta->valor > 10? 10 : $carta->valor;
+        }
+        return $suma > 30;
+    }
+
+    public function actualizarJuego($situacion) {
+        $posicion = ($situacion["mano"] + $situacion["turno"]) % 4;
+        $tieneJuego = $this->hayJuego($situacion["mesa_id"], $posicion);
+        if ($situacion["turno"] == 0) {
+            $situacion["turno"]++;
+            $situacion["juego"] = $tieneJuego ? "S" : "N";
+            $sql = "UPDATE `jugadas` SET `turno` = ?, `juego` = ? WHERE `mesa_id` = ?";
+        } else if ($situacion["turno"] == 3) {
+            $situacion["turno"] = 0;
+            $situacion["juego"] .= $tieneJuego ? "S" : "N";
+            $jugable = ($situacion["juego"][0] == 'S' && $situacion["juego"][1] == 'S') ||
+                ($situacion["juego"][0] == 'S' && $situacion["juego"][3] == 'S') ||
+                ($situacion["juego"][2] == 'S' && $situacion["juego"][1] == 'S') ||
+                ($situacion["juego"][2] == 'S' && $situacion["juego"][3] == 'S');
+            if ($jugable) {
+                $situacion["juego"] = "-";
+                $situacion["punto"] = "X";
+                $sql = "UPDATE `jugadas` SET `turno` = ?, estado = 'limpio', `juego` = ?, `punto` = 'X' WHERE `mesa_id` = ?";
+            } else {
+                $situacion["juego"] = "X";
+                $situacion["jugada"] = "punto";
+                $sql = "UPDATE `jugadas` SET `turno` = ?, `estado` = 'limpio', `jugada` = 'punto', `juego` = ? WHERE `mesa_id` = ?";
+            }   
+            $situacion["estado"] = "limpio";
+        } else {
+            $situacion["juego"] .= $tieneJuego ? "S" : "N";
+            $situacion["turno"]++;
+            $sql = "UPDATE `jugadas` SET `turno` = ?, `juego` = ? WHERE `mesa_id` = ?";
+        }
+        $bd = Klasto::getInstance();
+        $params = [$situacion["turno"], $situacion["juego"], $situacion["mesa_id"]];
+        $bd->execute($sql, $params);
+        $situacion["comprobacion"] = $tieneJuego;
+        return $situacion;
     }
 }

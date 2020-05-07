@@ -91,7 +91,6 @@ function comprobarYMostrarMenu(mano, turno, jugada, estado) {
                 activarSubidaCartas();
             }
         } else {
-            console.log(estado);
             if (estado == "limpio") {
                 $("#nohayEnvite").removeClass("hidden");
             } else if (estado == "envite") {
@@ -214,8 +213,7 @@ $('#rivalizq').click(() => {
 });
 
 //control desconexion
-comprobarYMostrarMenu(situacionEntrada.mano, situacionEntrada.turno, situacionEntrada.jugada, situacionEntrada.estado);
-
+socket.emit('interaccion', situacionEntrada);
 //juego
 $('#mus').click(() => {
     $('#haymus').addClass("hidden");
@@ -379,11 +377,6 @@ $('#noquiero').click(() => {
             }
         });
 });
-
-
-
-
-
 socket.on('actualizarMarcadores', (data) => {
     $("#puntosa").text(data[0].puntos);
     $("#juegosa").text(data[0].juegos);
@@ -399,8 +392,19 @@ socket.on('interaccion', (data) => {
         if (data.turno == 0) {
             //imprimir mensaje en el centro
         }
-        actualizarDatosJugada(data);
-        comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
+        if (data.estado == "comprobando" && usuario.posicion == (data.mano + data.turno) % 4) {
+            fetch(`${path}/api/paresojuego/${mesa.id_mesa}/${usuario.login}`)
+                .then((res) => res.json())
+                .then((res) => {
+                    res.texto = res.comprobacion? "Tengo": "No tengo";
+                    res.login = usuario.login;
+                    socket.emit('interaccion', res);
+                });
+        } else {
+            actualizarDatosJugada(data);
+            comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
+        }
+
     }
 });
 

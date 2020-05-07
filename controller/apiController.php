@@ -328,4 +328,21 @@ class ApiController extends Controller
             echo json_encode($error);
         }
     }
+
+    public function comprobarParesYJuego($id, $login) {
+        header('Content-type: application/json');
+        if ($_SESSION["login"] == $login) {
+            $orm = new OrmMesa;
+            $situacion = $orm->obtenerSituacionActual($id);            
+                if ($situacion["jugada"] == "pares") {
+                    $situacion = $orm->ActualizarPares($situacion);                    
+                } else {
+                    $situacion = $orm->ActualizarJuego($situacion);
+                }
+                echo json_encode($situacion);            
+        } else {
+            $error = "no coincide usuario";
+            echo json_encode($error);
+        }
+    }
 }
