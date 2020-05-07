@@ -466,10 +466,11 @@ class OrmMesa
         return $bd->execute($sql, $params);
     }
 
-    public function hayPares($id, $posicion) {
+    public function hayPares($id, $posicion)
+    {
         $cartas = $this->obtenerCartas($id, $posicion);
         return  $cartas[0]->valor == $cartas[1]->valor || $cartas[1]->valor == $cartas[2]->valor ||
-        $cartas[2]->valor == $cartas[3]->valor;
+            $cartas[2]->valor == $cartas[3]->valor;
     }
 
     public function actualizarPares($situacion)
@@ -492,10 +493,16 @@ class OrmMesa
                 $situacion["estado"] = "limpio";
                 $sql = "UPDATE `jugadas` SET `turno` = ?, estado = 'limpio', `pares` = ? WHERE `mesa_id` = ?";
             } else {
-                $situacion["pares"] = "X";
+                $ganador = strpos($situacion["pares"], 'S');
+                if ($ganador !== false) {
+                    $ganador = ($ganador + $situacion["mano"]) % 2;
+                    $situacion["pares"] = $ganador == 0 ? "A" : "B";
+                } else {
+                    $situacion["pares"] = "X";
+                }
                 $situacion["jugada"] = "juego";
                 $sql = "UPDATE `jugadas` SET `turno` = ?, `jugada` = 'juego', `pares` = ? WHERE `mesa_id` = ?";
-            }   
+            }
         } else {
             $situacion["pares"] .= $tienePares ? "S" : "N";
             $situacion["turno"]++;
@@ -508,16 +515,18 @@ class OrmMesa
         return $situacion;
     }
 
-    public function hayJuego($id, $posicion) {
+    public function hayJuego($id, $posicion)
+    {
         $cartas = $this->obtenerCartas($id, $posicion);
         $suma = 0;
         foreach ($cartas as $carta) {
-            $suma += $carta->valor > 10? 10 : $carta->valor;
+            $suma += $carta->valor > 10 ? 10 : $carta->valor;
         }
         return $suma > 30;
     }
 
-    public function actualizarJuego($situacion) {
+    public function actualizarJuego($situacion)
+    {
         $posicion = ($situacion["mano"] + $situacion["turno"]) % 4;
         $tieneJuego = $this->hayJuego($situacion["mesa_id"], $posicion);
         if ($situacion["turno"] == 0) {
@@ -536,10 +545,18 @@ class OrmMesa
                 $situacion["punto"] = "X";
                 $sql = "UPDATE `jugadas` SET `turno` = ?, estado = 'limpio', `juego` = ?, `punto` = 'X' WHERE `mesa_id` = ?";
             } else {
-                $situacion["juego"] = "X";
-                $situacion["jugada"] = "punto";
-                $sql = "UPDATE `jugadas` SET `turno` = ?, `estado` = 'limpio', `jugada` = 'punto', `juego` = ? WHERE `mesa_id` = ?";
-            }   
+                $ganador = strpos($situacion["juego"], 'S');
+                if ($ganador === false) {
+                    $situacion["juego"] = "X";
+                    $situacion["jugada"] = "punto";
+                    $sql = "UPDATE `jugadas` SET `turno` = ?, `estado` = 'limpio', `jugada` = 'punto', `juego` = ? WHERE `mesa_id` = ?";
+                } else {
+                    $ganador = ($ganador + $situacion["mano"]) % 2;
+                    $situacion["juego"] = $ganador == 0 ? "A" : "B";
+                    $situacion["jugada"] = "mus";
+                    $sql = "UPDATE `jugadas` SET `turno` = ?, `estado` = 'repartir', `jugada` = 'mus', `juego` = ? WHERE `mesa_id` = ?";
+                }
+            }
             $situacion["estado"] = "limpio";
         } else {
             $situacion["juego"] .= $tieneJuego ? "S" : "N";

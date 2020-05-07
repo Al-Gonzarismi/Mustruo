@@ -181,10 +181,11 @@ class ApiController extends Controller
         }
     }
 
-    public function noHayMus($id, $login) {
+    public function noHayMus($id, $login)
+    {
         header('Content-type: application/json');
         if ($_SESSION["login"] == $login) {
-            $orm = new OrmMesa;            
+            $orm = new OrmMesa;
             if ($orm->noHayMus($id)) {
                 $situacion = $orm->obtenerSituacionActual($id);
                 echo json_encode($situacion);
@@ -198,11 +199,12 @@ class ApiController extends Controller
         }
     }
 
-    public function envidar($id, $login, $envite) {
+    public function envidar($id, $login, $envite)
+    {
         header('Content-type: application/json');
         if ($_SESSION["login"] == $login) {
-            $orm = new OrmMesa; 
-            $situacion = $orm->obtenerSituacionActual($id);           
+            $orm = new OrmMesa;
+            $situacion = $orm->obtenerSituacionActual($id);
             if ($orm->envidar($situacion, $login, $envite)) {
                 $situacion = $orm->obtenerSituacionActual($id);
                 echo json_encode($situacion);
@@ -216,13 +218,14 @@ class ApiController extends Controller
         }
     }
 
-    public function pasar($id, $login) {
+    public function pasar($id, $login)
+    {
         header('Content-type: application/json');
         if ($_SESSION["login"] == $login) {
             $orm = new OrmMesa;
             $situacion = $orm->obtenerSituacionActual($id);
             if ($situacion["turno"] == 3) {
-                if ($orm->siguienteJugada( $situacion)) {
+                if ($orm->siguienteJugada($situacion)) {
                     $situacion = $orm->obtenerSituacionActual($id);
                     echo json_encode($situacion);
                 } else {
@@ -244,11 +247,12 @@ class ApiController extends Controller
         }
     }
 
-    public function echarOrdago($id, $login) {
+    public function echarOrdago($id, $login)
+    {
         header('Content-type: application/json');
         if ($_SESSION["login"] == $login) {
-            $orm = new OrmMesa; 
-            $situacion = $orm->obtenerSituacionActual($id);           
+            $orm = new OrmMesa;
+            $situacion = $orm->obtenerSituacionActual($id);
             if ($orm->echarOrdago($situacion, $login)) {
                 $situacion = $orm->obtenerSituacionActual($id);
                 echo json_encode($situacion);
@@ -262,7 +266,8 @@ class ApiController extends Controller
         }
     }
 
-    public function noQuerer($id, $login) {
+    public function noQuerer($id, $login)
+    {
         header('Content-type: application/json');
         if ($_SESSION["login"] == $login) {
             $orm = new OrmMesa;
@@ -277,7 +282,7 @@ class ApiController extends Controller
                     echo json_encode($error);
                 }
             } else {
-                $situacion["turno"]+= 2;
+                $situacion["turno"] += 2;
                 if ($orm->actualizarSituacion($id, $situacion["turno"])) {
                     echo json_encode($situacion);
                 } else {
@@ -291,7 +296,8 @@ class ApiController extends Controller
         }
     }
 
-    public function querer($id, $login) {
+    public function querer($id, $login)
+    {
         header('Content-type: application/json');
         if ($_SESSION["login"] == $login) {
             $orm = new OrmMesa;
@@ -304,18 +310,19 @@ class ApiController extends Controller
                     $error = "falla aceptacion envite";
                     echo json_encode($error);
                 }
-            } 
+            }
         } else {
             $error = "no coincide usuario";
             echo json_encode($error);
         }
     }
 
-    public function reenvidar($id, $login, $envite) {
+    public function reenvidar($id, $login, $envite)
+    {
         header('Content-type: application/json');
         if ($_SESSION["login"] == $login) {
-            $orm = new OrmMesa; 
-            $situacion = $orm->obtenerSituacionActual($id);           
+            $orm = new OrmMesa;
+            $situacion = $orm->obtenerSituacionActual($id);
             if ($orm->reenvidar($situacion, $login, $envite)) {
                 $situacion = $orm->obtenerSituacionActual($id);
                 echo json_encode($situacion);
@@ -329,17 +336,34 @@ class ApiController extends Controller
         }
     }
 
-    public function comprobarParesYJuego($id, $login) {
+    public function comprobarParesYJuego($id, $login)
+    {
         header('Content-type: application/json');
         if ($_SESSION["login"] == $login) {
             $orm = new OrmMesa;
-            $situacion = $orm->obtenerSituacionActual($id);            
-                if ($situacion["jugada"] == "pares") {
-                    $situacion = $orm->ActualizarPares($situacion);                    
-                } else {
-                    $situacion = $orm->ActualizarJuego($situacion);
-                }
-                echo json_encode($situacion);            
+            $situacion = $orm->obtenerSituacionActual($id);
+            if ($situacion["jugada"] == "pares") {
+                $situacion = $orm->ActualizarPares($situacion);
+            } else {
+                $situacion = $orm->ActualizarJuego($situacion);
+            }
+            echo json_encode($situacion);
+        } else {
+            $error = "no coincide usuario";
+            echo json_encode($error);
+        }
+    }
+
+    public function verificarParJuego($id, $login)
+    {
+        header('Content-type: application/json');
+        if ($_SESSION["login"] == $login) {
+            $orm = new OrmMesa;
+            $situacion = $orm->obtenerSituacionActual($id);
+            $posicion = ($situacion["mano"] + $situacion["turno"]) % 4;
+            $situacion["comprobacion"] = $situacion["jugada"] == "pares" ? $orm->hayPares($situacion["mesa_id"], $posicion) :
+                $orm->hayJuego($situacion["mesa_id"], $posicion);
+            echo json_encode($situacion);
         } else {
             $error = "no coincide usuario";
             echo json_encode($error);

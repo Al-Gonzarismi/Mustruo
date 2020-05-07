@@ -81,6 +81,16 @@ function actualizarDatosJugada(situacion) {
     $("#punto").text(situacion.punto);
 }
 
+function mostrarMenu(estado) {
+    if (estado == "limpio") {
+        $("#nohayEnvite").removeClass("hidden");
+    } else if (estado == "envite") {
+        $("#hayEnvite").removeClass("hidden");
+    } else if (estado == "ordago") {
+        $("#responderOrdago").removeClass("hidden");
+    }
+}
+
 function comprobarYMostrarMenu(mano, turno, jugada, estado) {
     if (usuario.posicion == (mano + turno) % 4) {
         if (jugada == "mus") {
@@ -90,14 +100,42 @@ function comprobarYMostrarMenu(mano, turno, jugada, estado) {
                 $("#divDescartes").removeClass("hidden");
                 activarSubidaCartas();
             }
+        } else if (jugada == "pares" || jugada == "juego") {
+            fetch(`${path}/api/menuparjuego/${mesa.id_mesa}/${usuario.login}`)
+                .then((res) => res.json())
+                .then((res) => {
+                    console.log(res);
+                    if (res.comprobacion) {
+                        mostrarMenu(estado);
+                    } else {
+                        if (res.estado == "limpio") {
+                            fetch(`${path}/api/paso/${mesa.id_mesa}/${usuario.login}`)
+                                .then((res) => res.json())
+                                .then((res) => {
+                                    if (res.jugada == "mus") {
+                                        socket.emit('showdown', res);
+                                    } else {
+                                        socket.emit('interaccion', res);
+                                    }
+                                });
+                        } else {
+                            fetch(`${path}/api/noquiero/${mesa.id_mesa}/${usuario.login}`)
+                                .then((res) => res.json())
+                                .then((res) => {                                    
+                                    if (typeof res.marcadores !== 'undefined') {
+                                        socket.emit('actualizarMarcadores', res.marcadores);
+                                    }
+                                    if (res.jugada == "mus") {
+                                        socket.emit('showdown', res);// programar al final
+                                    } else {
+                                        socket.emit('interaccion', res);
+                                    }
+                                });
+                        }
+                    }
+                });
         } else {
-            if (estado == "limpio") {
-                $("#nohayEnvite").removeClass("hidden");
-            } else if (estado == "envite") {
-                $("#hayEnvite").removeClass("hidden");
-            } else if (estado == "ordago") {
-                $("#responderOrdago").removeClass("hidden");
-            }
+            mostrarMenu(estado);
         }
     }
 }
@@ -214,6 +252,7 @@ $('#rivalizq').click(() => {
 
 //control desconexion
 socket.emit('interaccion', situacionEntrada);
+
 //juego
 $('#mus').click(() => {
     $('#haymus').addClass("hidden");
@@ -264,7 +303,7 @@ $('#paso').click(() => {
             res.texto = `Paso`;
             res.login = usuario.login;
             if (res.jugada == "mus") {
-                socket.emit('showdown', res);// programar al final
+                socket.emit('showdown', res);
             } else {
                 socket.emit('interaccion', res);
             }
@@ -280,6 +319,7 @@ $('#envidar').click(() => {
             res.texto = `Envido ${envite}`;
             res.login = usuario.login;
             $('#textoEnvidar').text(2);
+            $('#envidar').text("Envido 2");
             socket.emit('interaccion', res);
         });
 });
@@ -306,7 +346,7 @@ $('#haynoquiero').click(() => {
                 socket.emit('actualizarMarcadores', res.marcadores);
             }
             if (res.jugada == "mus") {
-                socket.emit('showdown', res);// programar al final
+                socket.emit('showdown', res);
             } else {
                 socket.emit('interaccion', res);
             }
@@ -321,7 +361,7 @@ $('#hayquiero').click(() => {
             res.texto = `Quiero`;
             res.login = usuario.login;
             if (res.jugada == "mus") {
-                socket.emit('showdown', res);// programar al final
+                socket.emit('showdown', res);
             } else {
                 socket.emit('interaccion', res);
             }
@@ -337,6 +377,7 @@ $('#hayenvidar').click(() => {
             res.texto = `${envite} más!!`;
             res.login = usuario.login;
             $('#haytextoEnvidar').text(2);
+            $('#hayEnvidar').text("Envido 2");
             socket.emit('interaccion', res);
         });
 });
@@ -357,7 +398,7 @@ $('#quiero').click(() => {
     let datos = new Object();
     datos.login = usuario.login;
     datos.texto = "Quiero";
-    socket.emit('showdown', res);// programar al final
+    socket.emit('showdown', datos);// programar al final
 });
 
 $('#noquiero').click(() => {
@@ -371,7 +412,7 @@ $('#noquiero').click(() => {
                 socket.emit('actualizarMarcadores', res.marcadores);
             }
             if (res.jugada == "mus") {
-                socket.emit('showdown', res);// programar al final
+                socket.emit('showdown', res);
             } else {
                 socket.emit('interaccion', res);
             }
@@ -388,7 +429,9 @@ socket.on('actualizarMarcadores', (data) => {
 
 socket.on('interaccion', (data) => {
     if (data.mesa_id == mesa.id_mesa) {
-        //imprimir bocadillo con data.texto y data.login
+        if (typeof data.texto !== 'undefined') {
+            //imprimir bocadillo con data.texto y data.login
+        }
         if (data.turno == 0) {
             //imprimir mensaje en el centro
         }
@@ -396,16 +439,23 @@ socket.on('interaccion', (data) => {
             fetch(`${path}/api/paresojuego/${mesa.id_mesa}/${usuario.login}`)
                 .then((res) => res.json())
                 .then((res) => {
-                    res.texto = res.comprobacion? "Tengo": "No tengo";
+                    res.texto = res.comprobacion ? "Tengo" : "No tengo";
                     res.login = usuario.login;
-                    socket.emit('interaccion', res);
+                    if (res.jugada == "mus") {
+                        socket.emit('showdown', res);
+                    } else {
+                        socket.emit('interaccion', res);
+                    }
                 });
         } else {
-            actualizarDatosJugada(data);
             comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
         }
-
+        actualizarDatosJugada(data);
     }
 });
+
+socket.on('showdown', (data) =>{
+    console.log("programa el showdown copon");
+})
 
 
