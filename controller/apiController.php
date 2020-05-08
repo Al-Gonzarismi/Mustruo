@@ -369,4 +369,31 @@ class ApiController extends Controller
             echo json_encode($error);
         }
     }
+
+    public function repartirNuevaMano($id) {
+        header('Content-type: application/json');
+        $orm = new OrmMesa;
+        $situacion = $orm->obtenerSituacionActual($id);
+        if ($situacion["estado"] == "repartir") {
+            $orm->recogerCartas($id);
+            $orm->empezarMano($id, $situacion["mano"]);
+            $situacion = $orm->obtenerSituacionActual($id);
+            echo json_encode($situacion);
+        } else {
+            $error = "reparto incorrecto";
+            echo json_encode($error);
+        }
+    }
+
+    public function verMisCartas($id, $login) {
+        header('Content-type: application/json');
+        $orm = new OrmMesa;
+        if ($_SESSION["login"] == $login) {
+            $cartas = $orm->obtenerCartas($id, $orm->obtenerPosicion($login));
+            echo json_encode($cartas);
+        } else {
+            $error = "no coincide usuario";
+            echo json_encode($error);
+        }
+    }
 }

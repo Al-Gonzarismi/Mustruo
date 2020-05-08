@@ -70,6 +70,10 @@ Macaw::get($URL_PATH . '/api/paresojuego/(:any)/(:any)', "controller\apiControll
 
 Macaw::get($URL_PATH . '/api/menuparjuego/(:any)/(:any)', "controller\apiController@verificarParJuego");
 
+Macaw::get($URL_PATH . '/api/repartir/(:any)', "controller\apiController@repartirNuevaMano");
+
+Macaw::get($URL_PATH . '/api/cartas/(:any)/(:any)', "controller\apiController@verMisCartas");
+
 Macaw::error(function() {
     echo '404 :: Not Found';
 });

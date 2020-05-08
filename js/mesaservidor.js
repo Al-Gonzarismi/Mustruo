@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const fetch= require('node-fetch');
 
 //settings
 app.set('port', 3333);
@@ -56,6 +57,14 @@ io.on('connection', (socket) => {
 
     socket.on('actualizarMarcadores', (data) => {
         io.emit('actualizarMarcadores', data);
+    })
+
+    socket.on('repartir', (data) => {
+        fetch(`http://Localhost/Mustruo/api/repartir/${data}`)
+        .then((res) => res.json())
+        .then((res) => {
+            io.emit('repartir', res);
+        });
     })
 
     socket.on('showdown', (data) => {

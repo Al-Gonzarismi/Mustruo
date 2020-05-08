@@ -41,13 +41,17 @@ class OrmMesa
     public function empezarMano($id, $mano = 0)
     {
         $bd = Klasto::getInstance();
-        $params = [$id];
-        $sql = "DELETE FROM `jugadas` WHERE mesa_id = ?";
-        $bd->execute($sql, $params);
-        $params = [$id, $mano, 0];
-        $sql = "INSERT INTO `jugadas` (`mesa_id`, `mano`, `turno`) VALUES(?, ?, ?)";
+        $params = [$mano, $id];
+        $sql = "UPDATE `jugadas` SET `mano` = ?, `turno` = 0, `estado` = 'menu', `jugada` = 'mus', `grande` = '-', `chica` = '-', `pares` = '-', `juego` = '-', `punto` = '-', `acumulado` = 0, `rechazo` = 0 WHERE mesa_id = ?";
         $bd->execute($sql, $params);
         $this->repartirCartasIniciales($id);
+    }
+
+    public function recogerCartas($id) {
+        $bd = Klasto::getInstance();
+        $params = [$id];
+        $sql = "UPDATE `cartas` SET `estado` = 4 WHERE `mesa_id` = ?";
+        $bd->execute($sql, $params);   
     }
 
     public function generarMarcadores($id)
@@ -73,9 +77,12 @@ class OrmMesa
         $params = [$mesa->login, $mesa->id_mesa];
         $sql = "INSERT INTO `usuarios_por_mesa` (`login`, `mesa_id`, `pareja_id`, `posicion`) VALUES (?, ?, 0, 0)";
         $bd->execute($sql, $params);
+        $params = [$mesa->id_mesa, 0, 0];
+        $sql = "INSERT INTO `jugadas` (`mesa_id`, `mano`, `turno`) VALUES(?, ?, ?)";
+        $bd->execute($sql, $params);
         $this->generarBaraja($mesa->id_mesa);
         $this->generarMarcadores($mesa->id_mesa);
-        $this->empezarMano($mesa->id_mesa);
+        $this->repartirCartasIniciales($mesa->id_mesa);
         $bd->commit();
     }
 
@@ -310,8 +317,8 @@ class OrmMesa
                 $sql = "UPDATE `jugadas` SET `estado` = 'comprobando', `turno` = 0, `jugada` = 'juego', `acumulado` = 0, `rechazo` = 0 WHERE `mesa_id` = ?";
                 break;
             default:
-                $params = [($situacion["mano"] + 1) % 4, $situacion["mesa_id"]];
-                $sql = "UPDATE `jugadas` SET `estado` = 'repartir', `turno` = 0, `jugada` = 'mus', `mano` = ?, `acumulado` = 0, `rechazo` = 0 WHERE `mesa_id` = ?";
+                $params = [$situacion["mesa_id"]];
+                $sql = "UPDATE `jugadas` SET `estado` = 'repartir', `turno` = 0, `jugada` = 'mus', `acumulado` = 0, `rechazo` = 0 WHERE `mesa_id` = ?";
         }
         return $bd->execute($sql, $params);
     }

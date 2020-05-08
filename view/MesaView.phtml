@@ -75,19 +75,19 @@
                     <button id="menos" class="btn boton-marron mas centrarTexto"><span>-</span></button>
                     <div class="centrarTexto" id="textoEnvidar"><span>2</span></div>
                     <button id="mas" class="btn boton-marron menos centrarTexto"><span>+</span></button>
-                    <button id="envidar" class="btn boton-marron centrarTexto"><span>Paso</span></button>
-                    <button id="ordago" class="btn boton-marron centrarTexto"><span>Envido 2</span></button>
-                    <button id="paso" class="btn boton-marron centrarTexto"><span>Órdago</span></button>
+                    <button id="paso" class="btn boton-marron centrarTexto"><span>Paso</span></button>
+                    <button id="envidar" class="btn boton-marron centrarTexto"><span>Envido 2</span></button>
+                    <button id="ordago" class="btn boton-marron centrarTexto"><span>Órdago</span></button>
                 </div>
                 <!--Hay Envite-->
                 <div class="hidden" id="hayEnvite">
                     <button id="haymenos" class="btn boton-marron menos centrarTexto"><span>-</span></button>
                     <div class="centrarTexto textoEnvidar" id="haytextoEnvidar"><span>2</span></div>
                     <button id="haymas" class="btn boton-marron mas centrarTexto"><span>+</span></button>
-                    <button id="hayenvidar" class="btn boton-marron centrarTexto"><span>No Quiero</span></button>
-                    <button id="hayordago" class="btn boton-marron centrarTexto"><span>Quiero</span></button>
-                    <button id="hayquiero" class="btn boton-marron centrarTexto"><span>Envido 2</span></button>
-                    <button id="haynoquiero" class="btn boton-marron centrarTexto"><span>Órdago</span></button>
+                    <button id="haynoquiero" class="btn boton-marron centrarTexto"><span>No Quiero</span></button>
+                    <button id="hayquiero" class="btn boton-marron centrarTexto"><span>Quiero</span></button>
+                    <button id="hayenvidar" class="btn boton-marron centrarTexto"><span>Envido 2</span></button>
+                    <button id="hayordago" class="btn boton-marron centrarTexto"><span>Órdago</span></button>
                 </div>
                 <!--Ordago-->
                 <div class="hidden" id="responderOrdago">
@@ -103,8 +103,8 @@
                 <div class="centrarTexto"><span class="pointer" id="compannero"><?= $compannero->login ?></span></div>
             </div>
             <!--Bocadillo-->
-            <div class="bocadillo bocataCompi hidden">
-                <div class="globo centrarTexto"><span id="bocatacompi"><span></div>
+            <div class="bocadillo bocataCompi hidden" id="bocatacompi">
+                <div class="globo centrarTexto"><span id="textocompi"><span></div>
                 <div class="piquitoIzq"></div>
             </div>
             <!--RivalDer-->
@@ -114,8 +114,8 @@
                 <div class="centrarTexto"><span class="pointer" id="rivalder"><?= $rivalDer->login ?></span></div>
             </div>
             <!--Bocadillo-->
-            <div class="bocadillo bocataRivalDer hidden">
-                <div class="globo centrarTexto"><span id="bocatarivalder"><span></div>
+            <div class="bocadillo bocataRivalDer hidden" id="bocatarivalder">
+                <div class="globo centrarTexto"><span id="textorivalder"><span></div>
                 <div class="piquitoIzq"></div>
             </div>
             <!--RivalIIzq-->
@@ -125,14 +125,14 @@
                 <div class="centrarTexto"><span class="pointer" id="rivalizq"><?= $rivalIzq->login ?></span></div>
             </div>
             <!--Bocadillo-->
-            <div class="bocadillo bocataRivalIzq hidden">
-                <div class="globo centrarTexto"><span id="bocatarivalizq"><span></div>
+            <div class="bocadillo bocataRivalIzq hidden" id="bocatarivalizq">
+                <div class="globo centrarTexto"><span id="textorivalizq"><span></div>
                 <div class="piquitoDer"></div>
             </div>
             <!--Mesa-->
             <div class="mesaJuego">
             <!--Repartir-->
-                <button class="boton-marron" id="repartir">Repartir</button>
+                <button class="boton-marron hidden" id="repartir">Repartir</button>
                 <!--Tapete-->
                 <div class="tapete"></div>
                 <!--Reparto-->
@@ -205,7 +205,7 @@
                     <img class="hidden" id="carta4" src="<?= $URL_PATH ?>/media/baraja/<?=$cartas[3]->imagen?>">
                 </div>
                 <!--Mano-->
-                <img class="mano manoUsuario hidden" id="mano<?=$usuario->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                <img class="mano manoUsuario hidden" id="manousuario" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 <!--Compi-->
                 <!--Cartas-->
                 <div class="compiCartas cartasHorizontal" id="compi">
@@ -215,7 +215,7 @@
                     <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="compi4">
                 </div>
                 <!--Mano-->
-                <img class="mano manoCompi hidden" id="mano<?=$compi->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                <img class="mano manoCompi hidden" id="manocompi" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 <!--Rival Izquierda-->
                 <!--Cartas-->
                 <div class="rivalizqCartas cartasVertical" id="rivalizq">
@@ -225,7 +225,7 @@
                     <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="rivalizq4">
                 </div>
                 <!--Mano-->
-                <img class="mano manoRivalIzq hidden" id="mano<?=$rivalIzq->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                <img class="mano manoRivalIzq hidden" id="manorivalizq" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 <!--Rival Derecha-->
                 <!--Cartas-->
                 <div class="rivalderCartas cartasVertical" id="rivalder">
@@ -235,7 +235,7 @@
                     <img class="hidden" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg" id="rivalder4">
                 </div>
                 <!--Mano-->
-                <img class="mano manoRivalDer" id="mano<?=$rivalDer->login?>" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
+                <img class="mano manoRivalDer hidden" id="manorivalder" src="<?= $URL_PATH ?>/media/baraja/reverso.jpg">
                 <!--Descartes-->
                 <div class="posDescartes centrarTexto hidden" id="divDescartes">
                     <button class="boton-marron centrarTexto" id="descartar"><span>Descartar</span></button>
@@ -306,7 +306,6 @@
         var cartas = <?=json_encode($cartas)?>;
     </script>
     <script src="http://localhost:3333/socket.io/socket.io.js"></script>
-    <script src="<?= $URL_PATH ?>/js/repartir.js"></script>
     <script src="<?= $URL_PATH ?>/js/mesa.js"></script>
 </body>
 </html>

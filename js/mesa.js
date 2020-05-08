@@ -43,6 +43,66 @@ function renderStats(login) {
         });
 }
 
+function repartoDerecha(cartas) {
+    cartas[0].setAttribute('class', 'ocultar aparecer unSegundo')
+    cartas['1'].setAttribute('class', 'ocultar aparecer cincoSegundos')
+    cartas['2'].setAttribute('class', 'ocultar aparecer nueveSegundos')
+    cartas['3'].setAttribute('class', 'ocultar aparecer treceSegundos')
+}
+function repartoCompi(cartas) {
+    cartas['0'].setAttribute('class', 'ocultar aparecer dosSegundos')
+    cartas['1'].setAttribute('class', 'ocultar aparecer seisSegundos')
+    cartas['2'].setAttribute('class', 'ocultar aparecer diezSegundos')
+    cartas['3'].setAttribute('class', 'ocultar aparecer catorceSegundos')
+}
+function repartoIzq(cartas) {
+    cartas['0'].setAttribute('class', 'ocultar aparecer tresSegundos')
+    cartas['1'].setAttribute('class', 'ocultar aparecer sieteSegundos')
+    cartas['2'].setAttribute('class', 'ocultar aparecer onceSegundos')
+    cartas['3'].setAttribute('class', 'ocultar aparecer quinceSegundos')
+}
+function repartoUsuario(cartas) {
+    cartas['0'].setAttribute('class', 'ocultar aparecer cuatroSegundos')
+    cartas['1'].setAttribute('class', 'ocultar aparecer ochoSegundos')
+    cartas['2'].setAttribute('class', 'ocultar aparecer doceSegundos')
+    cartas['3'].setAttribute('class', 'ocultar aparecer dieciseisSegundos')
+}
+function repartir() {
+    const manoUsuario = $('.manoUsuario');
+    const manoRivalDer = $('.manoRivalDer');
+    const manoRivalIzq = $('.manoRivalIzq');
+    const manoCompi = $('.manoCompi');
+    var usuarioCartas = $('.misCartas').children();
+    var compiCartas = $('.compiCartas').children();
+    var rivalDerCartas = $('.rivalderCartas').children();
+    var rivalIzqCartas = $('.rivalizqCartas').children();
+    if (!manoRivalDer.hasClass('hidden')) {
+        $('#deUsu').show();
+        repartoDerecha(rivalDerCartas);
+        repartoCompi(compiCartas);
+        repartoIzq(rivalIzqCartas);
+        repartoUsuario(usuarioCartas);
+    } else if (!manoCompi.hasClass('hidden')) {
+        $('#deRivalDer').show();
+        repartoDerecha(compiCartas);
+        repartoCompi(rivalIzqCartas);
+        repartoIzq(usuarioCartas);
+        repartoUsuario(rivalDerCartas);
+    } else if (!manoUsuario.hasClass('hidden')) {
+        $('#deRivalIzq').show();
+        repartoDerecha(usuarioCartas);
+        repartoCompi(rivalDerCartas);
+        repartoIzq(compiCartas);
+        repartoUsuario(rivalIzqCartas);
+    } else if (!manoRivalIzq.hasClass('hidden')) {
+        $('#deCompi').show();
+        repartoDerecha(rivalIzqCartas);
+        repartoCompi(usuarioCartas);
+        repartoIzq(rivalDerCartas);
+        repartoUsuario(compiCartas);
+    }
+}
+
 function subirCartas() {
     if ($(this).hasClass('subirCarta')) {
         $(this).removeClass('subirCarta');
@@ -91,12 +151,88 @@ function mostrarMenu(estado) {
     }
 }
 
+function ocultarCartas() {
+    for (let i = 1; i <= 4; i++) {
+        $(`#carta${i}`).addClass("hidden");
+        $(`#compi${i}`).addClass("hidden");
+        $(`#rivalizq${i}`).addClass("hidden");
+        $(`#rivalder${i}`).addClass("hidden");
+    }
+}
+
+function mostrarCartas() {
+    for (let i = 1; i <= 4; i++) {
+        $(`#carta${i}`).removeClass("hidden");
+        $(`#compi${i}`).removeClass("hidden");
+        $(`#rivalizq${i}`).removeClass("hidden");
+        $(`#rivalder${i}`).removeClass("hidden");
+    }
+}
+
+function colocarBaraja(mano) {
+    switch (mano) {
+        case usuario.posicion:
+            $("#manousuario").removeClass("hidden");
+            break;
+        case compannero.posicion:
+            $("#manocompi").removeClass("hidden");
+            break;
+        case rivalIzq.posicion:
+            $("#manorivalizq").removeClass("hidden");
+            break;
+        case rivalDer.posicion:
+            $("#manorivalder").removeClass("hidden");
+            break;
+    }
+}
+
+function ocultarBaraja(mano) {
+    switch (mano) {
+        case usuario.posicion:
+            $("#manousuario").addClass("hidden");
+            break;
+        case compannero.posicion:
+            $("#manocompannero").addClass("hidden");
+            break;
+        case rivalIzq.posicion:
+            $("#manorivalizq").addClass("hidden");
+            break;
+        case rivalIzq.posicion:
+            $("#manorivalder").addClass("hidden");
+            break;
+    }
+}
+
+function colocarReversos() {
+    for (let i = 1; i <= 4; i++) {
+        $(`#compi${i}`).attr('src', `${path}/media/baraja/reverso.jpg`);
+        $(`#rivalizq${i}`).attr('src', `${path}/media/baraja/reverso.jpg`);
+        $(`#rivalder${i}`).attr('src', `${path}/media/baraja/reverso.jpg`);
+    }
+}
+
+function colocarMisCartas(cartas) {
+    for (let i = 1; i <= 4; i++) {
+        $(`#carta${i}`).attr('src', `${path}/media/baraja/${cartas[i - 1].imagen}`);
+    }
+}
+
 function comprobarYMostrarMenu(mano, turno, jugada, estado) {
-    if (usuario.posicion == (mano + turno) % 4) {
+    if (estado != "repartir" && $("#carta1").hasClass("hidden")) {
+        mostrarCartas();
+    }
+    if (estado == "repartir") {
+        if (!$("#carta1").hasClass("hidden")) {
+            ocultarCartas();
+        }
+        if ((mano + 3) % 4 == usuario.posicion) {
+            $("#repartir").removeClass("hidden");
+        }
+    } else if (usuario.posicion == (mano + turno) % 4) {
         if (jugada == "mus") {
             if (estado == "menu") {
                 $("#haymus").removeClass("hidden");
-            } else {
+            } else if (estado == "descartando") {
                 $("#divDescartes").removeClass("hidden");
                 activarSubidaCartas();
             }
@@ -104,7 +240,6 @@ function comprobarYMostrarMenu(mano, turno, jugada, estado) {
             fetch(`${path}/api/menuparjuego/${mesa.id_mesa}/${usuario.login}`)
                 .then((res) => res.json())
                 .then((res) => {
-                    console.log(res);
                     if (res.comprobacion) {
                         mostrarMenu(estado);
                     } else {
@@ -121,7 +256,7 @@ function comprobarYMostrarMenu(mano, turno, jugada, estado) {
                         } else {
                             fetch(`${path}/api/noquiero/${mesa.id_mesa}/${usuario.login}`)
                                 .then((res) => res.json())
-                                .then((res) => {                                    
+                                .then((res) => {
                                     if (typeof res.marcadores !== 'undefined') {
                                         socket.emit('actualizarMarcadores', res.marcadores);
                                     }
@@ -161,6 +296,28 @@ function comprobarDescartes() {
     }
     descartes += contador;
     return descartes;
+}
+
+function mostrarBocadillo(login, texto) {
+    var contenido;
+    var bocadillo
+    if (login == compannero.login) {
+        bocadillo = $("#bocatacompi");
+        contenido =  $("#textocompi");
+    } else if(login == rivalDer.login) {
+        bocadillo = $("#bocatarivalder");
+        contenido =  $("#textorivalder");
+    } else if (login == rivalIzq.login){
+        bocadillo = $("#bocatarivalizq");
+        contenido =  $("#textorivalizq");
+    }
+    if (typeof contenido !== 'undefined') {
+        bocadillo.removeClass("hidden");
+        contenido.text(texto);
+        setTimeout(()=> {
+            bocadillo.addClass("hidden");
+        }, 2000);
+    }
 }
 
 // Rango Envites
@@ -252,6 +409,28 @@ $('#rivalizq').click(() => {
 
 //control desconexion
 socket.emit('interaccion', situacionEntrada);
+colocarBaraja(situacionEntrada.mano);
+
+//repartir
+$('#repartir').click(() => {
+    $('#repartir').addClass("hidden");
+    socket.emit('repartir', mesa.id_mesa);
+});
+
+socket.on('repartir', (data) => {
+    ocultarCartas();
+    colocarReversos();
+    fetch(`${path}/api/cartas/${mesa.id_mesa}/${usuario.login}`)
+        .then((res) => res.json())
+        .then((res) => {
+            colocarMisCartas(res);
+            repartir();
+            setTimeout(() => {
+                comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
+            }, 8000);
+            //comprobar que los tiempos cuadran
+        });
+})
 
 //juego
 $('#mus').click(() => {
@@ -397,7 +576,7 @@ $('#quiero').click(() => {
     $('#responderOrdago').addClass("hidden");
     let datos = new Object();
     datos.login = usuario.login;
-    datos.texto = "Quiero";
+    datos.texto = "Muestrame tu RNG";
     socket.emit('showdown', datos);// programar al final
 });
 
@@ -429,33 +608,43 @@ socket.on('actualizarMarcadores', (data) => {
 
 socket.on('interaccion', (data) => {
     if (data.mesa_id == mesa.id_mesa) {
-        if (typeof data.texto !== 'undefined') {
-            //imprimir bocadillo con data.texto y data.login
-        }
         if (data.turno == 0) {
             //imprimir mensaje en el centro
+            $("#tapetej").text(data.jugada.toUpperCase());
+            $("#tapetej").removeClass("hidden");
+
         }
-        if (data.estado == "comprobando" && usuario.posicion == (data.mano + data.turno) % 4) {
-            fetch(`${path}/api/paresojuego/${mesa.id_mesa}/${usuario.login}`)
-                .then((res) => res.json())
-                .then((res) => {
-                    res.texto = res.comprobacion ? "Tengo" : "No tengo";
-                    res.login = usuario.login;
-                    if (res.jugada == "mus") {
-                        socket.emit('showdown', res);
-                    } else {
-                        socket.emit('interaccion', res);
-                    }
-                });
-        } else {
-            comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
+        if (typeof data.texto !== 'undefined') {
+            //imprimir bocadillo con data.texto y data.login
+            if (data.login != usuario.login) {
+                mostrarBocadillo(data.login, data.texto);
+            }
         }
-        actualizarDatosJugada(data);
+        setTimeout(() => {
+            if (data.estado == "comprobando" && usuario.posicion == (data.mano + data.turno) % 4) {
+                fetch(`${path}/api/paresojuego/${mesa.id_mesa}/${usuario.login}`)
+                    .then((res) => res.json())
+                    .then((res) => {
+                        res.texto = res.comprobacion ? "Tengo" : "No tengo";
+                        res.login = usuario.login;
+                        if (res.jugada == "mus") {
+                            socket.emit('showdown', res);
+                        } else {
+                            socket.emit('interaccion', res);
+                        }
+                    });
+            } else {
+                comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
+            }
+            actualizarDatosJugada(data);
+        }, 1500);
+
     }
 });
 
-socket.on('showdown', (data) =>{
+socket.on('showdown', (data) => {
     console.log("programa el showdown copon");
+    comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
 })
 
 
