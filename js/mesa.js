@@ -303,21 +303,41 @@ function mostrarBocadillo(login, texto) {
     var bocadillo
     if (login == compannero.login) {
         bocadillo = $("#bocatacompi");
-        contenido =  $("#textocompi");
-    } else if(login == rivalDer.login) {
+        contenido = $("#textocompi");
+    } else if (login == rivalDer.login) {
         bocadillo = $("#bocatarivalder");
-        contenido =  $("#textorivalder");
-    } else if (login == rivalIzq.login){
+        contenido = $("#textorivalder");
+    } else if (login == rivalIzq.login) {
         bocadillo = $("#bocatarivalizq");
-        contenido =  $("#textorivalizq");
+        contenido = $("#textorivalizq");
     }
     if (typeof contenido !== 'undefined') {
         bocadillo.removeClass("hidden");
         contenido.text(texto);
-        setTimeout(()=> {
+        setTimeout(() => {
             bocadillo.addClass("hidden");
         }, 2000);
     }
+}
+
+function actualizarMarcadores(data) {
+    $("#puntosa").text(data[0].puntos);
+    $("#juegosa").text(data[0].juegos);
+    $("#vacasa").text(data[0].vacas);
+    $("#puntosb").text(data[1].puntos);
+    $("#juegosb").text(data[1].juegos);
+    $("#vacasb").text(data[1].vacas);
+}
+
+function mostrarMensajesShowdown(data, contador) {
+    setTimeout(() => {
+        if (contador < data.contador) {
+            $("#tapetes").text(data.textos[contador]);
+            actualizarMarcadores(data.marcadores[contador]);
+            contador++;
+            mostrarMensajesShowdown(data, contador);
+        }
+    }, 1500 * contador);
 }
 
 // Rango Envites
@@ -420,6 +440,7 @@ $('#repartir').click(() => {
 socket.on('repartir', (data) => {
     ocultarCartas();
     colocarReversos();
+    colocarBaraja(data.mano);
     fetch(`${path}/api/cartas/${mesa.id_mesa}/${usuario.login}`)
         .then((res) => res.json())
         .then((res) => {
@@ -438,9 +459,13 @@ $('#mus').click(() => {
     fetch(`${path}/api/mus/${mesa.id_mesa}/${usuario.login}`)
         .then((res) => res.json())
         .then((res) => {
-            res.texto = "dame mus";
-            res.login = usuario.login;
-            socket.emit('interaccion', res);
+            let datos = new Object();
+            datos.texto = "Dame mus";
+            datos.login = usuario.login;
+            socket.emit('mostrarbocadillo', datos);
+            setTimeout(() => {
+                socket.emit('interaccion', res);
+            }, 1500);
         });
 });
 
@@ -451,15 +476,20 @@ $('#descartar').click(() => {
     fetch(`${path}/api/descartar/${mesa.id_mesa}/${usuario.login}/${descartes}`)
         .then((res) => res.json())
         .then((res) => {
-            res.texto = res.descartes > 0 ? `Dame ${res.descartes} cartas` : "Me quedo servido";
-            res.login = usuario.login;
+            let datos = new Object();
+            datos.texto = res.descartes > 0 ? `Dame ${res.descartes} cartas` : "Me quedo servido";
+            datos.login = usuario.login;
             cartas = res.cartas;
             delete res.cartas;
             $('#carta1').attr('src', `${path}/media/baraja/${cartas[0].imagen}`);
             $('#carta2').attr('src', `${path}/media/baraja/${cartas[1].imagen}`);
             $('#carta3').attr('src', `${path}/media/baraja/${cartas[2].imagen}`);
             $('#carta4').attr('src', `${path}/media/baraja/${cartas[3].imagen}`);
-            socket.emit('interaccion', res);
+            socket.emit('mostrarbocadillo', datos);
+            setTimeout(() => {
+                socket.emit('interaccion', res);
+            }, 1500);
+
         });
 });
 
@@ -468,9 +498,13 @@ $('#nomus').click(() => {
     fetch(`${path}/api/nomus/${mesa.id_mesa}/${usuario.login}`)
         .then((res) => res.json())
         .then((res) => {
-            res.texto = "No hay mus";
-            res.login = usuario.login;
-            socket.emit('interaccion', res);
+            let datos = new Object();
+            datos.texto = "No hay mus";
+            datos.login = usuario.login;
+            socket.emit('mostrarbocadillo', datos);
+            setTimeout(() => {
+                socket.emit('interaccion', res);
+            }, 1500);
         });
 });
 
@@ -479,13 +513,17 @@ $('#paso').click(() => {
     fetch(`${path}/api/paso/${mesa.id_mesa}/${usuario.login}`)
         .then((res) => res.json())
         .then((res) => {
-            res.texto = `Paso`;
-            res.login = usuario.login;
-            if (res.jugada == "mus") {
-                socket.emit('showdown', res);
-            } else {
-                socket.emit('interaccion', res);
-            }
+            let datos = new Object();
+            datos.texto = `Paso`;
+            datos.login = usuario.login;
+            socket.emit('mostrarbocadillo', datos);
+            setTimeout(() => {
+                if (res.jugada == "mus") {
+                    socket.emit('showdown', res);
+                } else {
+                    socket.emit('interaccion', res);
+                }
+            }, 1500);
         });
 });
 
@@ -495,11 +533,15 @@ $('#envidar').click(() => {
     fetch(`${path}/api/envite/${mesa.id_mesa}/${usuario.login}/${envite}`)
         .then((res) => res.json())
         .then((res) => {
-            res.texto = `Envido ${envite}`;
-            res.login = usuario.login;
+            let datos = new Object();
+            datos.texto = `Envido ${envite}`;
+            datos.login = usuario.login;
             $('#textoEnvidar').text(2);
             $('#envidar').text("Envido 2");
-            socket.emit('interaccion', res);
+            socket.emit('mostrarbocadillo', datos);
+            setTimeout(() => {
+                socket.emit('interaccion', res);
+            }, 1500);
         });
 });
 
@@ -508,9 +550,13 @@ $('#ordago').click(() => {
     fetch(`${path}/api/ordago/${mesa.id_mesa}/${usuario.login}`)
         .then((res) => res.json())
         .then((res) => {
-            res.texto = `¡¡ORDAGO!!`;
-            res.login = usuario.login;
-            socket.emit('interaccion', res);
+            let datos = new Object();
+            datos.texto = `¡¡ORDAGO!!`;
+            datos.login = usuario.login;
+            socket.emit('mostrarbocadillo', datos);
+            setTimeout(() => {
+                socket.emit('interaccion', res);
+            }, 1500);
         });
 });
 
@@ -519,16 +565,20 @@ $('#haynoquiero').click(() => {
     fetch(`${path}/api/noquiero/${mesa.id_mesa}/${usuario.login}`)
         .then((res) => res.json())
         .then((res) => {
-            res.texto = `No quiero`;
-            res.login = usuario.login;
-            if (typeof res.marcadores !== 'undefined') {
-                socket.emit('actualizarMarcadores', res.marcadores);
-            }
-            if (res.jugada == "mus") {
-                socket.emit('showdown', res);
-            } else {
-                socket.emit('interaccion', res);
-            }
+            let datos = new Object();
+            datos.texto = `No quiero`;
+            datos.login = usuario.login;
+            socket.emit('mostrarbocadillo', datos);
+            setTimeout(() => {
+                if (typeof res.marcadores !== 'undefined') {
+                    socket.emit('actualizarMarcadores', res.marcadores);
+                }
+                if (res.jugada == "mus") {
+                    socket.emit('showdown', res);
+                } else {
+                    socket.emit('interaccion', res);
+                }
+            }, 1500);
         });
 });
 
@@ -537,13 +587,17 @@ $('#hayquiero').click(() => {
     fetch(`${path}/api/quiero/${mesa.id_mesa}/${usuario.login}`)
         .then((res) => res.json())
         .then((res) => {
-            res.texto = `Quiero`;
-            res.login = usuario.login;
-            if (res.jugada == "mus") {
-                socket.emit('showdown', res);
-            } else {
-                socket.emit('interaccion', res);
-            }
+            let datos = new Object();
+            datos.texto = `Quiero`;
+            datos.login = usuario.login;
+            socket.emit('mostrarbocadillo', datos);
+            setTimeout(() => {
+                if (res.jugada == "mus") {
+                    socket.emit('showdown', res);
+                } else {
+                    socket.emit('interaccion', res);
+                }
+            }, 1500);
         });
 });
 
@@ -553,11 +607,15 @@ $('#hayenvidar').click(() => {
     fetch(`${path}/api/reenvite/${mesa.id_mesa}/${usuario.login}/${envite}`)
         .then((res) => res.json())
         .then((res) => {
-            res.texto = `${envite} más!!`;
-            res.login = usuario.login;
+            let datos = new Object();
+            datos.texto = `${envite} más!!`;
+            datos.login = usuario.login;
             $('#haytextoEnvidar').text(2);
             $('#hayEnvidar').text("Envido 2");
-            socket.emit('interaccion', res);
+            socket.emit('mostrarbocadillo', datos);
+            setTimeout(() => {
+                socket.emit('interaccion', res);
+            }, 1500);
         });
 });
 
@@ -566,9 +624,13 @@ $('#hayordago').click(() => {
     fetch(`${path}/api/ordago/${mesa.id_mesa}/${usuario.login}`)
         .then((res) => res.json())
         .then((res) => {
-            res.texto = `¡¡ORDAGO!!`;
-            res.login = usuario.login;
-            socket.emit('interaccion', res);
+            let datos = new Object();
+            datos.texto = `¡¡ORDAGO!!`;
+            datos.login = usuario.login;
+            socket.emit('mostrarbocadillo', datos);
+            setTimeout(() => {
+                socket.emit('interaccion', res);
+            }, 1500);
         });
 });
 
@@ -576,8 +638,14 @@ $('#quiero').click(() => {
     $('#responderOrdago').addClass("hidden");
     let datos = new Object();
     datos.login = usuario.login;
-    datos.texto = "Muestrame tu RNG";
-    socket.emit('showdown', datos);// programar al final
+    datos.texto = "Quiero";
+    socket.emit('mostrarbocadillo', datos);
+    setTimeout(() => {
+        let datos2 = new Object();
+        datos2.mesa_id = mesa.id_mesa;
+        datos2.estado = "ordago";
+        socket.emit('showdown', datos2);
+    }, 1500);
 });
 
 $('#noquiero').click(() => {
@@ -585,66 +653,104 @@ $('#noquiero').click(() => {
     fetch(`${path}/api/noquiero/${mesa.id_mesa}/${usuario.login}`)
         .then((res) => res.json())
         .then((res) => {
-            res.texto = `No quiero`;
-            res.login = usuario.login;
-            if (typeof res.marcadores !== 'undefined') {
-                socket.emit('actualizarMarcadores', res.marcadores);
-            }
-            if (res.jugada == "mus") {
-                socket.emit('showdown', res);
-            } else {
-                socket.emit('interaccion', res);
-            }
+            let datos = new Object();
+            datos.texto = `No quiero`;
+            datos.login = usuario.login;
+            socket.emit('mostrarbocadillo', datos);
+            setTimeout(() => {
+                if (typeof res.marcadores !== 'undefined') {
+                    socket.emit('actualizarMarcadores', res.marcadores);
+                }
+                if (res.jugada == "mus") {
+                    socket.emit('showdown', res);
+                } else {
+                    socket.emit('interaccion', res);
+                }
+            }, 1500);
         });
 });
+
+
+
 socket.on('actualizarMarcadores', (data) => {
-    $("#puntosa").text(data[0].puntos);
-    $("#juegosa").text(data[0].juegos);
-    $("#vacasa").text(data[0].vacas);
-    $("#puntosb").text(data[1].puntos);
-    $("#juegosb").text(data[1].juegos);
-    $("#vacasb").text(data[1].vacas);
+    actualizarMarcadores(data);
 })
 
 socket.on('interaccion', (data) => {
     if (data.mesa_id == mesa.id_mesa) {
         if (data.turno == 0) {
-            //imprimir mensaje en el centro
             $("#tapetej").text(data.jugada.toUpperCase());
-            $("#tapetej").removeClass("hidden");
-
         }
-        if (typeof data.texto !== 'undefined') {
-            //imprimir bocadillo con data.texto y data.login
-            if (data.login != usuario.login) {
-                mostrarBocadillo(data.login, data.texto);
-            }
-        }
-        setTimeout(() => {
-            if (data.estado == "comprobando" && usuario.posicion == (data.mano + data.turno) % 4) {
-                fetch(`${path}/api/paresojuego/${mesa.id_mesa}/${usuario.login}`)
-                    .then((res) => res.json())
-                    .then((res) => {
-                        res.texto = res.comprobacion ? "Tengo" : "No tengo";
-                        res.login = usuario.login;
+        if (data.estado == "comprobando" && usuario.posicion == (data.mano + data.turno) % 4) {
+            fetch(`${path}/api/paresojuego/${mesa.id_mesa}/${usuario.login}`)
+                .then((res) => res.json())
+                .then((res) => {
+                    let datos = new Object();
+                    datos.texto = res.comprobacion ? "Tengo" : "No tengo";
+                    datos.login = usuario.login;
+                    socket.emit('mostrarbocadillo', datos);
+                    setTimeout(() => {
+                        
                         if (res.jugada == "mus") {
                             socket.emit('showdown', res);
                         } else {
                             socket.emit('interaccion', res);
                         }
-                    });
-            } else {
-                comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
-            }
-            actualizarDatosJugada(data);
-        }, 1500);
-
+                    }, 1500);
+                });
+        } else {
+            comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
+        }
+        actualizarDatosJugada(data);
     }
 });
 
+//bocadillos
+socket.on('mostrarbocadillo', (data) => {
+    if (data.login != usuario.login) {
+        mostrarBocadillo(data.login, data.texto);
+    }
+})
+
+//tapete
+socket.on('tapete', () => {
+    $("#tapetesdiv").addClass("hidden");
+    $("#tapetej").removeClass("hidden");
+})
+
+//levantar cartas
+function levantarCartas(usu, cartas) {
+    for (let i = 1; i <= 4; i++) {
+        $(`#${usu}${i}`).attr('src', `${path}/media/baraja/${cartas[i - 1].imagen}`);
+    }
+}
+
+socket.on('showdown:levantarcartas', (data) => {
+    for (let i = 0; i < 4; i++) {
+        if (compannero.posicion == i) {
+            levantarCartas("compi", data[i]);
+        }
+        if (rivalDer.posicion == i) {
+            levantarCartas("rivalder", data[i]);
+        }
+        if (rivalIzq.posicion == i) {
+            levantarCartas("rivalizq", data[i]);
+        }
+    }
+})
+
+socket.on('showdown:ordago', (data) => {
+    $("#tapetesdiv").removeClass("hidden");
+    $("#tapetes").text(data);
+})
+
+
+
 socket.on('showdown', (data) => {
-    console.log("programa el showdown copon");
-    comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
+    $("#tapetesdiv").removeClass("hidden");
+    $("#tapetej").removeClass("hidden");
+    let contador = 0;
+    mostrarMensajesShowdown(data, contador)
 })
 
 

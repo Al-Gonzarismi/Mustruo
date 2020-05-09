@@ -396,4 +396,111 @@ class ApiController extends Controller
             echo json_encode($error);
         }
     }
+
+    public function obtenerCartas($id, $control) {
+        header('Content-type: application/json');
+        $orm = new OrmMesa;
+        if ($control == "control") {
+            $cartas = [];
+            for ($i = 0; $i < 4; $i++) {
+                $cartas[$i] = $orm->obtenerCartas($id, $i);
+            }
+            echo json_encode($cartas);
+        } else {
+            $error = "peticion no ejecutada desde servidor";
+            echo json_encode($error);
+        }
+    }
+
+    public function adelantarMano($id, $control) {
+        header('Content-type: application/json');
+        $orm = new OrmMesa;
+        if ($control == "control") {            
+            $situacion = $orm->adelantarMano($id);
+            echo json_encode($situacion);
+        } else {
+            $error = "peticion no ejecutada desde servidor";
+            echo json_encode($error);
+        }
+    }
+
+    public function resolverOrdago($id, $control) {
+        header('Content-type: application/json');
+        $orm = new OrmMesa;
+        if ($control == "control") {
+            $situacion = $orm->obtenerSituacionActual($id);
+            $resultado= $orm->resolverOrdago($situacion);            
+            echo json_encode($resultado);
+        } else {
+            $error = "peticion no ejecutada desde servidor";
+            echo json_encode($error);
+        }
+    }
+
+    public function resolverGrande($id, $control) {
+        header('Content-type: application/json');
+        $orm = new OrmMesa;
+        if ($control == "control") {
+            $situacion = $orm->obtenerSituacionActual($id);
+            $resultado= $orm->resolverGrande($situacion);            
+            echo json_encode($resultado);
+        } else {
+            $error = "peticion no ejecutada desde servidor";
+            echo json_encode($error);
+        }
+    }
+
+    public function resolverChica($id, $control) {
+        header('Content-type: application/json');
+        $orm = new OrmMesa;
+        if ($control == "control") {
+            $situacion = $orm->obtenerSituacionActual($id);
+            $resultado= $orm->resolverChica($situacion);            
+            echo json_encode($resultado);
+        } else {
+            $error = "peticion no ejecutada desde servidor";
+            echo json_encode($error);
+        }
+    }
+
+    public function resolverPares($id, $control) {
+        header('Content-type: application/json');
+        $orm = new OrmMesa;
+        if ($control == "control") {
+            $situacion = $orm->obtenerSituacionActual($id);
+            $resultado= $orm->resolverPares($situacion);            
+            echo json_encode($resultado);
+        } else {
+            $error = "peticion no ejecutada desde servidor";
+            echo json_encode($error);
+        }
+    }
+
+    public function resolverJuego($id, $control) {
+        header('Content-type: application/json');
+        $orm = new OrmMesa;
+        if ($control == "control") {
+            $situacion = $orm->obtenerSituacionActual($id);
+            $resultado= $orm->resolverJuego($situacion);            
+            echo json_encode($resultado);
+        } else {
+            $error = "peticion no ejecutada desde servidor";
+            echo json_encode($error);
+        }
+    }
+
+    public function resolverPunto($id, $control) {
+        header('Content-type: application/json');
+        $orm = new OrmMesa;
+        if ($control == "control") {
+            $situacion = $orm->obtenerSituacionActual($id);
+            $resultado= $orm->resolverPunto($situacion);            
+            echo json_encode($resultado);
+        } else {
+            $error = "peticion no ejecutada desde servidor";
+            echo json_encode($error);
+        }
+    }
+
+    
 }

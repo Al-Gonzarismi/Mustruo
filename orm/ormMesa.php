@@ -47,11 +47,26 @@ class OrmMesa
         $this->repartirCartasIniciales($id);
     }
 
-    public function recogerCartas($id) {
+    public function recogerCartas($id)
+    {
         $bd = Klasto::getInstance();
         $params = [$id];
         $sql = "UPDATE `cartas` SET `estado` = 4 WHERE `mesa_id` = ?";
-        $bd->execute($sql, $params);   
+        $bd->execute($sql, $params);
+    }
+
+    public function adelantarMano($id)
+    {
+        $bd = Klasto::getInstance();
+        $situacion = $this->obtenerSituacionActual($id);
+        $situacion["mano"] = ($situacion["mano"] + 1) % 4;
+        $situacion["turno"] = 0;
+        $situacion["estado"] = 'repartir';
+        $situacion["jugada"] = 'mus';
+        $params = [$situacion["estado"], $situacion["jugada"], $situacion["mano"], $situacion["turno"], $id];
+        $sql = "UPDATE `jugadas` SET `estado` = ?, `jugada` = ?, `mano` = ?, `turno` = ? WHERE `mesa_id` = ?";
+        $bd->execute($sql, $params);
+        return $situacion;
     }
 
     public function generarMarcadores($id)
@@ -351,14 +366,45 @@ class OrmMesa
         return $bd->execute($sql, $params);
     }
 
+    private function annadirAEstadisticas($id, $campo, $pareja)
+    {
+        $bd = Klasto::getInstance();
+        $usuariosMesa = $this->obtenerUsuariosMesa($id);
+        if ($campo == "juegos") {
+            foreach ($usuariosMesa as $usu) {
+                $params = [$usu["login"]];
+                $sql = "UPDATE `estadisticas` SET `juegos_jugados` = `juegos_jugados` + 1 WHERE `login` = ?";
+                $bd->execute($sql, $params);
+                if ($pareja == $usu["posicion"] % 2) {
+                    $params = [$usu["login"]];
+                    $sql = "UPDATE `estadisticas` SET `juegos_ganados` = `juegos_ganados` + 1 WHERE `login` = ?";
+                    $bd->execute($sql, $params);
+                }
+            }
+        } else if ($campo == "vacas") {
+            foreach ($usuariosMesa as $usu) {
+                $params = [$usu["login"]];
+                $sql = "UPDATE `estadisticas` SET `vacas_jugadas` = `vacas_jugadas` + 1 WHERE `login` = ?";
+                $bd->execute($sql, $params);
+                if ($pareja == $usu["posicion"] % 2) {
+                    $params = [$usu["login"]];
+                    $sql = "UPDATE `estadisticas` SET `vacas_ganadas` = `vacas_ganadas` + 1 WHERE `login` = ?";
+                    $bd->execute($sql, $params);
+                }
+            }
+        }
+    }
+
     private function sumarYManipularMarcadores($puntos, $marcador, $mesa, $pareja)
     {
         if ($marcador[$pareja]->puntos + $puntos >= $mesa->puntos) {
             $marcador[$pareja]->puntos = 0;
             $marcador[($pareja + 1) % 2]->puntos = 0;
+            $this->annadirAEstadisticas($mesa->id_mesa, "juegos", $pareja);
             if ($marcador[$pareja]->juegos + 1 == $mesa->juegos) {
                 $marcador[$pareja]->juegos = 0;
                 $marcador[($pareja + 1) % 2]->juegos = 0;
+                $this->annadirAEstadisticas($mesa->id_mesa, "vacas", $pareja);
                 if ($marcador[$pareja]->vacas + 1 == $mesa->vacas) {
                     $marcador[$pareja]->vacas = 77;
                     $marcador[($pareja + 1) % 2]->vacas = 0;
@@ -473,6 +519,12 @@ class OrmMesa
         return $bd->execute($sql, $params);
     }
 
+    public function tienePares($cartas)
+    {
+        return $cartas[0]->valor == $cartas[1]->valor || $cartas[1]->valor == $cartas[2]->valor ||
+            $cartas[2]->valor == $cartas[3]->valor;
+    }
+
     public function hayPares($id, $posicion)
     {
         $cartas = $this->obtenerCartas($id, $posicion);
@@ -520,6 +572,15 @@ class OrmMesa
         $bd->execute($sql, $params);
         $situacion["comprobacion"] = $tienePares;
         return $situacion;
+    }
+
+    public function tieneJuego($cartas)
+    {
+        $suma = 0;
+        foreach ($cartas as $carta) {
+            $suma += $carta->valor > 10 ? 10 : $carta->valor;
+        }
+        return $suma > 30;
     }
 
     public function hayJuego($id, $posicion)
@@ -575,5 +636,419 @@ class OrmMesa
         $bd->execute($sql, $params);
         $situacion["comprobacion"] = $tieneJuego;
         return $situacion;
+    }
+
+    public function obtenerGanadorGrande($situacion)
+    {
+        for ($i = 0; $i < 4; $i++) {
+            $cartas[$i] = $this->obtenerCartas($situacion["mesa_id"], $i);
+        }
+        $ganador = $situacion["mano"];
+        for ($i = 1; $i < 4; $i++) {
+            $jugador = ($situacion["mano"] + $i) % 4;
+            if ($cartas[$jugador][0]->valor > $cartas[$ganador][0]->valor) {
+                $ganador = $jugador;
+            } else if ($cartas[$jugador][0]->valor == $cartas[$ganador][0]->valor) {
+                if ($cartas[$jugador][1]->valor > $cartas[$ganador][1]->valor) {
+                    $ganador = $jugador;
+                } else if ($cartas[$jugador][1]->valor == $cartas[$ganador][1]->valor) {
+                    if ($cartas[$jugador][2]->valor > $cartas[$ganador][2]->valor) {
+                        $ganador = $jugador;
+                    } else if (
+                        $cartas[$jugador][2]->valor == $cartas[$ganador][2]->valor &&
+                        $cartas[$jugador][3]->valor > $cartas[$ganador][3]->valor
+                    ) {
+                        $ganador = $jugador;
+                    }
+                }
+            }
+        }
+        return $ganador % 2;
+    }
+
+    public function obtenerGanadorChica($situacion)
+    {
+        for ($i = 0; $i < 4; $i++) {
+            $cartas[$i] = $this->obtenerCartas($situacion["mesa_id"], $i);
+        }
+        $ganador = $situacion["mano"];
+        for ($i = 1; $i < 4; $i++) {
+            $jugador = ($situacion["mano"] + $i) % 4;
+            if ($cartas[$jugador][0]->valor < $cartas[$ganador][0]->valor) {
+                $ganador = $jugador;
+            } else if ($cartas[$jugador][0]->valor == $cartas[$ganador][0]->valor) {
+                if ($cartas[$jugador][1]->valor < $cartas[$ganador][1]->valor) {
+                    $ganador = $jugador;
+                } else if ($cartas[$jugador][1]->valor == $cartas[$ganador][1]->valor) {
+                    if ($cartas[$jugador][2]->valor < $cartas[$ganador][2]->valor) {
+                        $ganador = $jugador;
+                    } else if (
+                        $cartas[$jugador][2]->valor == $cartas[$ganador][2]->valor &&
+                        $cartas[$jugador][3]->valor < $cartas[$ganador][3]->valor
+                    ) {
+                        $ganador = $jugador;
+                    }
+                }
+            }            
+        }
+        return $ganador % 2;
+    }
+
+    public function obtenerValorPar($cartas)
+    {
+        if ($cartas[0]->valor == $cartas[1]->valor && $cartas[2]->valor == $cartas[3]->valor) {
+            return 200 * $cartas[0]->valor + $cartas[3]->valor;
+        }
+        if ($cartas[0]->valor == $cartas[2]->valor || $cartas[1]->valor == $cartas[3]->valor) {
+            return 15 * $cartas[2]->valor;
+        }
+        if ($cartas[0]->valor == $cartas[1]->valor) {
+            return $cartas[0]->valor;
+        }
+        if ($cartas[2]->valor == $cartas[1]->valor) {
+            return $cartas[2]->valor;
+        }
+        if ($cartas[2]->valor == $cartas[3]->valor) {
+            return $cartas[2]->valor;
+        }
+    }
+
+    public function obtenerGanadorPares($situacion)
+    {
+        if ($situacion["pares"] == 'A') {
+            return 0;
+        } else if ($situacion["pares"] == 'B') {
+            return 1;
+        }
+        for ($i = 0; $i < 4; $i++) {
+            $cartas[$i] = $this->obtenerCartas($situacion["mesa_id"], $i);
+        }
+        $ganador = -1;
+        $valorParGanador = 0;
+        for ($i = 0; $i < 4; $i++) {
+            $jugador = ($situacion["mano"] + $i) % 4;
+            if ($this->tienePares($cartas[$jugador])) {
+                $valorPar = $this->obtenerValorPar($cartas[$jugador]);
+                if ($valorPar > $valorParGanador) {
+                    $ganador = $jugador;
+                    $valorParGanador = $valorPar;
+                }
+            }
+        }
+        return $ganador % 2;
+    }
+
+    private function obtenerValorJuegoOPunto($cartas)
+    {
+        $suma = 0;
+        foreach ($cartas as $carta) {
+            $suma += $carta->valor > 10 ? 10 : $carta->valor;
+        }
+        switch ($suma) {
+            case 31:
+                $valor = 50;
+                break;
+            case 32:
+                $valor = 45;
+                break;
+            default:
+                $valor = $suma;
+        }
+        return $valor;
+    }
+
+    public function obtenerGanadorJuegoOPunto($situacion)
+    {
+        for ($i = 0; $i < 4; $i++) {
+            $cartas[$i] = $this->obtenerCartas($situacion["mesa_id"], $i);
+        }
+        $ganador = -1;
+        $valorJuegoGanador = 0;
+        for ($i = 0; $i < 4; $i++) {
+            $jugador = ($situacion["mano"] + $i) % 4;
+            $valorJuego = $this->obtenerValorJuegoOPunto($cartas[$jugador]);
+            if ($valorJuego > $valorJuegoGanador) {
+                $ganador = $jugador;
+                $valorJuegoGanador = $valorJuego;
+            }
+        }
+        return $ganador % 2;
+    }
+
+    public function resolverOrdago($situacion)
+    {
+        switch ($situacion["jugada"]) {
+            case 'grande':
+                $ganador = $this->obtenerGanadorGrande($situacion);
+                break;
+            case 'chica':
+                $ganador = $this->obtenerGanadorChica($situacion);
+                break;
+            case 'pares':
+                $ganador = $this->obtenerGanadorPares($situacion);
+                break;
+            default:
+                $ganador = $this->obtenerGanadorJuegoOPunto($situacion);
+        }
+        $bd = Klasto::getInstance();
+        $bd->startTransaction();
+        $mesa = $this->obtenerMesa($situacion["mesa_id"]);
+        $marcadores = $this->obtenerMarcador($situacion["mesa_id"]);
+        $marcadores = $this->sumarYManipularMarcadores(40, $marcadores, $mesa, $ganador);
+        foreach ($marcadores as $marcador) {
+            $params = [$marcador->puntos, $marcador->juegos, $marcador->vacas, $situacion["mesa_id"], $marcador->pareja_id];
+            $sql = "UPDATE `marcador` SET `puntos` = ?, `juegos` = ?, `vacas` = ? WHERE `mesa_id` = ? AND `pareja_id` = ?";
+            $bd->execute($sql, $params);
+        }
+        $bd->commit();
+        $pareja = $ganador == 0 ? "Pareja A" : "ParejaB";
+        if ($marcadores[$ganador]->vacas == 77) {
+            $texto = "$pareja ha ganado la partida";
+        } else if ($marcadores[$ganador]->juegos == 0) {
+            $texto = "$pareja ha ganado la vaca";
+        } else {
+            $texto = "$pareja ha ganado el juego";
+        }
+        $resultado["texto"] = $texto;
+        $resultado["marcador"] = $marcador;
+        return $resultado;
+    }
+
+    private function cerrarTodasLasJugadas($id)
+    {
+        $bd = Klasto::getInstance();
+        $params = [$id];
+        $sql = "UPDATE `jugadas` SET `grande` = 'X', `chica` = 'X', pares = 'X', juego = 'X', punto = 'X'";
+        $bd->execute($sql, $params);
+    }
+
+    public function resolverGrande($situacion)
+    {
+        $bd = Klasto::getInstance();
+        if ($situacion["grande"] != 'X') {
+            $bd->startTransaction();
+            $puntos = $situacion["grande"] == '-' ? 1 : $situacion["grande"];
+            $ganador = $this->obtenerGanadorGrande($situacion);
+            $mesa = $this->obtenerMesa($situacion["mesa_id"]);
+            $marcadores = $this->obtenerMarcador($situacion["mesa_id"]);
+            $marcadores = $this->sumarYManipularMarcadores($puntos, $marcadores, $mesa, $ganador);
+            foreach ($marcadores as $marcador) {
+                $params = [$marcador->puntos, $marcador->juegos, $marcador->vacas, $situacion["mesa_id"], $marcador->pareja_id];
+                $sql = "UPDATE `marcador` SET `puntos` = ?, `juegos` = ?, `vacas` = ? WHERE `mesa_id` = ? AND `pareja_id` = ?";
+                $bd->execute($sql, $params);
+            }
+            $pareja = $ganador == 0 ? "Pareja A" : "Pareja B";
+            if ($marcadores[$ganador]->puntos > 0) {
+                $texto = "$pareja gana $puntos de grande";
+            } else {
+                if ($marcadores[$ganador]->vacas == 77) {
+                    $texto = "$pareja gana $puntos de grande y ha ganado la partida";
+                } else if ($marcadores[$ganador]->juegos == 0) {
+                    $texto = "$pareja gana $puntos de grande y ha ganado la vaca";
+                } else {
+                    $texto = "$pareja ha ganado el juego";
+                }
+                $this->cerrarTodasLasJugadas($situacion["mesa_id"]);
+            }
+            $bd->commit();
+            $res["marcador"] = $marcadores;
+            $res["texto"] = $texto;
+        } else {
+            $res["texto"] = "nada";
+        }
+        return $res;
+    }
+
+    public function resolverChica($situacion)
+    {
+        $bd = Klasto::getInstance();
+        if ($situacion["chica"] != 'X') {
+            $bd->startTransaction();
+            $puntos = $situacion["chica"] == '-' ? 1 : $situacion["chica"];
+            $ganador = $this->obtenerGanadorChica($situacion);
+            $mesa = $this->obtenerMesa($situacion["mesa_id"]);
+            $marcadores = $this->obtenerMarcador($situacion["mesa_id"]);
+            $marcadores = $this->sumarYManipularMarcadores($puntos, $marcadores, $mesa, $ganador);
+            foreach ($marcadores as $marcador) {
+                $params = [$marcador->puntos, $marcador->juegos, $marcador->vacas, $situacion["mesa_id"], $marcador->pareja_id];
+                $sql = "UPDATE `marcador` SET `puntos` = ?, `juegos` = ?, `vacas` = ? WHERE `mesa_id` = ? AND `pareja_id` = ?";
+                $bd->execute($sql, $params);
+            }
+            $pareja = $ganador == 0 ? "Pareja A" : "Pareja B";
+            if ($marcadores[$ganador]->puntos > 0) {
+                $texto = "$pareja gana $puntos de chica";
+            } else {
+                if ($marcadores[$ganador]->vacas == 77) {
+                    $texto = "$pareja gana $puntos de chica y ha ganado la partida";
+                } else if ($marcadores[$ganador]->juegos == 0) {
+                    $texto = "$pareja gana $puntos de chica y ha ganado la vaca";
+                } else {
+                    $texto = "$pareja gana $puntos de chica y ha ganado el juego";
+                }
+                $this->cerrarTodasLasJugadas($situacion["mesa_id"]);
+            }
+            $bd->commit();
+            $res["marcador"] = $marcadores;
+            $res["texto"] = $texto;
+        } else {
+            $res["texto"] = "nada";
+        }
+        return $res;
+    }
+
+    public function resolverPares($situacion)
+    {
+        $bd = Klasto::getInstance();
+        if ($situacion["pares"] != 'X') {
+            $bd->startTransaction();
+            $puntos = 0;
+            if ($situacion["pares"] != 'A' && $situacion["pares"] != 'B' || $situacion["pares"] != '-') {
+                $puntos = (int)$situacion["pares"];
+            }
+            $ganador = $this->obtenerGanadorPares($situacion);
+            $cartas1 = $this->obtenerCartas($situacion["mesa_id"], $ganador);
+            $cartas2 = $this->obtenerCartas($situacion["mesa_id"], $ganador + 2);
+            if ($this->tienePares($cartas1)) {
+                $v = $this->obtenerValorPar($cartas1);
+                $valor1 = $v > 200 ? 3 : ($v >= 15 ? 2 : 1);
+                $puntos += $valor1;
+            }
+            if ($this->tienePares($cartas2)) {
+                $v = $this->obtenerValorPar($cartas2);
+                $valor2 = $v > 200 ? 3 : ($v >= 15 ? 2 : 1);
+                $puntos += $valor2;
+            }
+            $mesa = $this->obtenerMesa($situacion["mesa_id"]);
+            $marcadores = $this->obtenerMarcador($situacion["mesa_id"]);
+            $marcadores = $this->sumarYManipularMarcadores($puntos, $marcadores, $mesa, $ganador);
+            foreach ($marcadores as $marcador) {
+                $params = [$marcador->puntos, $marcador->juegos, $marcador->vacas, $situacion["mesa_id"], $marcador->pareja_id];
+                $sql = "UPDATE `marcador` SET `puntos` = ?, `juegos` = ?, `vacas` = ? WHERE `mesa_id` = ? AND `pareja_id` = ?";
+                $bd->execute($sql, $params);
+            }
+            $pareja = $ganador == 0 ? "Pareja A" : "Pareja B";
+            if ($marcadores[$ganador]->puntos > 0) {
+                $texto = "$pareja gana $puntos de pares";
+            } else {
+                if ($marcadores[$ganador]->vacas == 77) {
+                    $texto = "$pareja gana $puntos de pares y ha ganado la partida";
+                } else if ($marcadores[$ganador]->juegos == 0) {
+                    $texto = "$pareja gana $puntos de pares y ha ganado la vaca";
+                } else {
+                    $texto = "$pareja gana $puntos de pares y ha ganado el juego";
+                }
+                $this->cerrarTodasLasJugadas($situacion["mesa_id"]);
+            }
+            $bd->commit();
+            $res["marcador"] = $marcadores;
+            $res["texto"] = $texto;
+        } else {
+            $res["texto"] = "nada";
+        }
+        return $res;
+    }
+
+    public function resolverJuego($situacion)
+    {
+        $bd = Klasto::getInstance();
+        if ($situacion["juego"] != 'X') {
+            $bd->startTransaction();
+            $puntos = 0;
+            if ($situacion["juego"] == 'A') {
+                $ganador = 0;
+            } else if ($situacion["juego"] == 'B') {
+                $ganador = 1;
+            } else if ($situacion["juego"] == '-') {
+                $ganador = $this->obtenerGanadorJuegoOPunto($situacion);
+            } else {
+                $puntos = (int)$situacion["juego"];
+                $ganador = $this->obtenerGanadorJuegoOPunto($situacion);
+            }
+            $cartas1 = $this->obtenerCartas($situacion["mesa_id"], $ganador);
+            $cartas2 = $this->obtenerCartas($situacion["mesa_id"], $ganador + 2);
+            if ($this->tieneJuego($cartas1)) {
+                $v = $this->obtenerValorJuegoOPunto($cartas1);
+                $valor1 = $v == 50 ? 3 : 2;
+                $puntos += $valor1;
+            }
+            if ($this->tieneJuego($cartas2)) {
+                $v = $this->obtenerValorJuegoOPunto($cartas2);
+                $valor2 = $v == 50 ? 3 : 2;
+                $puntos += $valor2;
+            }
+            $mesa = $this->obtenerMesa($situacion["mesa_id"]);
+            $marcadores = $this->obtenerMarcador($situacion["mesa_id"]);
+            $marcadores = $this->sumarYManipularMarcadores($puntos, $marcadores, $mesa, $ganador);
+            foreach ($marcadores as $marcador) {
+                $params = [$marcador->puntos, $marcador->juegos, $marcador->vacas, $situacion["mesa_id"], $marcador->pareja_id];
+                $sql = "UPDATE `marcador` SET `puntos` = ?, `juegos` = ?, `vacas` = ? WHERE `mesa_id` = ? AND `pareja_id` = ?";
+                $bd->execute($sql, $params);
+            }
+            $pareja = $ganador == 0 ? "Pareja A" : "Pareja B";
+            if ($marcadores[$ganador]->puntos > 0) {
+                $texto = "$pareja gana $puntos de juego";
+            } else {
+                if ($marcadores[$ganador]->vacas == 77) {
+                    $texto = "$pareja gana $puntos de juego y ha ganado la partida";
+                } else if ($marcadores[$ganador]->juegos == 0) {
+                    $texto = "$pareja gana $puntos de juego y ha ganado la vaca";
+                } else {
+                    $texto = "$pareja gana $puntos de juego y ha ganado el juego";
+                }
+                $this->cerrarTodasLasJugadas($situacion["mesa_id"]);
+            }
+            $bd->commit();
+            $res["marcador"] = $marcadores;
+            $res["texto"] = $texto;
+        } else {
+            $res["texto"] = "nada";
+        }
+        return $res;
+    }
+
+    public function resolverPunto($situacion)
+    {
+        $bd = Klasto::getInstance();
+        if ($situacion["punto"] != 'X') {
+            $bd->startTransaction();
+            $puntos = 1;
+            if ($situacion["punto"] == 'A') {
+                $ganador = 0;
+            } else if ($situacion["punto"] == 'B') {
+                $ganador = 1;
+            } else if ($situacion["punto"] == '-') {
+                $ganador = $this->obtenerGanadorJuegoOPunto($situacion);
+            } else {
+                $puntos += $situacion["punto"];
+                $ganador = $this->obtenerGanadorJuegoOPunto($situacion);
+            }           
+            $mesa = $this->obtenerMesa($situacion["mesa_id"]);
+            $marcadores = $this->obtenerMarcador($situacion["mesa_id"]);
+            $marcadores = $this->sumarYManipularMarcadores($puntos, $marcadores, $mesa, $ganador);
+            foreach ($marcadores as $marcador) {
+                $params = [$marcador->puntos, $marcador->juegos, $marcador->vacas, $situacion["mesa_id"], $marcador->pareja_id];
+                $sql = "UPDATE `marcador` SET `puntos` = ?, `juegos` = ?, `vacas` = ? WHERE `mesa_id` = ? AND `pareja_id` = ?";
+                $bd->execute($sql, $params);
+            }
+            $pareja = $ganador == 0 ? "Pareja A" : "Pareja B";
+            if ($marcadores[$ganador]->puntos > 0) {
+                $texto = "$pareja gana $puntos de punto";
+            } else {
+                if ($marcadores[$ganador]->vacas == 77) {
+                    $texto = "$pareja gana $puntos de punto y ha ganado la partida";
+                } else if ($marcadores[$ganador]->juegos == 0) {
+                    $texto = "$pareja gana $puntos de punto y ha ganado la vaca";
+                } else {
+                    $texto = "$pareja gana $puntos de punto y ha ganado el juego";
+                }
+                $this->cerrarTodasLasJugadas($situacion["mesa_id"]);
+            }
+            $bd->commit();
+            $res["marcador"] = $marcadores;
+            $res["texto"] = $texto;
+        } else {
+            $res["texto"] = "nada";
+        }
+        return $res;
     }
 }

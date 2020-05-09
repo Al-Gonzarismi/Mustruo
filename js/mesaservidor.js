@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const fetch= require('node-fetch');
+const fetch = require('node-fetch');
 
 //settings
 app.set('port', 3333);
@@ -61,14 +61,102 @@ io.on('connection', (socket) => {
 
     socket.on('repartir', (data) => {
         fetch(`http://Localhost/Mustruo/api/repartir/${data}`)
-        .then((res) => res.json())
-        .then((res) => {
-            io.emit('repartir', res);
-        });
+            .then((res) => res.json())
+            .then((res) => {
+                io.emit('repartir', res);
+            });
+    })
+
+    socket.on('mostrarbocadillo', (data) => {
+        io.emit('mostrarbocadillo', data);
     })
 
     socket.on('showdown', (data) => {
-        io.emit('showdown', data);
+        var contador = 0;
+        var id = data.mesa_id;
+        var datos = new Object();
+        datos.textos = [];
+        datos.marcadores = [];
+        fetch(`http://Localhost/Mustruo/api/mostrarcartas/${id}/control`)
+            .then((res) => res.json())
+            .then((res) => {
+                io.emit('showdown:levantarcartas', res);
+                if (data.estado == 'ordago') {
+                    setTimeout(() => {
+                        fetch(`http://Localhost/Mustruo/api/resolverordago/${id}/control`)
+                            .then((res) => res.json())
+                            .then((res) => {
+                                io.emit('showdown:ordago', res.texto);
+                            });
+                        setTimeout(() => {
+                            io.emit('actualizarMarcadores', res.marcador);
+                            fetch(`http://Localhost/Mustruo/api/adelantarmano/${id}/control`)
+                                .then((res) => res.json())
+                                .then((res) => {
+                                    io.emit('tapete');
+                                    io.emit('interaccion', res);
+                                });
+                        }, 1500);
+                    }, 1500);
+                } else {
+
+                    fetch(`http://Localhost/Mustruo/api/resolvergrande/${id}/control`)
+                        .then((res) => res.json())
+                        .then((res) => {
+                            if (res.texto != "nada") {
+                                datos.textos[contador] = res.texto;
+                                datos.marcadores[contador] = res.marcador;
+                                contador++;
+                            }
+                            fetch(`http://Localhost/Mustruo/api/resolverchica/${id}/control`)
+                                .then((res) => res.json())
+                                .then((res) => {
+                                    if (res.texto != "nada") {
+                                        datos.textos[contador] = res.texto;
+                                        datos.marcadores[contador] = res.marcador;
+                                        contador++;
+                                    }
+                                    fetch(`http://Localhost/Mustruo/api/resolverpares/${id}/control`)
+                                        .then((res) => res.json())
+                                        .then((res) => {
+                                            if (res.texto != "nada") {
+                                                datos.textos[contador] = res.texto;
+                                                datos.marcadores[contador] = res.marcador;
+                                                contador++;
+                                            }
+                                            fetch(`http://Localhost/Mustruo/api/resolverjuego/${id}/control`)
+                                                .then((res) => res.json())
+                                                .then((res) => {
+                                                    if (res.texto != "nada") {
+                                                        datos.textos[contador] = res.texto;
+                                                        datos.marcadores[contador] = res.marcador;
+                                                        contador++;
+                                                    }
+                                                    fetch(`http://Localhost/Mustruo/api/resolverpunto/${id}/control`)
+                                                        .then((res) => res.json())
+                                                        .then((res) => {
+                                                            if (res.texto != "nada") {
+                                                                datos.textos[contador] = res.texto;
+                                                                datos.marcadores[contador] = res.marcador;
+                                                                contador++;
+                                                            }
+                                                            datos.contador = contador;
+                                                            io.emit('showdown', datos);
+                                                            setTimeout(() => {
+                                                                fetch(`http://Localhost/Mustruo/api/adelantarmano/${id}/control`)
+                                                                    .then((res) => res.json())
+                                                                    .then((res) => {
+                                                                        io.emit('tapete');
+                                                                        io.emit('interaccion', res);
+                                                                    });
+                                                            }, 2000 * contador);
+                                                        });
+                                                });
+                                        });
+                                });
+                        });
+                }
+            });
     })
 
 })

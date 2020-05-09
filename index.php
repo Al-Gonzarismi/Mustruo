@@ -74,6 +74,23 @@ Macaw::get($URL_PATH . '/api/repartir/(:any)', "controller\apiController@reparti
 
 Macaw::get($URL_PATH . '/api/cartas/(:any)/(:any)', "controller\apiController@verMisCartas");
 
+Macaw::get($URL_PATH . '/api/mostrarcartas/(:any)/(:any)', "controller\apiController@obtenerCartas");
+
+Macaw::get($URL_PATH . '/api/adelantarmano/(:any)/(:any)', "controller\apiController@adelantarMano");
+
+Macaw::get($URL_PATH . '/api/resolverordago/(:any)/(:any)', "controller\apiController@resolverOrdago");
+
+Macaw::get($URL_PATH . '/api/resolvergrande/(:any)/(:any)', "controller\apiController@resolverGrande");
+
+Macaw::get($URL_PATH . '/api/resolverchica/(:any)/(:any)', "controller\apiController@resolverChica");
+
+Macaw::get($URL_PATH . '/api/resolverpares/(:any)/(:any)', "controller\apiController@resolverPares");
+
+Macaw::get($URL_PATH . '/api/resolverjuego/(:any)/(:any)', "controller\apiController@resolverJuego");
+
+Macaw::get($URL_PATH . '/api/resolverpunto/(:any)/(:any)', "controller\apiController@resolverPunto");
+
+
 Macaw::error(function() {
     echo '404 :: Not Found';
 });
