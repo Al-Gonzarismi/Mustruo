@@ -302,6 +302,7 @@
     height: 15%;
     top: 42.5%;
     left: 37.5%;
+    z-index: 5;
 }
 .posDescartes > button {
     position: absolute;
@@ -324,6 +325,7 @@
     top: 40%;
     left: 32.5%;
     font-size: 300%;
+
 }
 .pequennoTapete {
     border-radius: 7px;

@@ -622,7 +622,7 @@ class OrmMesa
                     $ganador = ($ganador + $situacion["mano"]) % 2;
                     $situacion["juego"] = $ganador == 0 ? "A" : "B";
                     $situacion["jugada"] = "mus";
-                    $sql = "UPDATE `jugadas` SET `turno` = ?, `estado` = 'repartir', `jugada` = 'mus', `juego` = ? WHERE `mesa_id` = ?";
+                    $sql = "UPDATE `jugadas` SET `turno` = ?, `estado` = 'repartir', `jugada` = 'mus', `juego` = ?, `punto` = 'X' WHERE `mesa_id` = ?";
                 }
             }
             $situacion["estado"] = "limpio";
@@ -674,17 +674,17 @@ class OrmMesa
         $ganador = $situacion["mano"];
         for ($i = 1; $i < 4; $i++) {
             $jugador = ($situacion["mano"] + $i) % 4;
-            if ($cartas[$jugador][0]->valor < $cartas[$ganador][0]->valor) {
+            if ($cartas[$jugador][3]->valor < $cartas[$ganador][3]->valor) {
                 $ganador = $jugador;
-            } else if ($cartas[$jugador][0]->valor == $cartas[$ganador][0]->valor) {
-                if ($cartas[$jugador][1]->valor < $cartas[$ganador][1]->valor) {
+            } else if ($cartas[$jugador][3]->valor == $cartas[$ganador][3]->valor) {
+                if ($cartas[$jugador][2]->valor < $cartas[$ganador][2]->valor) {
                     $ganador = $jugador;
-                } else if ($cartas[$jugador][1]->valor == $cartas[$ganador][1]->valor) {
-                    if ($cartas[$jugador][2]->valor < $cartas[$ganador][2]->valor) {
+                } else if ($cartas[$jugador][2]->valor == $cartas[$ganador][2]->valor) {
+                    if ($cartas[$jugador][1]->valor < $cartas[$ganador][1]->valor) {
                         $ganador = $jugador;
                     } else if (
-                        $cartas[$jugador][2]->valor == $cartas[$ganador][2]->valor &&
-                        $cartas[$jugador][3]->valor < $cartas[$ganador][3]->valor
+                        $cartas[$jugador][1]->valor == $cartas[$ganador][1]->valor &&
+                        $cartas[$jugador][0]->valor < $cartas[$ganador][0]->valor
                     ) {
                         $ganador = $jugador;
                     }
@@ -810,7 +810,7 @@ class OrmMesa
             $texto = "$pareja ha ganado el juego";
         }
         $resultado["texto"] = $texto;
-        $resultado["marcador"] = $marcador;
+        $resultado["marcadores"] = $marcadores;
         return $resultado;
     }
 
@@ -818,7 +818,7 @@ class OrmMesa
     {
         $bd = Klasto::getInstance();
         $params = [$id];
-        $sql = "UPDATE `jugadas` SET `grande` = 'X', `chica` = 'X', pares = 'X', juego = 'X', punto = 'X'";
+        $sql = "UPDATE `jugadas` SET `grande` = 'X', `chica` = 'X', pares = 'X', juego = 'X', punto = 'X' WHERE `mesa_id` = ?";
         $bd->execute($sql, $params);
     }
 
@@ -1019,7 +1019,7 @@ class OrmMesa
             } else if ($situacion["punto"] == '-') {
                 $ganador = $this->obtenerGanadorJuegoOPunto($situacion);
             } else {
-                $puntos += $situacion["punto"];
+                $puntos += (int)$situacion["punto"];
                 $ganador = $this->obtenerGanadorJuegoOPunto($situacion);
             }           
             $mesa = $this->obtenerMesa($situacion["mesa_id"]);
@@ -1050,5 +1050,26 @@ class OrmMesa
             $res["texto"] = "nada";
         }
         return $res;
+    }
+
+    private function apuntarAbandono($login) {
+        $bd = Klasto::getInstance();
+        $params = [$login];
+        $sql = "UPDATE `estadisticas` SET `abandonos` = `abandonos` + 1 WHERE `login` = ?";
+        return $bd->execute($sql, $params);
+
+    }
+
+    public function abandonarMesa($id, $login) {
+        $bd = Klasto::getInstance();
+        $bd->startTransaction();
+        $posicion = $this->obtenerPosicion($login);
+        $todoOk = $posicion >= 0;
+        if ($posicion > 0) {
+            $todoOk = $todoOk && $this->apuntarAbandono($login) && $this->cambiarEstadoPartida($id, 0);
+        }
+        $todoOk = $todoOk && $this->levantarseDeLaMesa($id, $posicion, $login);
+        $bd->commit();
+        return $todoOk;
     }
 }

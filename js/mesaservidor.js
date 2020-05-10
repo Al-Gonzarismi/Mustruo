@@ -86,20 +86,20 @@ io.on('connection', (socket) => {
                         fetch(`http://Localhost/Mustruo/api/resolverordago/${id}/control`)
                             .then((res) => res.json())
                             .then((res) => {
-                                io.emit('showdown:ordago', res.texto);
+                                res.mesa_id = id;
+                                io.emit('showdown:ordago', res);
+                                setTimeout(() => {
+                                    io.emit('actualizarMarcadores', res);
+                                    fetch(`http://Localhost/Mustruo/api/adelantarmano/${id}/control`)
+                                        .then((res) => res.json())
+                                        .then((res) => {
+                                            io.emit('tapete');
+                                            io.emit('interaccion', res);
+                                        });
+                                }, 2000);
                             });
-                        setTimeout(() => {
-                            io.emit('actualizarMarcadores', res.marcador);
-                            fetch(`http://Localhost/Mustruo/api/adelantarmano/${id}/control`)
-                                .then((res) => res.json())
-                                .then((res) => {
-                                    io.emit('tapete');
-                                    io.emit('interaccion', res);
-                                });
-                        }, 1500);
-                    }, 1500);
+                    }, 2000);
                 } else {
-
                     fetch(`http://Localhost/Mustruo/api/resolvergrande/${id}/control`)
                         .then((res) => res.json())
                         .then((res) => {
@@ -137,19 +137,20 @@ io.on('connection', (socket) => {
                                                         .then((res) => {
                                                             if (res.texto != "nada") {
                                                                 datos.textos[contador] = res.texto;
-                                                                datos.marcadores[contador] = res.marcador;
+                                                                datos.marcadores[contador] = res.marcador;                                                                
                                                                 contador++;
                                                             }
                                                             datos.contador = contador;
+                                                            datos.mesa = id;
                                                             io.emit('showdown', datos);
                                                             setTimeout(() => {
                                                                 fetch(`http://Localhost/Mustruo/api/adelantarmano/${id}/control`)
                                                                     .then((res) => res.json())
                                                                     .then((res) => {
-                                                                        io.emit('tapete');
+                                                                        io.emit('tapete', res.mesa_id);
                                                                         io.emit('interaccion', res);
                                                                     });
-                                                            }, 2000 * contador);
+                                                            }, 4000 * contador);
                                                         });
                                                 });
                                         });
@@ -157,6 +158,10 @@ io.on('connection', (socket) => {
                         });
                 }
             });
+    })
+
+    socket.on('salirdemesa', (data) => {
+        io.emit('salirdemesa', (data));
     })
 
 })

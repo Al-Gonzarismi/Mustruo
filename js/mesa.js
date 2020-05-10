@@ -4,7 +4,7 @@ var chat = document.getElementById("chat");
 var usuarios = document.getElementById("usuariosonline");
 var enviar = document.getElementById("enviarmensaje");
 var mensaje = document.getElementById("mensaje");
-
+var timeoutBocadillo = 2000;
 
 
 //functions
@@ -186,20 +186,15 @@ function colocarBaraja(mano) {
     }
 }
 
-function ocultarBaraja(mano) {
-    switch (mano) {
-        case usuario.posicion:
-            $("#manousuario").addClass("hidden");
-            break;
-        case compannero.posicion:
-            $("#manocompannero").addClass("hidden");
-            break;
-        case rivalIzq.posicion:
-            $("#manorivalizq").addClass("hidden");
-            break;
-        case rivalIzq.posicion:
-            $("#manorivalder").addClass("hidden");
-            break;
+function ocultarBaraja() {
+    if (!$("#manousuario").hasClass("hidden")) {
+        $("#manousuario").addClass("hidden")
+    } else if (!$("#manocompi").hasClass("hidden")) {
+        $("#manocompi").addClass("hidden");
+    } else if (!$("#manorivalizq").hasClass("hidden")) {
+        $("#manorivalizq").addClass("hidden")
+    } else {
+        $("#manorivalder").addClass("hidden");
     }
 }
 
@@ -211,7 +206,7 @@ function colocarReversos() {
     }
 }
 
-function colocarMisCartas(cartas) {
+function colocarMisCartas() {
     for (let i = 1; i <= 4; i++) {
         $(`#carta${i}`).attr('src', `${path}/media/baraja/${cartas[i - 1].imagen}`);
     }
@@ -222,9 +217,9 @@ function comprobarYMostrarMenu(mano, turno, jugada, estado) {
         mostrarCartas();
     }
     if (estado == "repartir") {
-        if (!$("#carta1").hasClass("hidden")) {
-            ocultarCartas();
-        }
+        /*if (!$("#carta1").hasClass("hidden")) {
+            ocultarCartas()
+        }*/
         if ((mano + 3) % 4 == usuario.posicion) {
             $("#repartir").removeClass("hidden");
         }
@@ -258,7 +253,7 @@ function comprobarYMostrarMenu(mano, turno, jugada, estado) {
                                 .then((res) => res.json())
                                 .then((res) => {
                                     if (typeof res.marcadores !== 'undefined') {
-                                        socket.emit('actualizarMarcadores', res.marcadores);
+                                        socket.emit('actualizarMarcadores', res);
                                     }
                                     if (res.jugada == "mus") {
                                         socket.emit('showdown', res);// programar al final
@@ -279,7 +274,7 @@ function comprobarDescartes() {
     let descartes = "";
     let contador = 0;
     if ($("#carta1").hasClass('subirCarta')) {
-        descartes += cartas[0].imagen + "+";
+        descartes += cartas[0].imagen + "+";//cartas[0] no cambia pasadas las manos
         contador++;
     }
     if ($("#carta2").hasClass('subirCarta')) {
@@ -296,6 +291,7 @@ function comprobarDescartes() {
     }
     descartes += contador;
     return descartes;
+
 }
 
 function mostrarBocadillo(login, texto) {
@@ -316,7 +312,7 @@ function mostrarBocadillo(login, texto) {
         contenido.text(texto);
         setTimeout(() => {
             bocadillo.addClass("hidden");
-        }, 2000);
+        }, timeoutBocadillo);
     }
 }
 
@@ -337,7 +333,7 @@ function mostrarMensajesShowdown(data, contador) {
             contador++;
             mostrarMensajesShowdown(data, contador);
         }
-    }, 1500 * contador);
+    }, 3500 * contador);
 }
 
 // Rango Envites
@@ -438,19 +434,24 @@ $('#repartir').click(() => {
 });
 
 socket.on('repartir', (data) => {
-    ocultarCartas();
-    colocarReversos();
-    colocarBaraja(data.mano);
-    fetch(`${path}/api/cartas/${mesa.id_mesa}/${usuario.login}`)
-        .then((res) => res.json())
-        .then((res) => {
-            colocarMisCartas(res);
-            repartir();
-            setTimeout(() => {
-                comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
-            }, 8000);
-            //comprobar que los tiempos cuadran
-        });
+    if (mesa.id_mesa == data.mesa) {
+        ocultarBaraja();
+        ocultarCartas();
+        colocarReversos();
+        colocarBaraja(data.mano);
+        fetch(`${path}/api/cartas/${mesa.id_mesa}/${usuario.login}`)
+            .then((res) => res.json())
+            .then((res) => {
+                cartas = res
+                colocarMisCartas();
+                repartir();
+                setTimeout(() => {
+                    actualizarDatosJugada(data);
+                    comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
+                }, 8000);
+            });
+    }
+
 })
 
 //juego
@@ -462,10 +463,11 @@ $('#mus').click(() => {
             let datos = new Object();
             datos.texto = "Dame mus";
             datos.login = usuario.login;
+            datos.mesa = mesa.id_mesa;
             socket.emit('mostrarbocadillo', datos);
             setTimeout(() => {
                 socket.emit('interaccion', res);
-            }, 1500);
+            }, timeoutBocadillo);
         });
 });
 
@@ -479,6 +481,7 @@ $('#descartar').click(() => {
             let datos = new Object();
             datos.texto = res.descartes > 0 ? `Dame ${res.descartes} cartas` : "Me quedo servido";
             datos.login = usuario.login;
+            datos.mesa = mesa.id_mesa;
             cartas = res.cartas;
             delete res.cartas;
             $('#carta1').attr('src', `${path}/media/baraja/${cartas[0].imagen}`);
@@ -488,7 +491,7 @@ $('#descartar').click(() => {
             socket.emit('mostrarbocadillo', datos);
             setTimeout(() => {
                 socket.emit('interaccion', res);
-            }, 1500);
+            }, timeoutBocadillo);
 
         });
 });
@@ -501,10 +504,11 @@ $('#nomus').click(() => {
             let datos = new Object();
             datos.texto = "No hay mus";
             datos.login = usuario.login;
+            datos.mesa = mesa.id_mesa;
             socket.emit('mostrarbocadillo', datos);
             setTimeout(() => {
                 socket.emit('interaccion', res);
-            }, 1500);
+            }, timeoutBocadillo);
         });
 });
 
@@ -516,6 +520,7 @@ $('#paso').click(() => {
             let datos = new Object();
             datos.texto = `Paso`;
             datos.login = usuario.login;
+            datos.mesa = mesa.id_mesa;
             socket.emit('mostrarbocadillo', datos);
             setTimeout(() => {
                 if (res.jugada == "mus") {
@@ -523,7 +528,7 @@ $('#paso').click(() => {
                 } else {
                     socket.emit('interaccion', res);
                 }
-            }, 1500);
+            }, timeoutBocadillo);
         });
 });
 
@@ -536,12 +541,13 @@ $('#envidar').click(() => {
             let datos = new Object();
             datos.texto = `Envido ${envite}`;
             datos.login = usuario.login;
+            datos.mesa = mesa.id_mesa;
             $('#textoEnvidar').text(2);
             $('#envidar').text("Envido 2");
             socket.emit('mostrarbocadillo', datos);
             setTimeout(() => {
                 socket.emit('interaccion', res);
-            }, 1500);
+            }, timeoutBocadillo);
         });
 });
 
@@ -553,10 +559,11 @@ $('#ordago').click(() => {
             let datos = new Object();
             datos.texto = `¡¡ORDAGO!!`;
             datos.login = usuario.login;
+            datos.mesa = mesa.id_mesa;
             socket.emit('mostrarbocadillo', datos);
             setTimeout(() => {
                 socket.emit('interaccion', res);
-            }, 1500);
+            }, timeoutBocadillo);
         });
 });
 
@@ -568,17 +575,18 @@ $('#haynoquiero').click(() => {
             let datos = new Object();
             datos.texto = `No quiero`;
             datos.login = usuario.login;
+            datos.mesa = mesa.id_mesa;
             socket.emit('mostrarbocadillo', datos);
             setTimeout(() => {
                 if (typeof res.marcadores !== 'undefined') {
-                    socket.emit('actualizarMarcadores', res.marcadores);
+                    socket.emit('actualizarMarcadores', res);
                 }
                 if (res.jugada == "mus") {
                     socket.emit('showdown', res);
                 } else {
                     socket.emit('interaccion', res);
                 }
-            }, 1500);
+            }, timeoutBocadillo);
         });
 });
 
@@ -590,6 +598,7 @@ $('#hayquiero').click(() => {
             let datos = new Object();
             datos.texto = `Quiero`;
             datos.login = usuario.login;
+            datos.mesa = mesa.id_mesa;
             socket.emit('mostrarbocadillo', datos);
             setTimeout(() => {
                 if (res.jugada == "mus") {
@@ -597,7 +606,7 @@ $('#hayquiero').click(() => {
                 } else {
                     socket.emit('interaccion', res);
                 }
-            }, 1500);
+            }, timeoutBocadillo);
         });
 });
 
@@ -610,12 +619,13 @@ $('#hayenvidar').click(() => {
             let datos = new Object();
             datos.texto = `${envite} más!!`;
             datos.login = usuario.login;
+            datos.mesa = mesa.id_mesa;
             $('#haytextoEnvidar').text(2);
-            $('#hayEnvidar').text("Envido 2");
+            $('#hayenvidar').text("Envido 2");
             socket.emit('mostrarbocadillo', datos);
             setTimeout(() => {
                 socket.emit('interaccion', res);
-            }, 1500);
+            }, timeoutBocadillo);
         });
 });
 
@@ -627,10 +637,11 @@ $('#hayordago').click(() => {
             let datos = new Object();
             datos.texto = `¡¡ORDAGO!!`;
             datos.login = usuario.login;
+            datos.mesa = mesa.id_mesa;
             socket.emit('mostrarbocadillo', datos);
             setTimeout(() => {
                 socket.emit('interaccion', res);
-            }, 1500);
+            }, timeoutBocadillo);
         });
 });
 
@@ -639,13 +650,14 @@ $('#quiero').click(() => {
     let datos = new Object();
     datos.login = usuario.login;
     datos.texto = "Quiero";
+    datos.mesa = mesa.id_mesa;
     socket.emit('mostrarbocadillo', datos);
     setTimeout(() => {
         let datos2 = new Object();
         datos2.mesa_id = mesa.id_mesa;
         datos2.estado = "ordago";
         socket.emit('showdown', datos2);
-    }, 1500);
+    }, timeoutBocadillo);
 });
 
 $('#noquiero').click(() => {
@@ -656,24 +668,27 @@ $('#noquiero').click(() => {
             let datos = new Object();
             datos.texto = `No quiero`;
             datos.login = usuario.login;
+            datos.mesa = mesa.id_mesa;
             socket.emit('mostrarbocadillo', datos);
             setTimeout(() => {
                 if (typeof res.marcadores !== 'undefined') {
-                    socket.emit('actualizarMarcadores', res.marcadores);
+                    socket.emit('actualizarMarcadores', res);
                 }
                 if (res.jugada == "mus") {
                     socket.emit('showdown', res);
                 } else {
                     socket.emit('interaccion', res);
                 }
-            }, 1500);
+            }, timeoutBocadillo);
         });
 });
 
 
 
 socket.on('actualizarMarcadores', (data) => {
-    actualizarMarcadores(data);
+    if (data.mesa_id == mesa.id_mesa) {
+        actualizarMarcadores(data.marcadores);
+    }
 })
 
 socket.on('interaccion', (data) => {
@@ -681,6 +696,7 @@ socket.on('interaccion', (data) => {
         if (data.turno == 0) {
             $("#tapetej").text(data.jugada.toUpperCase());
         }
+
         if (data.estado == "comprobando" && usuario.posicion == (data.mano + data.turno) % 4) {
             fetch(`${path}/api/paresojuego/${mesa.id_mesa}/${usuario.login}`)
                 .then((res) => res.json())
@@ -688,15 +704,16 @@ socket.on('interaccion', (data) => {
                     let datos = new Object();
                     datos.texto = res.comprobacion ? "Tengo" : "No tengo";
                     datos.login = usuario.login;
+                    datos.mesa = mesa.id_mesa;
                     socket.emit('mostrarbocadillo', datos);
                     setTimeout(() => {
-                        
+
                         if (res.jugada == "mus") {
                             socket.emit('showdown', res);
                         } else {
                             socket.emit('interaccion', res);
                         }
-                    }, 1500);
+                    }, timeoutBocadillo);
                 });
         } else {
             comprobarYMostrarMenu(data.mano, data.turno, data.jugada, data.estado);
@@ -707,14 +724,18 @@ socket.on('interaccion', (data) => {
 
 //bocadillos
 socket.on('mostrarbocadillo', (data) => {
-    if (data.login != usuario.login) {
-        mostrarBocadillo(data.login, data.texto);
+    if (data.mesa == mesa.id_mesa) {
+        if (data.login != usuario.login) {
+            mostrarBocadillo(data.login, data.texto);
+        }
     }
+
 })
 
 //tapete
-socket.on('tapete', () => {
-    $("#tapetesdiv").addClass("hidden");
+socket.on('tapete', (data) => {
+    if (data == mesa.id_mesa)
+        $("#tapetesdiv").addClass("hidden");
     $("#tapetej").removeClass("hidden");
 })
 
@@ -726,31 +747,61 @@ function levantarCartas(usu, cartas) {
 }
 
 socket.on('showdown:levantarcartas', (data) => {
-    for (let i = 0; i < 4; i++) {
-        if (compannero.posicion == i) {
-            levantarCartas("compi", data[i]);
-        }
-        if (rivalDer.posicion == i) {
-            levantarCartas("rivalder", data[i]);
-        }
-        if (rivalIzq.posicion == i) {
-            levantarCartas("rivalizq", data[i]);
+    if (data[4] == mesa.id_mesa) {
+        for (let i = 0; i < 4; i++) {
+            if (compannero.posicion == i) {
+                levantarCartas("compi", data[i]);
+            }
+            if (rivalDer.posicion == i) {
+                levantarCartas("rivalder", data[i]);
+            }
+            if (rivalIzq.posicion == i) {
+                levantarCartas("rivalizq", data[i]);
+            }
         }
     }
+
 })
 
 socket.on('showdown:ordago', (data) => {
-    $("#tapetesdiv").removeClass("hidden");
-    $("#tapetes").text(data);
+    if (data.mesa_id == mesa.id_mesa) {
+        $("#tapetesdiv").removeClass("hidden");
+        $("#tapetes").text(data.texto);
+    }
+
 })
 
-
-
 socket.on('showdown', (data) => {
-    $("#tapetesdiv").removeClass("hidden");
-    $("#tapetej").removeClass("hidden");
-    let contador = 0;
-    mostrarMensajesShowdown(data, contador)
+    if (data.mesa == mesa.id_mesa) {
+        $("#tapetesdiv").removeClass("hidden");
+        $("#tapetej").removeClass("hidden");        
+        mostrarMensajesShowdown(data, 0);
+    }
+
+})
+
+//Abandonar partida
+$("#salir").click(() => {
+    if (window.confirm("¿Quieres abandonar la partida?")) {
+        console.log("he aceptado");
+        fetch(`${path}/api/abandonarmesa/${mesa.id_mesa}/${usuario.login}`)
+            .then((res) => res.text())
+            .then((res) => {
+                console.log("he pasado el fetch");
+                if (res == 'ok') {
+                    socket.emit('salirdemesa', mesa.id_mesa);
+                } else {
+                    console.log(res);
+                }
+                
+            });
+    }
+})
+
+socket.on('salirdemesa', (data) => {
+    if (mesa.id_mesa == data) {
+        window.location = `${path}`;
+    }
 })
 
 

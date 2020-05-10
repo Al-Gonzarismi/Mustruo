@@ -405,6 +405,7 @@ class ApiController extends Controller
             for ($i = 0; $i < 4; $i++) {
                 $cartas[$i] = $orm->obtenerCartas($id, $i);
             }
+            $cartas[4] = $id;
             echo json_encode($cartas);
         } else {
             $error = "peticion no ejecutada desde servidor";
@@ -429,7 +430,7 @@ class ApiController extends Controller
         $orm = new OrmMesa;
         if ($control == "control") {
             $situacion = $orm->obtenerSituacionActual($id);
-            $resultado= $orm->resolverOrdago($situacion);            
+            $resultado = $orm->resolverOrdago($situacion);            
             echo json_encode($resultado);
         } else {
             $error = "peticion no ejecutada desde servidor";
@@ -500,6 +501,23 @@ class ApiController extends Controller
             $error = "peticion no ejecutada desde servidor";
             echo json_encode($error);
         }
+    }
+
+    public function abandonarMesa($id, $login) {
+        if ($login == $_SESSION["login"]) {
+            $orm = new OrmMesa;
+            echo $orm->abandonarMesa($id, $login)? "ok" : "error al abandonar";
+        } else {
+            $error = "no coincide usuario";
+            echo $error;
+        }
+    }
+
+    public function prueba() {
+        $orm = new OrmMesa;
+        $mesa = $orm->obtenerMesa(2);
+        $marcadores = $orm->obtenerMarcador(2);
+        $marcadores = $orm->sumarYManipularMarcadores(40, $marcadores, $mesa, 2);
     }
 
     

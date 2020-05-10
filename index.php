@@ -90,6 +90,10 @@ Macaw::get($URL_PATH . '/api/resolverjuego/(:any)/(:any)', "controller\apiContro
 
 Macaw::get($URL_PATH . '/api/resolverpunto/(:any)/(:any)', "controller\apiController@resolverPunto");
 
+Macaw::get($URL_PATH . '/api/abandonarmesa/(:any)/(:any)', "controller\apiController@abandonarMesa");
+
+Macaw::get($URL_PATH . '/api/prueba', "controller\apiController@prueba");
+
 
 Macaw::error(function() {
     echo '404 :: Not Found';
