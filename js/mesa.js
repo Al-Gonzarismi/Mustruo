@@ -434,7 +434,7 @@ $('#repartir').click(() => {
 });
 
 socket.on('repartir', (data) => {
-    if (mesa.id_mesa == data.mesa) {
+    if (mesa.id_mesa == data.mesa_id) {
         ocultarBaraja();
         ocultarCartas();
         colocarReversos();
