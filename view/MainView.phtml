@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Propia hoja de estilos -->
     <link rel="stylesheet" href="<?= $URL_PATH ?>/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
     <?php \dawfony\Ti::startBlock("extrahead"); ?>
     <?php \dawfony\Ti::endBlock() ?>
     <title>
@@ -28,7 +29,7 @@
         </div>
         <!--LOGO-->
         <div class="barraLogo">   
-            <img src="<?= $URL_PATH ?>/media/logoPrueba.png">
+            <img src="<?= $URL_PATH ?>/media/logo.png">
         </div>
         <div class="barraLogin">
             <?php if (isset($enLobby)) : ?>
@@ -40,13 +41,12 @@
                 <input type="text" class="inicioLogin" id="login" name="login" placeholder="usuario">
                 <input type="password" class="inicioContrasenna" id="contrasenna" name="contrasenna" placeholder="************">
                 <div class="inicioBotones">
-                    <input type="button" class="boton-marron" onclick="comprobarSesion()" value="Iniciar Sesión">
-                    <a class="registrate" href="<?= $URL_PATH ?>/registrate">Regístrate</a>
+                    <a href="javascript:void(0)" class="boton-marron iniciarSesion centrarTexto" id="comprobarSesion"><span>Iniciar Sesión</span></a>
+                    <a class="registrate centrarTexto" href="<?= $URL_PATH ?>/registrate">Regístrate</a>
                 </div>
                 <script>
                     var URL_PATH = '<?= $URL_PATH ?>';
                 </script>
-                <script src="<?= $URL_PATH ?>/js/comprobarSesion.js"></script>
             <?php endif; ?> 
         </div>
     </nav>

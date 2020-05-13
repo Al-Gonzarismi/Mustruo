@@ -1,5 +1,8 @@
 <?php global $URL_PATH;?>
 <?php \dawfony\Ti::extend("view/MainView.phtml"); ?>
+<?php \dawfony\Ti::startBlock("extrahead"); ?>
+<link rel="stylesheet" href="<?= $URL_PATH ?>/css/perfil.css">
+<?php \dawfony\Ti::endBlock(); ?>
 <?php \dawfony\Ti::startBlock("content"); ?>
 <div class="info">
     <div class="bloqueImagen">
@@ -15,55 +18,61 @@
         <?php endif;?>    
     </div>
     <div class="datos">
-        <div>
+        <div class="datosLogin bloqueDatos">
             <span>Login:</span> 
-            <div class="editarDatos">
-                <span id="spanLogin"><?= $usuario->login ?></span>
-            </div>
+            <span id="spanLogin"><?= $usuario->login ?></span>
         </div>
         <?php if (isset($_SESSION["login"])) : ?>
-            <?php if($_SESSION["login"] == $usuario->login) : ?>
-                <div>
-                    <span>Contraseña:</span>
-                    <div class="editarDatos">
-                        <span class="normalContrasennas">**********</span>
-                        <a href="javascript:void(0);" class="btn boton-naranja btn-chiquitin normalContrasennas" id="editarContrasenna">Editar <i class="fa fa-pencil"></i></a>
-                        <input class="editarInput editarContrasennas" type="password" id="contrasenna" placeholder="  contraseña nueva">
-                        <input class="editarInput editarContrasennas" type="password" id="repitecontrasenna" placeholder="  repita contraseña">
-                        <a href="javascript:void(0);" class="btn boton-naranja btn-chiquitin editarContrasennas" id="cambiarContrasenna">Cambiar <i class="fa fa-pencil"></i></a>
-                        <a href="javascript:void(0);" class="btn boton-morado btn-chiquitin editarContrasennas" id="cancelarContrasenna">Cancelar</a>   
-                    </div>
-                </div>
-            <?php endif;?>
+        <?php if($_SESSION["login"] == $usuario->login) : ?>
+        <div class="datosContrasenna bloqueDatos">
+            <span>Contraseña:</span>
+            <div class="editarDatos">
+                <span id="spanContrasenna">**********</span>
+                <a href="javascript:void(0);" class="boton-chiquitin editarContrasenna centrarTexto" id="editarContrasenna"><span>Editar <i class="fa fa-pencil"></i></sapn></a>
+                <input class="editarInput editarContrasennas" type="password" id="contrasenna" placeholder="  contraseña nueva">
+                <input class="editarInput repite editarContrasennas" type="password" id="repitecontrasenna" placeholder="  repita contraseña">
+                <a href="javascript:void(0);" class="boton-chiquitin cambiarContrasenna centrarTexto editarContrasennas" id="cambiarContrasenna"><span>Cambiar <i class="fa fa-pencil"></i></span></a>
+                <a href="javascript:void(0);" class="boton-cancelar cancelarContrasenna centrarTexto editarContrasennas" id="cancelarContrasenna"><span>Cancelar</span></a>   
+            </div>
+        </div>
+        <?php endif;?>
         <?php endif;?> 
-        <div>
+        <div class="datosEmail bloqueDatos">
             <span>Email:</span>
             <div class="editarDatos">
-                <span class="normalEmail" id="spanEmail"><?= $usuario->email ?></span>
+                <span id="spanEmail"><?= $usuario->email ?></span>
                 <?php if (isset($_SESSION["login"])) : ?>
-                    <?php if($_SESSION["login"] == $usuario->login) : ?>
-                        <a href="javascript:void(0);" class="btn boton-naranja btn-chiquitin normalEmail" id="editarEmail">Editar <i class="fa fa-pencil"></i></a>
-                        <input class="editarInput editarEmail" type="text" value="<?= $usuario->email ?>" id="email">
-                        <a href="javascript:void(0);" class="btn boton-naranja btn-chiquitin editarEmail" id="cambiarEmail">Cambiar <i class="fa fa-pencil"></i></a>
-                        <a href="javascript:void(0);" class="btn boton-morado btn-chiquitin editarEmail" id="cancelarEmail">Cancelar</a>
-                    <?php endif;?>
+                <?php if($_SESSION["login"] == $usuario->login) : ?>
+                <a href="javascript:void(0);" class="boton-chiquitin editarMail centrarTexto" id="editarEmail"><span>Editar <i class="fa fa-pencil"></i></span></a>
+                <input class="editarInput editarEmail" type="text" value="<?= $usuario->email ?>" id="email">
+                <a href="javascript:void(0);" class="boton-chiquitin cambiarEmail editarEmail centrarTexto" id="cambiarEmail"><span>Cambiar <i class="fa fa-pencil"></i></span></a>
+                <a href="javascript:void(0);" class="boton-cancelar cancelarEmail centrarTexto editarEmail" id="cancelarEmail">Cancelar</a>
+                <?php endif;?>
                 <?php endif;?>    
             </div>
         </div>
     </div> 
-</div>    
-<hr id="bg-morado">
-<div class="info">
+</div>
+<div class="stats">
     <h1>Estadisticas:</h1>
-    <div class="datos">
-        <div class="stats">Juegos jugados: <div class="numero"><?= $estadisticas["juegos_jugados"] ?></div></div>
-        <div class="stats">Juegos ganados: <div class="numero"><?= $estadisticas["juegos_ganados"] ?></div></div>
-        <div class="stats">Vacas jugadas: <div class="numero"><?= $estadisticas["vacas_jugadas"] ?></div></div>
-        <div class="stats">Vacas ganadas: <div class="numero"><?= $estadisticas["vacas_jugadas"] ?></div></div>
-        <div class="stats">Abandonos: <div class="numero"><?= $estadisticas["abandonos"] ?></div></div>
-        <div class="stats">Mustruo de la semana: <div class="numero"><?= $estadisticas["mustruo_semana"] ?></div></div>
-        <div class="stats">Mustruo del mes: <div class="numero"><?= $estadisticas["mustruo_mes"] ?></div></div>
-        <div class="stats">Mustruo del año: <div class="numero"><?= $estadisticas["mustruo_anno"] ?></div></div>
+    <div class="statsTabla">
+        <div class="tablaEstadisticas">
+            <div class="jugados centrarTexto statsPrincipal"><span>Jugados</span></div>
+            <div class="ganados centrarTexto statsPrincipal"><span>Ganados</span></div>
+            <div class="juegosTabla centrarTexto statsPrincipal"><span>Juegos</span></div>
+            <div class="juegosJugados centrarTexto statsInfo"><?= $estadisticas["juegos_jugados"] ?></div>
+            <div class="juegosGanados centrarTexto statsInfo"><?= $estadisticas["juegos_ganados"] ?></div>
+            <div class="vacasTabla centrarTexto statsPrincipal"><span>Vacas</span></div>
+            <div class="vacasJugadas centrarTexto statsInfo"><?= $estadisticas["vacas_jugadas"] ?></div>
+            <div class="vacasGanadas centrarTexto statsInfo"><?= $estadisticas["vacas_jugadas"] ?></div>
+        </div>
+        <span class="abandonos centrarTexto statsInfo"><span>Abandonos: <?= $estadisticas["abandonos"] ?></span></span>
+        <div class="tablaMustruo">
+            <div class="headerMustruo centrarTexto">Ranking de Mustruo's</div>
+            <div class="musSemana centrarTexto"><span>Mustruo de la semana: <span><?= $estadisticas["mustruo_semana"] ?></span></span></div>
+            <div class="musMes centrarTexto"><span>Mustruo del mes: <span><?= $estadisticas["mustruo_mes"] ?></span></span></div>
+            <div class="musAnno centrarTexto"><span>Mustruo del año: <span><?= $estadisticas["mustruo_anno"] ?></span></span></div>
+        </div>
     </div>
 </div>
 <script>

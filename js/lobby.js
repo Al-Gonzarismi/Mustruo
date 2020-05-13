@@ -39,31 +39,32 @@ function hacerLista(zona, data) {
             let li = document.createElement("li");
             let div = document.createElement("div");
             if (zona == clasificacion) {
-                div.setAttribute("class", "rank");
+                div.setAttribute("class", `rank rank${i + 1}`);
                 switch (i) {
                     case 0:
-                        div.innerHTML = `<a>${login}</a><div class='puntos'><img src='${path}/media/oro.png'><span>${puntos}pts</span><div>`;
+                        div.innerHTML = `<span>${i + 1}. ${login}</span><div class='puntos'><img src='${path}/media/oro.png'><span class="puntoSpan centrarTexto">${puntos}pts</span></div>`;
                         break;
                     case 1:
-                        div.innerHTML = `<a>${login}</a><div class='puntos'><img src='${path}/media/plata.png'><span>${puntos}pts</span><div>`;
+                        div.innerHTML = `<span>${i + 1}. ${login}</span><div class='puntos'><img src='${path}/media/plata.png'><span class="puntoSpan centrarTexto">${puntos}pts</span></div>`;
                         break;
                     case 2:
-                        div.innerHTML = `<a>${login}</a><div class='puntos'><img src='${path}/media/bronce.png'><span>${puntos}pts</span><div>`;
+                        div.innerHTML = `<span>${i + 1}. ${login}</span><div class='puntos'><img src='${path}/media/bronce.png'><span class="puntoSpan centrarTexto">${puntos}pts</span></div>`;
                         break;
                     default:
-                        div.innerHTML = `<a>${login}</a><div class='puntos'><span>${puntos}pts</span><div>`;
+                        div.innerHTML = `<span>${i + 1}. ${login}</span><div class='puntos'><span class="puntoSpan centrarTexto">${puntos}pts</span></div>`;
                         break;
                 }
+                container.append(div);
+                div.addEventListener("click", () => {
+                    renderStats(login);
+                });
             } else {
-                div.setAttribute("class", "online");
-                div.innerHTML = `<a>${login}</a>`;
+                li.innerHTML = `<span>${login}</span>`;
+                container.append(li);
+                li.addEventListener("click", () => {
+                    renderStats(login);
+                });
             }
-
-            li.append(div);
-            container.append(li);
-            li.addEventListener("click", () => {
-                renderStats(login);
-            });
             previo = login;
         }
     }
@@ -106,6 +107,7 @@ function crearAsientos(id, mesa, i) {
     asiento.setAttribute("class", `posicion${i} asiento`);
     let img = document.createElement("img");
     let span = document.createElement("span");
+    span.setAttribute("class", "centrarTexto")
     span.innerText = "";
     img.setAttribute("src", `${path}/media/asientolibre.PNG`);//poner imagen y adaptar ruta    
     img.addEventListener("click", () => {
@@ -198,9 +200,11 @@ function actualizarMesas() {
                     mesas.innerHTML = "";
                     mesas.append(container);
                     if (usuario.estaSentado) {
-                        btnlevantarse.setAttribute("class", "btn boton-morado dejarMesa");
+                        btnlevantarse.setAttribute("class", "dejarMesa");
+                        nuevaMesa.setAttribute("class", "hidden");
                     } else {
-                        btnlevantarse.setAttribute("class", "btn boton-morado hidden");
+                        btnlevantarse.setAttribute("class", "hidden");
+                        nuevaMesa.setAttribute("class", "nuevaMesa");
                     }
                 })
 
@@ -215,21 +219,23 @@ function renderRanking(tipo) {
         })
 }
 
-
 //rankings
 
 renderRanking(0);
 
 
 semana.addEventListener("click", () => {
+    $('#pestannasRanking').text('de la semana');
     renderRanking(0);
 })
 
 mes.addEventListener("click", () => {
+    $('#pestannasRanking').text('del mes');
     renderRanking(1);
 })
 
 anno.addEventListener("click", () => {
+    $('#pestannasRanking').text('del año');
     renderRanking(2);
 })
 
@@ -264,7 +270,8 @@ if (usuario != "anonimo") {
 }
 
 socket.on('chatlobby:message', (data) => {
-    chat.innerHTML += `<p>${data.nombre}: ${data.mensaje}</p>`;
+    chat.innerHTML += `<div class="textoMensaje"><span>${data.nombre}:</span> ${data.mensaje}</div>`;
+    $('#chat').scrollTop($('#chat').prop('scrollHeight'));
 });
 
 //crear mesa y levantarse de mesa
@@ -311,5 +318,26 @@ socket.on("empezarpartida", (data) => {
         window.location = `${path}/mesa/${data}`;
     }
 })
-
+window.onload = function () {
+    console.log("height: " + window.innerHeight);
+    console.log("width: " + window.innerWidth);
+    $('#comprobarSesion').click(function () {
+        var login = document.getElementById("login").value;
+        var contrasenna = document.getElementById("contrasenna").value;
+        if (login.length > 3 && contrasenna.length > 3) {
+            fetch(`${URL_PATH}/api/comprobarSesion/${login}/${contrasenna}`)
+                .then(function (response) {
+                    return response.text()
+                }).then (function (datos){
+                if (datos == "si") {
+                    alert('Compruebe de nuevo su login y/o contraseña')
+                } else {
+                    location.replace(URL_PATH+"/");
+                }
+            })
+        } else {
+            alert('Compruebe de nuevo su login y/o contraseña')
+        }
+    })
+}
 
