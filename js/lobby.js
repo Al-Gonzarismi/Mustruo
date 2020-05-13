@@ -149,7 +149,7 @@ function renderUsuarios(id, mesa) {
             }
             if (usuario.mesa_id == id && usuario.listo) {
                 var listo = document.createElement("button");
-                listo.setAttribute("class", "listo btn boton-morado");
+                listo.setAttribute("class", "listo boton-marron");
                 listo.innerText = "Listo!";
                 console.log(mesa.childNodes[1]);
                 mesa.append(listo);
@@ -318,26 +318,23 @@ socket.on("empezarpartida", (data) => {
         window.location = `${path}/mesa/${data}`;
     }
 })
-window.onload = function () {
-    console.log("height: " + window.innerHeight);
-    console.log("width: " + window.innerWidth);
-    $('#comprobarSesion').click(function () {
-        var login = document.getElementById("login").value;
-        var contrasenna = document.getElementById("contrasenna").value;
-        if (login.length > 3 && contrasenna.length > 3) {
-            fetch(`${URL_PATH}/api/comprobarSesion/${login}/${contrasenna}`)
-                .then(function (response) {
-                    return response.text()
-                }).then (function (datos){
+//Comprabar Sesion
+$('#comprobarSesion').click(function () {
+    var login = document.getElementById("login").value;
+    var contrasenna = document.getElementById("contrasenna").value;
+    if (login.length > 3 && contrasenna.length > 3) {
+        fetch(`${URL_PATH}/api/comprobarSesion/${login}/${contrasenna}`)
+            .then(function (response) {
+                return response.text()
+            }).then(function (datos) {
                 if (datos == "si") {
                     alert('Compruebe de nuevo su login y/o contraseña')
                 } else {
-                    location.replace(URL_PATH+"/");
+                    location.replace(URL_PATH + "/");
                 }
             })
-        } else {
-            alert('Compruebe de nuevo su login y/o contraseña')
-        }
-    })
-}
+    } else {
+        alert('Compruebe de nuevo su login y/o contraseña')
+    }
+})
 
