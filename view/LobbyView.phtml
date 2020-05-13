@@ -1,87 +1,83 @@
 <?php global $URL_PATH; ?>
 <?php \dawfony\Ti::extend("view/MainView.phtml"); ?>
+<?php \dawfony\Ti::startBlock("extrahead"); ?>
+<link rel="stylesheet" href="<?= $URL_PATH ?>/css/lobbyResponsive.css">
+<link rel="stylesheet" href="<?= $URL_PATH ?>/css/lobby.css">
+<?php \dawfony\Ti::endBlock(); ?>
 <?php \dawfony\Ti::startBlock("content"); ?>
-<div class="principal">
   <!-- clasificaciones Mustruo -->
-  <div class="primerTercio">
-    <header class="header">
-      <img src="<?= $URL_PATH ?>/media/trofeo.png" class="imgCabecera">
-      <span class="textoHeader"> Ranking de Mustruos </span>
-      <div class="pestannas">
+  <div class="ranking">
+    <header class="headerRanking">
+      <img src="<?= $URL_PATH ?>/media/trofeo.png">
+      <span class="textoMustruo">Mustruo</span>
+      <span class="textoPestannas" id="pestannasRanking">de la semana</span>
+      <div class="pestannasRanking">
         <ul>
-          <li id="semana"><a href="javascript:void(0)">semana</a></li>
-          <li id="mes"><a href="javascript:void(0)">mes</a></li>
-          <li id="anno"><a href="javascript:void(0)">año</a></li>
+          <li class="centrarTexto" id="semana"><span>semana</span></li>
+          <li class="centrarTexto pestannaMes" id="mes"><span>mes</span></li>
+          <li class="centrarTexto pestannaAnno" id="anno"><span>año</span></li>
         </ul>
       </div>
     </header>
-    <section>
-      <ol id="clasificacion"></ol>
+    <section class="rankingClasificacion">
+      <div id="clasificacion"></div>
     </section>
   </div>
   <!-- 2/3 -->
-  <div class="segundoTercio">
+  <div class="mesasChat">
     <!-- mesas -->
     <div class="mesas">
-      <header class="header">
+      <header class="headerMesas">
         <img src="<?= $URL_PATH ?>/media/mesas.png" class="imgCabecera">
-        <span class="textoHeader">Únete a una mesa para jugar</span>
+        <span class="textoMesa centrarTexto"><span>Únete o crea una mesa</span></span>
         <?php if (isset($_SESSION["login"])) : ?>
           <!-- boton nueva mesa-->
-          <button id="nuevamesa" class="btn boton-morado nuevaMesa">Nueva mesa</button>
+          <button id="nuevamesa" class="nuevaMesa">Nueva mesa</button>
         <?php endif; ?>
         <!-- boton levantarse de mesa-->
-        <button id="levantarse" class="btn boton-morado hidden dejarMesa">Dejar mesa</button>
+        <button id="levantarse" class="dejarMesa hidden">Dejar mesa</button>
       </header>
-
-      <section id="mesas" class="bodyHeader scroll crearMesas"></section>
+      <section id="mesas" class="bodyMesas scroll"></section>
     </div>
     <!-- chat-->
     <div class="chat">
-      <header class="header">
-        <img src="<?= $URL_PATH ?>/media/chat.png" class="imgCabecera">
-        <span class="textoHeader">Dialoga con los usuarios online</span>
-      </header>
-      <div class="bodyHeader divChat">
-        <section id="chat" class="scroll"></section>
-        <div class="enviarTexto">
+        <section id="chat" class="mensajes scroll"></section>
+        <div class="enviarMensajes">
           <input type="text" id="mensaje" placeholder="Escribe algo...">
-          <button id="enviarmensaje" class="btn boton-morado">enviar</button>
+          <button id="enviarmensaje" class="centrarTexto"><span>Enviar</span></button>
         </div>
-      </div>
     </div>
   </div>
 
-  <div class="tercerTercio">
+  <div class="usuarioStats">
     <!--Inicio 3/3-->
     <!-- Usuarios online-->
     <div class="usuarios">
-      <header class="header">
+      <header class="headerUsuarios">
         <img src="<?= $URL_PATH ?>/media/online.png" class="imgCabecera">
-        <span class="textoHeader">Usuarios online</span>
+        <span class="textoUsuarios centrarTexto"><span>Usuarios online</span></span>
       </header>
-      <section class="bodyHeader scroll">
+      <section class="bodyUsuarios scroll">
         <ul id="usuariosonline"></ul>
       </section>
     </div>
     <!-- Estadisticas-->
     <div class="estadisticas">
-      <header class="header">
+      <header class="headerEstadisticas">
         <img src="<?= $URL_PATH ?>/media/estadistica.png" class="imgCabecera">
-        <span class="textoHeader">Estadísticas <span id="usuestadisticas"></span></span>
+        <div class="centrarTexto"><span class="textoEstadisticas">Estadísticas de <span id="usuestadisticas"></span></span></div>
       </header>
       <section class="tablaEstadisticas">
-        <div></div>
-        <div>Jugados</div>
-        <div>Ganados</div>
-        <div>Juegos</div>
-        <div id="juegosJugados"></div>
-        <div id="juegosGanados"></div>
-        <div>Vacas</div>
-        <div id="vacasJugadas"></div>
-        <div id="vacasGanadas"></div>
+        <div class="jugados centrarTexto"><span>Jugados</span></div>
+        <div class="ganados centrarTexto"><span>Ganados</span></div>
+        <div class="juegosTabla centrarTexto"><span>Juegos</span></div>
+        <div class="juegosJugados centrarTexto"><span id="juegosJugados"></span></div>
+        <div class="juegosGanados centrarTexto"><span id="juegosGanados"></span></div>
+        <div class="vacasTabla centrarTexto"><span>Vacas</span></div>
+        <div class="vacasJugadas centrarTexto"><span id="vacasJugadas"></span></div>
+        <div class="vacasGanadas centrarTexto"><span id="vacasGanadas"></span></div>
       </section>
-      <span class="abandonos">Abandonos: <span id="abandonos"></span></span>
+      <span class="abandonos centrarTexto"><span>Abandonos: <span id="abandonos"></span></span></span>
     </div>
   </div>
   <!--Fin 3/3-->

@@ -5,12 +5,13 @@ window.onload = function () {
         $('#cambiarAvatar').click();
     })
     $('#editarEmail').click(function () {
-        console.log(email);
-        $('.normalEmail').css('display', 'none');
+        $('#spanEmail').css('display', 'none');
+        $('#editarEmail').css('display', 'none');
         $('.editarEmail').css('display', 'inline');
     })
     $('#cancelarEmail').click(function () {
-        $('.normalEmail').css('display', 'inline');
+        $('#spanEmail').css('display', 'inline');
+        $('#editarEmail').css('display', 'inline');
         $('.editarEmail').css('display', 'none');
         $('#email').val(email);
     })
@@ -35,7 +36,8 @@ window.onload = function () {
                     case "1":
                         //exito
                         $('#email').css('background-color', 'palegreen').css('color', 'green').css('border-color', 'green');
-                        $('.normalEmail').css('display', 'inline');
+                        $('#spanEmail').css('display', 'inline');
+                        $('#editarEmail').css('display', 'inline');
                         $('.editarEmail').css('display', 'none');
                         $('#email').val(emailCambio);
                         $('#spanEmail').text(emailCambio);
@@ -47,7 +49,8 @@ window.onload = function () {
         }
     })
     $('#editarContrasenna').click(function () {
-        $('.normalContrasennas').css('display', 'none');
+        $('#spanContrasenna').css('display', 'none');
+        $('#editarContrasenna').css('display', 'none');
         $('.editarContrasennas').css('display', 'inline');
     })
     $('#cambiarContrasenna').click(function () {
@@ -74,7 +77,8 @@ window.onload = function () {
                             break;
                         case "1":
                             //exito
-                            $('.normalContrasennas').css('display', 'inline');
+                            $('#spanContrasenna').css('display', 'inline');
+                            $('#editarContrasenna').css('display', 'inline');
                             $('.editarContrasennas').css('display', 'none');
                             $('#contrasenna').val('');
                             $('#repitecontrasenna').val('');
@@ -85,7 +89,8 @@ window.onload = function () {
         }
     })
     $('#cancelarContrasenna').click(function () {
-        $('.normalContrasennas').css('display', 'inline');
+        $('#spanContrasenna').css('display', 'inline');
+        $('#editarContrasenna').css('display', 'inline');
         $('.editarContrasennas').css('display', 'none');
         $('#contrasenna').val('');
         $('#repitecontrasenna').val('');

@@ -2,7 +2,7 @@
 html, body {
     background: #401c50;
     color: white;
-    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-family: 'Special Elite', cursive;
     width: 100%;
     height: 100%;
 }
@@ -26,13 +26,6 @@ html, body {
 .centrarTexto > span {
     width: 100%;
 }
-.bg-morado {
-    background-color: purple;
-}
-.flexColumn {
-    display: flex;
-    flex-direction: column;
-}
 .pointer {
     cursor: pointer;
 }
@@ -42,93 +35,8 @@ html, body {
 .ocultar {
     visibility: hidden;
 }
-/* Nav */
-.personalizarNav {
-    text-align: center;
-    font-size: 30px;
-}
-.registrate {
-    color: lightblue;
-    font-size: 13px;
-    text-align: center;
-}
-.perfil {
-    color: lightblue;
-    font-size: 20px;
-}
-.perfil:hover {
-    color: rgba(173, 216, 230, 0.74);
-}
-/* Perfil */
-.info {
-    display: flex;
-    margin-top: 2%; 
-    margin-left: 6%;
-    color: lightblue;
-}
-.bloqueImagen {
-    display: flex;
-    flex-direction: column;
-    width: 250px;
-    height: 325px;
-}
-.imagenUsuario {
-    width: 250px;
-    height: 250px;
-}
-.datos {
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    margin-left: 15%;
-    font-size: 20px;
-}
-.editarDatos {
-    margin-left: 9%;
-    display: inline;
-    color:white;
-    font-size: 15px;
-}
-.editarInput {
-    width: 18%;
-    background-color: palegreen;
-    border: 1px solid palegreen;
-    color: green;
-    border-radius: 5px;
-}
-.btn-chiquitin {
-    font-size: 10px;
-    margin-left: 2%;
-    display: inline;
-}
-.informacionEditar {
-    font-size: 10px;
-    color: lightblue;
-}
-.subir{
-    padding: 5px;
-    text-align: center;
-    background-color: lightblue;
-    color: purple;
-}
-.subir:hover{
-    background-color: rgba(173, 216, 230, 0.74);
-    color: rgba(128, 0, 128, 0.61);
-}
-.stats {
-    margin-bottom: 2%;
-    width: 35%;
-}
-.stats > .numero {
-    display: inline;
-    color: white;
-}
-.editarContrasennas {
-    display: none;
-}
-.editarEmail {
-    display: none;
+.scroll {
+    overflow: auto;
 }
 /*Contenedor*/
 .contenedor {
@@ -161,9 +69,8 @@ html, body {
 .barraLogo > img {
     position: absolute;
     left: 35%;
-    top: 10%;
     width: 30%;
-    height: 80%;
+    height: 100%;
 }
 /*Inicio Sesion*/
 .barraLogin {
@@ -191,14 +98,16 @@ html, body {
     width: 30%;
     height: 100%;
 }
-.inicioBotones > input {
+.inicioBotones > a:first-child {
     position: absolute;
     top: 10%;
     left: 15%;
     width: 70%;
     height: 50%;
+    cursor: pointer;
+    text-decoration: none;
 }
-.inicioBotones > a {
+.inicioBotones > a:last-child {
     position: absolute;
     left: 15%;
     bottom: 0;
