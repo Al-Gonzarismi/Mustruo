@@ -93,7 +93,7 @@ io.on('connection', (socket) => {
                                     fetch(`http://Localhost/Mustruo/api/adelantarmano/${id}/control`)
                                         .then((res) => res.json())
                                         .then((res) => {
-                                            io.emit('tapete');
+                                            io.emit('tapete', res.mesa_id);
                                             io.emit('interaccion', res);
                                         });
                                 }, 2000);

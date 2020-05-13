@@ -172,7 +172,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `mustruobd`.`jugadas` (
   `mesa_id` INT NOT NULL,
   `mano` INT NOT NULL,
-  `estado` VARCHAR(45) NOT NULL DEFAULT 'menu',
+  `estado` VARCHAR(45) NOT NULL DEFAULT 'repartir',
   `turno` INT NOT NULL,
   `jugada` VARCHAR(45) NOT NULL DEFAULT 'mus',
   `grande` VARCHAR(45) NOT NULL DEFAULT '-',
