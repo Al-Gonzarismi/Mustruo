@@ -67,6 +67,20 @@ function repartoUsuario(cartas) {
     cartas['2'].setAttribute('class', 'ocultar aparecer doceSegundos')
     cartas['3'].setAttribute('class', 'ocultar aparecer dieciseisSegundos')
 }
+function hiddenReparto() {
+    if (!$('#deUsu').hasClass('hidden')) {
+        $('#deUsu').addClass('hidden');
+    }
+    if (!$('#deRivalDer').hasClass('hidden')) {
+        $('#deRivalDer').addClass('hidden');
+    }
+    if (!$('#deCompi').hasClass('hidden')) {
+        $('#deCompi').addClass('hidden');
+    }
+    if (!$('#deRivalIzq').hasClass('hidden')) {
+        $('#deRivalIzq').addClass('hidden');
+    }
+}
 function repartir() {
     const manoUsuario = $('.manoUsuario');
     const manoRivalDer = $('.manoRivalDer');
@@ -77,25 +91,25 @@ function repartir() {
     var rivalDerCartas = $('.rivalderCartas').children();
     var rivalIzqCartas = $('.rivalizqCartas').children();
     if (!manoRivalDer.hasClass('hidden')) {
-        $('#deUsu').show();
+        $('#deUsu').removeClass('hidden');
         repartoDerecha(rivalDerCartas);
         repartoCompi(compiCartas);
         repartoIzq(rivalIzqCartas);
         repartoUsuario(usuarioCartas);
     } else if (!manoCompi.hasClass('hidden')) {
-        $('#deRivalDer').show();
+        $('#deRivalDer').removeClass('hidden');
         repartoDerecha(compiCartas);
         repartoCompi(rivalIzqCartas);
         repartoIzq(usuarioCartas);
         repartoUsuario(rivalDerCartas);
     } else if (!manoUsuario.hasClass('hidden')) {
-        $('#deRivalIzq').show();
+        $('#deRivalIzq').removeClass('hidden');
         repartoDerecha(usuarioCartas);
         repartoCompi(rivalDerCartas);
         repartoIzq(compiCartas);
         repartoUsuario(rivalIzqCartas);
     } else if (!manoRivalIzq.hasClass('hidden')) {
-        $('#deCompi').show();
+        $('#deCompi').removeClass('hidden');
         repartoDerecha(rivalIzqCartas);
         repartoCompi(usuarioCartas);
         repartoIzq(rivalDerCartas);
@@ -435,6 +449,7 @@ $('#repartir').click(() => {
 
 socket.on('repartir', (data) => {
     if (mesa.id_mesa == data.mesa_id) {
+        hiddenReparto();
         ocultarBaraja();
         ocultarCartas();
         colocarReversos();
