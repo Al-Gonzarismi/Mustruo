@@ -79,7 +79,6 @@ function levantarse() {
             .then((res) => {
                 console.log(res);
                 if (res == "ok") {
-                    //sockets:probablemente mejorable
                     socket.emit('actualizarmesas');
                 } else {
                     window.alert("falla levantarse");
@@ -94,7 +93,6 @@ function sentarse(id, i) {
         .then((res) => {
             console.log(res);
             if (res != "nook") {
-                //sockets:probablemente mejorable
                 socket.emit("actualizarmesas");
             } else {
                 window.alert("falla sentarse");
