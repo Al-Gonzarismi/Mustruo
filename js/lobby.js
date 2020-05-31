@@ -149,7 +149,6 @@ function renderUsuarios(id, mesa) {
                 var listo = document.createElement("button");
                 listo.setAttribute("class", "listo boton-marron");
                 listo.innerText = "Listo!";
-                console.log(mesa.childNodes[1]);
                 mesa.append(listo);
                 listo.addEventListener("click", () => {
                     fetch(`${path}/api/empezarpartida/${usuario.mesa_id}`)
