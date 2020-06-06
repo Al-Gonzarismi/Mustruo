@@ -79,7 +79,6 @@ function levantarse() {
             .then((res) => {
                 console.log(res);
                 if (res == "ok") {
-                    //sockets:probablemente mejorable
                     socket.emit('actualizarmesas');
                 } else {
                     window.alert("falla levantarse");
@@ -94,7 +93,6 @@ function sentarse(id, i) {
         .then((res) => {
             console.log(res);
             if (res != "nook") {
-                //sockets:probablemente mejorable
                 socket.emit("actualizarmesas");
             } else {
                 window.alert("falla sentarse");
@@ -151,7 +149,6 @@ function renderUsuarios(id, mesa) {
                 var listo = document.createElement("button");
                 listo.setAttribute("class", "listo boton-marron");
                 listo.innerText = "Listo!";
-                console.log(mesa.childNodes[1]);
                 mesa.append(listo);
                 listo.addEventListener("click", () => {
                     fetch(`${path}/api/empezarpartida/${usuario.mesa_id}`)
