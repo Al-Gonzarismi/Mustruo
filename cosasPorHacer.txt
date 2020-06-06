@@ -1,17 +1,13 @@
-AMBOS:
-Logo
-¡No todos los navegadores usa ECS6!¡Existen transpiladores!
-Si esta en partida que te redirija todo el rato a la mesa en vez de Lobby
-Idea: cambiar funcionamiento botones dejar mesa, nueva mesa (desaparecer)
-GONZALO:
-Nav
-Lobby {
-    cambiar interior (MESAS)
-    cambiar interior (CHAT)
-    cambiar interior (USUARIOS ONLINE)
-    cambiar interior (ESTADISTICAS)
+Ultimas cosas:
+-Responsive {
+    Perfil
+    Registro
 }
-JORGE:
-estados mus: repartir, menus, descartar
-estados envites: limpio, envite || reenvite, ordago
-estado comprobacion pares y juego : comprobando
+Buscar Usuarios
+-Mesa {
+    estadisticas
+    online
+    colores
+}
+Comprobaciones de login (que no se repita y expresion regular)
+Limpiar clases vacias
