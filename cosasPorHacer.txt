@@ -1,13 +1,7 @@
 Ultimas cosas:
--Responsive {
-    Perfil
-    Registro
-}
 Buscar Usuarios
 -Mesa {
     estadisticas
     online
     colores
 }
-Comprobaciones de login (que no se repita y expresion regular)
-Limpiar clases vacias
