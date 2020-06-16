@@ -8,6 +8,17 @@ var timeoutBocadillo = 2000;
 
 
 //functions
+function enviarTexto() {
+    if (mensaje.value != "") {
+        socket.emit("chatpartida:message", {
+            "mensaje": mensaje.value,
+            "nombre": usuario.login,
+            "mesa": mesa.id_mesa
+        })
+        mensaje.value = "";
+    }
+}
+
 function hacerLista(data) {
     var container = document.createElement("div");
     var previo = "";
@@ -406,16 +417,15 @@ socket.on('refrescarusuarios', (data) => {
 });
 
 //chat
-enviar.addEventListener("click", () => {
-    if (mensaje.value != "") {
-        socket.emit("chatpartida:message", {
-            "mensaje": mensaje.value,
-            "nombre": usuario.login,
-            "mesa": mesa.id_mesa
-        })
-        mensaje.value = "";
+mensaje.addEventListener("keydown", () => {
+    key = event.keyCode;
+    switch (key) {
+        case 13:
+            enviarTexto();
+            break;
     }
 });
+enviar.addEventListener("click", enviarTexto);
 
 
 socket.on('chatpartida:message', (data) => {

@@ -510,7 +510,7 @@
     border: 4px ridge white;
 }
 .textoMensaje > span {
-    color: #96623d;
+    color: rgb(0, 255, 0);
 }
 /*Usuarios Mesa*/
 .usuariosMesa {
@@ -536,6 +536,14 @@
     bottom: 0;
     background-color: black;
     border-right: 5px ridge white;
+}
+#usuariosonline > div > li {
+    width: 50%;
+    color: rgb(0, 255, 0);
+    font-size: 110%;
+}
+#usuariosonline > div > li > div > a {
+    cursor: pointer;
 }
 /*Estadisticas*/
 .statsMesa {
