@@ -1,4 +1,6 @@
 window.onload = function () {
+    console.log("Height: "+window.innerHeight)
+    console.log("Width: "+window.innerWidth)
     var login = $('#spanLogin').text();
     var email = $('#spanEmail').text();
     $('#avatar').change(function () {

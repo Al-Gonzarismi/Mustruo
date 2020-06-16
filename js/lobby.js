@@ -20,7 +20,7 @@ function renderStats(login) {
     fetch(`${path}/api/estadisticas/${login}`)
         .then((res) => res.json())
         .then((res) => {
-            $("#usuestadisticas").text(login);
+            $("#usuestadisticas").text(login).attr('href', `${path}/perfil/${login}`);
             $("#juegosJugados").text(res.juegos_jugados);
             $("#juegosGanados").text(res.juegos_ganados);
             $("#vacasJugadas").text(res.vacas_jugadas);
