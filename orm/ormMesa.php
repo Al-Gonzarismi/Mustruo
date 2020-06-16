@@ -689,7 +689,7 @@ class OrmMesa
                         $ganador = $jugador;
                     }
                 }
-            }            
+            }
         }
         return $ganador % 2;
     }
@@ -804,6 +804,10 @@ class OrmMesa
         $pareja = $ganador == 0 ? "Pareja A" : "ParejaB";
         if ($marcadores[$ganador]->vacas == 77) {
             $texto = "$pareja ha ganado la partida";
+            $marcadores[$ganador]->vacas = 0;
+            $sql = "UPDATE `marcador` SET  `vacas` = 0 WHERE `mesa_id` = ?";
+            $params = [$situacion["mesa_id"]];
+            $bd->execute($sql, $params);
         } else if ($marcadores[$ganador]->juegos == 0) {
             $texto = "$pareja ha ganado la vaca";
         } else {
@@ -843,6 +847,10 @@ class OrmMesa
             } else {
                 if ($marcadores[$ganador]->vacas == 77) {
                     $texto = "$pareja gana $puntos de grande y ha ganado la partida";
+                    $marcadores[$ganador]->vacas = 0;
+                    $sql = "UPDATE `marcador` SET  `vacas` = 0 WHERE `mesa_id` = ?";
+                    $params = [$situacion["mesa_id"]];
+                    $bd->execute($sql, $params);
                 } else if ($marcadores[$ganador]->juegos == 0) {
                     $texto = "$pareja gana $puntos de grande y ha ganado la vaca";
                 } else {
@@ -880,6 +888,10 @@ class OrmMesa
             } else {
                 if ($marcadores[$ganador]->vacas == 77) {
                     $texto = "$pareja gana $puntos de chica y ha ganado la partida";
+                    $marcadores[$ganador]->vacas = 0;
+                    $sql = "UPDATE `marcador` SET  `vacas` = 0 WHERE `mesa_id` = ?";
+                    $params = [$situacion["mesa_id"]];
+                    $bd->execute($sql, $params);
                 } else if ($marcadores[$ganador]->juegos == 0) {
                     $texto = "$pareja gana $puntos de chica y ha ganado la vaca";
                 } else {
@@ -903,7 +915,7 @@ class OrmMesa
             $bd->startTransaction();
             $puntos = 0;
             if ($situacion["pares"] != 'A' && $situacion["pares"] != 'B' || $situacion["pares"] != '-') {
-                $puntos = (int)$situacion["pares"];
+                $puntos = (int) $situacion["pares"];
             }
             $ganador = $this->obtenerGanadorPares($situacion);
             $cartas1 = $this->obtenerCartas($situacion["mesa_id"], $ganador);
@@ -932,6 +944,10 @@ class OrmMesa
             } else {
                 if ($marcadores[$ganador]->vacas == 77) {
                     $texto = "$pareja gana $puntos de pares y ha ganado la partida";
+                    $marcadores[$ganador]->vacas = 0;
+                    $sql = "UPDATE `marcador` SET  `vacas` = 0 WHERE `mesa_id` = ?";
+                    $params = [$situacion["mesa_id"]];
+                    $bd->execute($sql, $params);
                 } else if ($marcadores[$ganador]->juegos == 0) {
                     $texto = "$pareja gana $puntos de pares y ha ganado la vaca";
                 } else {
@@ -961,7 +977,7 @@ class OrmMesa
             } else if ($situacion["juego"] == '-') {
                 $ganador = $this->obtenerGanadorJuegoOPunto($situacion);
             } else {
-                $puntos = (int)$situacion["juego"];
+                $puntos = (int) $situacion["juego"];
                 $ganador = $this->obtenerGanadorJuegoOPunto($situacion);
             }
             $cartas1 = $this->obtenerCartas($situacion["mesa_id"], $ganador);
@@ -990,6 +1006,10 @@ class OrmMesa
             } else {
                 if ($marcadores[$ganador]->vacas == 77) {
                     $texto = "$pareja gana $puntos de juego y ha ganado la partida";
+                    $marcadores[$ganador]->vacas = 0;
+                    $sql = "UPDATE `marcador` SET  `vacas` = 0 WHERE `mesa_id` = ?";
+                    $params = [$situacion["mesa_id"]];
+                    $bd->execute($sql, $params);
                 } else if ($marcadores[$ganador]->juegos == 0) {
                     $texto = "$pareja gana $puntos de juego y ha ganado la vaca";
                 } else {
@@ -1019,9 +1039,9 @@ class OrmMesa
             } else if ($situacion["punto"] == '-') {
                 $ganador = $this->obtenerGanadorJuegoOPunto($situacion);
             } else {
-                $puntos += (int)$situacion["punto"];
+                $puntos += (int) $situacion["punto"];
                 $ganador = $this->obtenerGanadorJuegoOPunto($situacion);
-            }           
+            }
             $mesa = $this->obtenerMesa($situacion["mesa_id"]);
             $marcadores = $this->obtenerMarcador($situacion["mesa_id"]);
             $marcadores = $this->sumarYManipularMarcadores($puntos, $marcadores, $mesa, $ganador);
@@ -1036,6 +1056,10 @@ class OrmMesa
             } else {
                 if ($marcadores[$ganador]->vacas == 77) {
                     $texto = "$pareja gana $puntos de punto y ha ganado la partida";
+                    $marcadores[$ganador]->vacas = 0;
+                    $sql = "UPDATE `marcador` SET  `vacas` = 0 WHERE `mesa_id` = ?";
+                    $params = [$situacion["mesa_id"]];
+                    $bd->execute($sql, $params);
                 } else if ($marcadores[$ganador]->juegos == 0) {
                     $texto = "$pareja gana $puntos de punto y ha ganado la vaca";
                 } else {
@@ -1052,15 +1076,16 @@ class OrmMesa
         return $res;
     }
 
-    private function apuntarAbandono($login) {
+    private function apuntarAbandono($login)
+    {
         $bd = Klasto::getInstance();
         $params = [$login];
         $sql = "UPDATE `estadisticas` SET `abandonos` = `abandonos` + 1 WHERE `login` = ?";
         return $bd->execute($sql, $params);
-
     }
 
-    public function abandonarMesa($id, $login) {
+    public function abandonarMesa($id, $login)
+    {
         $bd = Klasto::getInstance();
         $bd->startTransaction();
         $posicion = $this->obtenerPosicion($login);
