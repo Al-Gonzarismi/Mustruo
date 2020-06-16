@@ -1036,6 +1036,10 @@ class OrmMesa
             } else {
                 if ($marcadores[$ganador]->vacas == 77) {
                     $texto = "$pareja gana $puntos de punto y ha ganado la partida";
+                    $marcadores[$ganador]->vacas = 0;
+                    $sql = "UPDATE `marcador` SET  `vacas` = 0 WHERE `mesa_id` = ?";
+                    $params = [$situacion["mesa_id"]];
+                    $bd->execute($sql, $params);
                 } else if ($marcadores[$ganador]->juegos == 0) {
                     $texto = "$pareja gana $puntos de punto y ha ganado la vaca";
                 } else {
