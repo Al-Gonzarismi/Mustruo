@@ -8,12 +8,12 @@ function cambiarNombreAvatar($img, $login) {
     return $nombre . $extension;
 }
 function guardarAvatar($img) {
-    global $URL_PATH;
     $target_dir = "media/avatares/";
     $target_file = $target_dir . basename($img["name"]);
     move_uploaded_file($img["tmp_name"], $target_file);
 }
-function eliminarAvatar($img) {
-    $target_file = "media/avatares/$img";
+function actualizarAvatar($imgAntigua, $imgNueva) {
+    $target_file = "media/avatares/$imgAntigua";
     unlink($target_file);
+    guardarAvatar($imgNueva);
 }

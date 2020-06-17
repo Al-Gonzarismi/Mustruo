@@ -57,14 +57,14 @@ class UserController extends Controller {
     function cambiarAvatar($login, $imgAntigua) {
         global $URL_PATH;
         $orm = new OrmUser;
-        if ($imgAntigua != "anonimus.jpg") {
-            eliminarAvatar($imgAntigua);
-        }
         $imgNueva = $_FILES["avatar"];
         $imgNueva["name"] = cambiarNombreAvatar($imgNueva["name"], $login);
-        if ($orm->modificarAvatar($login, $imgNueva["name"])) {
+        if ($imgAntigua != "anonimus.jpg") {
+            actualizarAvatar($imgAntigua, $imgNueva);
+        } else {
+            $orm->modificarAvatar($login, $imgNueva["name"]);
             guardarAvatar($imgNueva);
-        }
+        }        
         header("Location: $URL_PATH/perfil/$login");
     }
 }

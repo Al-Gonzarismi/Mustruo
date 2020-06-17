@@ -142,14 +142,15 @@
     position: absolute;
     width: 35%;
     height: 55%;
-    right: 50%;
+    right: 65%;
     top: 22.5%;
 }
 .puntos > .puntoSpan {
     position: absolute;
     width: 50%;
     height: 100%;
-    right: 0;
+    right: 8%;
+    font-size: 0.85em;
 }
 /*Mesas y Chat*/
 .mesasChat {
