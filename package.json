@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/Al-Gonzarismi/Mustruo#readme",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "install": "^0.13.0",
     "node-fetch": "^2.6.0",
     "npm": "^6.14.5",
